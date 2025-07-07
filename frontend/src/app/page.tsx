@@ -5,6 +5,7 @@ import { ChartNoAxesCombined, Clock, QrCode, Plus, Play } from "lucide-react";
 
 import { ArrowRight, Zap, RefreshCw, TrendingUp } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const iconData = [
   { Icon: ChartNoAxesCombined, color: "text-red-500" },
@@ -14,6 +15,7 @@ const iconData = [
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 relative overflow-hidden">
       {/* Overlay */}
@@ -53,7 +55,12 @@ const Home: React.FC = () => {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center 979:justify-start">
-                <button className="bg-orange-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+                <button
+                  className="bg-orange-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                  onClick={() => {
+                    router.push("/menu");
+                  }}
+                >
                   <Plus />
                   Create New Menu
                 </button>

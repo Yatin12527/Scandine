@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import authRoute from "./routes/authRoute.js";
 import menuRoute from "./routes/menuItemsRoute.js";
+import uploadRoute from "./routes/upload.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import validateToken from "./middlewares/authMiddleware.js";
@@ -25,6 +26,8 @@ async function main() {
 app.use(express.json());
 app.use("/api/users", authRoute);
 app.use("/api/items", menuRoute);
+app.use("/api",uploadRoute);
+// for navbar and telling frontend that im logged in 
 app.get("/api/users/me", validateToken, (req, res) => {
   res.json(req.data);
 });
