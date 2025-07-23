@@ -238,92 +238,6 @@ const RestaurantMenu: React.FC = () => {
         },
       ],
     },
-    {
-      title: "NEPALI & INDIAN",
-      items: [
-        {
-          name: "Vegetable Thali Set/ Dhido",
-          description:
-            "Freshly homemade cuisine very self meat served with rice/dhido",
-          price: "Rs. 515/ 540",
-        },
-        {
-          name: "Chicken/Fish Thali Set/ Dhido",
-          description:
-            "Freshly homemade cuisine very self meat served with rice/dhido",
-          price: "Rs. 550/ 580",
-        },
-        {
-          name: "Mutton Thali Set/ Dhido",
-          description:
-            "Freshly homemade cuisine very self meat served with rice or dhido",
-          price: "Rs. 650/ 675",
-        },
-        {
-          name: "Mutton Curry",
-          description: "Freshly homemade cuisine with local spices",
-          price: "Rs. 825",
-        },
-        {
-          name: "Fish Curry",
-          description: "Freshly homemade cuisine with local spices",
-          price: "Rs. 795",
-        },
-        {
-          name: "Chicken Curry",
-          description: "Freshly homemade cuisine with local spices",
-          price: "Rs. 795",
-        },
-        {
-          name: "Paneer Matar Curry",
-          description: "Freshly homemade cuisine with local spices",
-          price: "Rs. 680",
-        },
-        {
-          name: "Palak Paneer",
-          description: "Freshly homemade cuisine with local spices",
-          price: "Rs. 675",
-        },
-        {
-          name: "Paneer Butter Masala",
-          description: "Our special paneer cooked in rich tomato base gravy",
-          price: "Rs. 790",
-        },
-        {
-          name: "Chicken Butter Masala",
-          description: "Our special chicken cooked in rich tomato & onk gravy",
-          price: "Rs. 790",
-        },
-        {
-          name: "Veg Kofta Curry",
-          description: "Mixed vegetables ball cooking in cashew onk gravy",
-          price: "Rs. 650",
-        },
-        {
-          name: "Aloo Palau",
-          description: "Choice of steam or fried, long grain rice",
-          price: "Rs. 305/ 365",
-        },
-        {
-          name: "Biryani Veg/Chicken/Mutton",
-          description:
-            "Rice choice of veg, chicken or mutton cooked with basmati rice served with raita and papad",
-          price: "Rs. 590/ 615/ 825",
-        },
-        {
-          name: "Dal Makhani",
-          description:
-            "Spicy lentil curry and black lentil with rich flavor of tomato",
-          price: "Rs. 540",
-        },
-        {
-          name: "Yellow Dal Tadka",
-          description:
-            "Spicy & thin curry of lentil, long bean with cultured butter",
-          price: "Rs. 405",
-        },
-      ],
-    },
   ];
 
   return (
@@ -509,40 +423,6 @@ const RestaurantMenu: React.FC = () => {
                   <div className="mt-4 w-full h-32 bg-gray-300 bg-opacity-20 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400">
                     <span className="text-gray-700 text-sm">
                       Chinese Food Image Placeholder
-                    </span>
-                  </div>
-                </div>
-
-                {/* Nepali & Indian Section */}
-                <div>
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
-                    {menuData[5].title}
-                  </h2>
-                  <div className="space-y-2">
-                    {menuData[5].items.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between items-start"
-                      >
-                        <div className="flex-1 pr-4">
-                          <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
-                            {item.name}
-                          </h3>
-                          <p className="text-xs text-gray-600 cursor-pointer hover:text-green-600 leading-tight">
-                            {item.description}
-                          </p>
-                        </div>
-                        <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
-                          {item.price}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Nepali Food Thali Image Space */}
-                  <div className="mt-4 w-full h-32 bg-gray-300 bg-opacity-20 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400">
-                    <span className="text-gray-700 text-sm">
-                      Nepali Thali Image Placeholder
                     </span>
                   </div>
                 </div>
