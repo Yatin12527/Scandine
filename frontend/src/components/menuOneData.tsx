@@ -2,10 +2,13 @@
 import React, { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import imageCompression from "browser-image-compression";
-import { Loader } from "./ui/loader";
 import axios from "axios";
 
-function Data() {
+interface DataProps {
+  setFinalSubmission: (value: { submitted: boolean; sectionTitle: string }) => void;
+}
+function Data({ setFinalSubmission }: DataProps) {
+  
   const [sections, setSections] = useState([
     {
       sectionTitle: "",
@@ -20,7 +23,6 @@ function Data() {
     },
   ]);
   const [nextId, setNextId] = useState(1);
-  const [isHydrated, setIsHydrated] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [imgUrl, setImgUrl] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -79,7 +81,7 @@ function Data() {
 
   const imageSubmit = async () => {
     if (!image) return;
-    
+
     setIsUploading(true);
     try {
       const compressedFile = await imageCompression(image, {
@@ -98,14 +100,14 @@ function Data() {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      
+
       const uploadedImageUrl = response.data.url;
       setImgUrl(uploadedImageUrl);
       setSections((prevSections) => {
         const newSections = JSON.parse(JSON.stringify(prevSections));
         const sectionToUpdate = newSections[0];
-        sectionToUpdate.image = uploadedImageUrl; 
-        return newSections; 
+        sectionToUpdate.image = uploadedImageUrl;
+        return newSections;
       });
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -113,16 +115,28 @@ function Data() {
       setIsUploading(false);
     }
   };
+  const handleFinalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("it works");
+    e.preventDefault();
+    const finalData = JSON.stringify(sections);
+    localStorage.setItem(sections[0].sectionTitle, finalData);
+    setFinalSubmission({
+      submitted: true,
+      sectionTitle: sections[0].sectionTitle,
+    });
+  };
 
   return (
     <div className="min-h-screen ">
       <div className="max-w-xl mx-auto sm:p-8 p-10">
-        <form className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+        <form
+          className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+          onSubmit={handleFinalSubmit}
+        >
           <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 flex items-center gap-4">
             <input
               className="w-full text-base sm:text-lg md:text-xl font-semibold rounded-2xl p-2 sm:p-3 border-white border-2 text-white bg-transparent placeholder-white focus:bg-white focus:text-orange-600 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
               placeholder="Section Title"
-              disabled={isUploading}
               onChange={(e) =>
                 handleItemChange(undefined, "Section Title", e.target.value)
               }
@@ -140,7 +154,6 @@ function Data() {
                       <input
                         className="w-full px-4 py-3 bg-gray-50 border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
                         placeholder="Enter item name"
-                        disabled={isUploading}
                         onChange={(e) =>
                           handleItemChange(data.id, "value", e.target.value)
                         }
@@ -219,9 +232,9 @@ function Data() {
               <label
                 htmlFor="file-upload"
                 className={`w-full h-44 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 transition-colors duration-200 ${
-                  isUploading 
-                    ? 'cursor-not-allowed opacity-50' 
-                    : 'cursor-pointer hover:bg-gray-200'
+                  isUploading
+                    ? "cursor-not-allowed opacity-50"
+                    : "cursor-pointer hover:bg-gray-200"
                 }`}
               >
                 <span className="text-gray-700 text-sm font-medium text-center px-4">
@@ -247,16 +260,29 @@ function Data() {
               </button>
             </div>
           )}
+          <span className="flex flex-col items-center">
+            <button
+              disabled={isUploading}
+              type="submit"
+              className=" w-1/2 mb-3 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+            >
+              {" "}
+              Submit{" "}
+            </button>
+          </span>
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-gray-500 text-sm">
-            Total items: <span className="font-semibold text-gray-700">{sections[0].items.length}</span>
+            Total items:{" "}
+            <span className="font-semibold text-gray-700">
+              {sections[0].items.length}
+            </span>
           </p>
         </div>
       </div>
     </div>
   );
-}
+} 
 
 export default Data;
