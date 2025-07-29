@@ -114,7 +114,7 @@ const RestaurantMenu: React.FC = () => {
       ],
     },
     {
-      title: "TOUCH OF ITSLY",
+      title: "TOUCH OF ITALY",
       items: [
         {
           name: "Lasagna with Meat Sauce",
@@ -270,6 +270,8 @@ const RestaurantMenu: React.FC = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
                     {menuData[0].title}
                   </h2>
+                  <div className="bg-gray-500 w-full h-0.5 mb-4" />
+
                   <div className="space-y-2">
                     {menuData[0].items.map((item, index) => (
                       <div
@@ -297,6 +299,7 @@ const RestaurantMenu: React.FC = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
                     {menuData[2].title}
                   </h2>
+                  <div className="bg-gray-500 w-full h-0.5 mb-4" />
                   <div className="space-y-2">
                     {menuData[2].items.map((item, index) => (
                       <div
@@ -334,6 +337,7 @@ const RestaurantMenu: React.FC = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
                     {menuData[1].title}
                   </h2>
+                  <div className="bg-gray-500 w-full h-0.5 mb-4" />
                   <div className="space-y-2">
                     {menuData[1].items.map((item, index) => (
                       <div
@@ -361,6 +365,7 @@ const RestaurantMenu: React.FC = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
                     {menuData[3].title}
                   </h2>
+                  <div className="bg-gray-500 w-full h-0.5 mb-4" />
                   <div className="space-y-2">
                     {menuData[3].items.map((item, index) => (
                       <div
@@ -398,6 +403,7 @@ const RestaurantMenu: React.FC = () => {
                   <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
                     {menuData[4].title}
                   </h2>
+                  <div className="bg-gray-500 w-full h-0.5 mb-4" />
                   <div className="space-y-2">
                     {menuData[4].items.map((item, index) => (
                       <div
