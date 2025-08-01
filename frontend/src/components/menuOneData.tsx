@@ -155,7 +155,7 @@ function Data({ sectionId }: { sectionId: number }) {
   };
 
   return (
-    <>
+    <div>
       {isPreview ? (
         <div className="max-w-xl mx-auto sm:p-0 p-10">
           <div className="flex justify-between items-center ">
@@ -375,7 +375,7 @@ function Data({ sectionId }: { sectionId: number }) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 
