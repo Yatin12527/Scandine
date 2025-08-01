@@ -3,42 +3,76 @@ import Data from "@/components/menuOneData";
 import HeadingOne from "@/components/menuOneHeading";
 import React, { useState, useEffect } from "react";
 
-interface MenuItem {
-  id: number;
-  value: string;
-  price: string;
-}
-
-interface Section {
-  sectionTitle: string;
-  items: MenuItem[];
-  image: string;
-}
-
 export default function MenuOne() {
-  const [menuItems, setMenuItems] = useState([""]);
+  const [sectionIds, setSectionIds] = useState<number[]>([]);
+
   useEffect(() => {
-    setMenuItems(JSON.parse(localStorage.getItem("menuItems") || '[""]'));
+    const savedSectionIds = JSON.parse(
+      localStorage.getItem("menuSectionIds") || "[]"
+    );
+
+    if (savedSectionIds.length > 0) {
+      setSectionIds(savedSectionIds);
+    } else {
+      const firstId = Date.now();
+      setSectionIds([firstId]);
+      localStorage.setItem("menuSectionIds", JSON.stringify([firstId]));
+    }
   }, []);
 
-  const addMenuItems = () => {
-    setMenuItems([...menuItems, ""]);
+  const addSection = () => {
+    const newId = Date.now();
+    const updated = [...sectionIds, newId];
+    setSectionIds(updated);
+    localStorage.setItem("menuSectionIds", JSON.stringify(updated));
   };
-  console.log(menuItems);
+
+  const deleteSection = (id: number) => {
+    const updatedSectionIds = sectionIds.filter((sid) => sid !== id);
+    setSectionIds(updatedSectionIds);
+    localStorage.setItem("menuSectionIds", JSON.stringify(updatedSectionIds));
+
+    const allSections = JSON.parse(localStorage.getItem("menuItems") || "{}");
+    delete allSections[id];
+    localStorage.setItem("menuItems", JSON.stringify(allSections));
+  };
+
   return (
     <div
-      className="min-h-screen bg-cover bg-center bg-no-repeat font-inter flex flex-col items-center"
+      className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
       style={{ backgroundImage: "url('/bg1.png')" }}
     >
       <HeadingOne />
-      {menuItems.map((data, index) => (
-        <Data key={index} />
-      ))}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-center items-start">
+        {sectionIds.map((id) => (
+          <div className="flex flex-col justify-center items-center" key={id}>
+            <Data sectionId={id} />
+            <button
+              onClick={() => deleteSection(id)}
+              className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150"
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+      </div>
       <button
-        className="border-1 border-black mb-10 w-50 cursor-pointer"
-        onClick={addMenuItems}
+        className="
+          bg-orange-500 text-white
+          font-bold
+          px-8 py-3
+          rounded-lg
+          shadow-md
+          transition-all
+          duration-300
+          ease-in-out
+          transform
+          hover:bg-red-600 hover:shadow-lg
+          hover:scale-105
+        "
+        onClick={addSection}
       >
-        Add section
+        Add Section
       </button>
     </div>
   );

@@ -27,7 +27,7 @@ export default function SignupForm() {
   const onSubmit = async (data: SignupFormInputs) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}/signup`,
+        `${process.env.NEXT_PUBLIC_SERVER}/users/signup`,
         data
       );
       console.log(response);
@@ -164,7 +164,7 @@ export default function SignupForm() {
             <button
               className="flex-1 flex items-center justify-center gap-3 p-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg shadow-sm cursor-pointer"
               onClick={() =>
-                (window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/google`)
+                (window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/users/google`)
               }
             >
               <img src="/google.svg" alt="Google" className="w-5 h-5" />
@@ -179,7 +179,7 @@ export default function SignupForm() {
             <button
               className="flex-1 flex items-center justify-center gap-3 p-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg shadow-sm cursor-pointer"
               onClick={() =>
-                (window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/google`)
+                (window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/users/google`)
               }
             >
               <img src="/facebook.svg" alt="Facebook" className="w-5 h-5" />

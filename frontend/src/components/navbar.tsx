@@ -32,7 +32,7 @@ const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, setIsMenuOpen }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}/me`,
+          `${process.env.NEXT_PUBLIC_SERVER}/users/me`,
           {
             withCredentials: true,
           }

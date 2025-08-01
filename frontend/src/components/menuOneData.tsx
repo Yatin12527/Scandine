@@ -5,7 +5,7 @@ import imageCompression from "browser-image-compression";
 import axios from "axios";
 import { HiPencilSquare } from "react-icons/hi2";
 
-function Data() {
+function Data({ sectionId }: { sectionId: number }) {
   const [sections, setSections] = useState([
     {
       sectionTitle: "",
@@ -27,21 +27,35 @@ function Data() {
   const [isPreview, setIspreview] = useState(false);
 
   useEffect(() => {
-    const data = localStorage.getItem("menuItems");
-    if (data != null) {
-      const newData = JSON.parse(data);
-      setSections(newData);
-      setImgUrl(newData[0]?.image ?? "");
+    const allSections = JSON.parse(localStorage.getItem("menuItems") || "{}");
+    const current = allSections[sectionId];
+
+    if (current) {
+      // we keep your internal shape: sections[0] is the active section
+      setSections([current]);
+      setImgUrl(current?.image ?? "");
       setIspreview(true);
+
       let maxId = 0;
-      newData[0]?.items?.forEach((item:any) => {
-        if (item.id > maxId) {
-          maxId = item.id;
-        }
+      current?.items?.forEach((item: any) => {
+        if (item.id > maxId) maxId = item.id;
       });
       setNextId(maxId + 1);
+    } else {
+      // fresh empty modal for a new ID
+      setSections([
+        {
+          sectionTitle: "",
+          items: [{ id: 0, value: "", description: "", price: "" }],
+          image: " ",
+        },
+      ]);
+      setImgUrl("");
+      setIspreview(false);
+      setNextId(1);
     }
-  }, []);
+  }, [sectionId]);
+
   const addItem = () => {
     setSections((prev) => [
       {
@@ -110,7 +124,7 @@ function Data() {
       formData.append("file", compressedFile);
 
       const response = await axios.post(
-        "http://localhost:4000/api/upload-image",
+        `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -131,18 +145,20 @@ function Data() {
       setIsUploading(false);
     }
   };
+
   const handleFinalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const finalData = JSON.stringify(sections);
-    localStorage.setItem("menuItems", finalData);
+    const allSections = JSON.parse(localStorage.getItem("menuItems") || "{}");
+    allSections[sectionId] = sections[0];
+    localStorage.setItem("menuItems", JSON.stringify(allSections));
     setIspreview(true);
   };
 
   return (
-    <div className="min-h-screen  ">
+    <div>
       {isPreview ? (
         <div className="max-w-xl mx-auto sm:p-0 p-10">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center ">
             <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
               {sections[0].sectionTitle}
             </h2>
@@ -162,7 +178,7 @@ function Data() {
                   <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
                     {data.value}
                   </h3>
-                  <p className="text-xs text-gray-600 cursor-pointer hover:text-green-600 leading-tight">
+                  <p className="text-xs text-gray-600 cursor-pointer  hover:text-green-600 leading-tight">
                     {data.description}
                   </p>
                 </div>
@@ -172,8 +188,8 @@ function Data() {
               </div>
             ))}
           </div>
-          {imgUrl && (
-            <div className="w-full h-60 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2  overflow-hidden">
+          {imgUrl && imgUrl.trim() !== "" && (
+            <div className="w-full h-60 mt-4">
               <img
                 src={imgUrl}
                 alt="Uploaded Preview"
@@ -183,7 +199,7 @@ function Data() {
           )}
         </div>
       ) : (
-        <div className="max-w-xl mx-auto sm:p-8 p-10">
+        <div className="max-w-xl mx-auto sm:p-8">
           <form
             className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
             onSubmit={handleFinalSubmit}
@@ -293,6 +309,7 @@ function Data() {
                   onClick={() => {
                     setImgUrl("");
                     setImage(null);
+                    sections[0].image = "";
                   }}
                   className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-red-400 hover:bg-red-500 text-white cursor-pointer"
                 >
@@ -309,9 +326,11 @@ function Data() {
                       : "cursor-pointer hover:bg-gray-200"
                   }`}
                 >
-                  <span className="text-gray-700 text-sm font-medium text-center px-4">
-                    {image ? image.name : "+ Select Image"}
-                  </span>
+                  <div className="max-w-xs w-full">
+                    <span className="block w-full text-gray-700 text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                      {image ? image.name : "+ Select Image"}
+                    </span>
+                  </div>
                 </label>
                 <input
                   id="file-upload"
