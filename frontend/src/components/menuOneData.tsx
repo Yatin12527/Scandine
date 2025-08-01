@@ -155,7 +155,7 @@ function Data({ sectionId }: { sectionId: number }) {
   };
 
   return (
-    <div>
+    <>
       {isPreview ? (
         <div className="max-w-xl mx-auto sm:p-0 p-10">
           <div className="flex justify-between items-center ">
@@ -199,7 +199,7 @@ function Data({ sectionId }: { sectionId: number }) {
           )}
         </div>
       ) : (
-        <div className="max-w-xl mx-auto sm:p-8">
+        <div className="w-full sm:p-4">
           <form
             className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
             onSubmit={handleFinalSubmit}
@@ -215,8 +215,9 @@ function Data({ sectionId }: { sectionId: number }) {
                 required={true}
               />
             </div>
-            <div className="p-6 sm:p-8 space-y-6">
-              <div className="group relative">
+
+            <div className="p-6 sm:p-8">
+              <div className="group relative space-y-6">
                 {sections[0].items.map((data, index) => (
                   <div key={data.id}>
                     <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
@@ -276,8 +277,9 @@ function Data({ sectionId }: { sectionId: number }) {
                         </div>
                       )}
                     </div>
+
                     {index < sections[0].items.length - 1 && (
-                      <div className="mt-6 border-b border-gray-200"></div>
+                      <div className="border-b border-gray-200"></div>
                     )}
                   </div>
                 ))}
@@ -373,7 +375,7 @@ function Data({ sectionId }: { sectionId: number }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

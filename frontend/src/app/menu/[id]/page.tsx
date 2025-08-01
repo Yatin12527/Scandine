@@ -43,13 +43,14 @@ export default function MenuOne() {
       style={{ backgroundImage: "url('/bg1.png')" }}
     >
       <HeadingOne />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-center items-start">
+
+      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
         {sectionIds.map((id) => (
-          <div className="flex flex-col justify-center items-center" key={id}>
+          <div className="flex flex-col justify-between w-full" key={id}>
             <Data sectionId={id} />
             <button
               onClick={() => deleteSection(id)}
-              className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150"
+              className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150 mx-auto"
             >
               Delete
             </button>
