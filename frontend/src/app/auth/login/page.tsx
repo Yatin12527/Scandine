@@ -7,32 +7,12 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Toast } from "primereact/toast";
 import Link from "next/link";
 
-
 type LoginFormInputs = {
   username: string;
   password: string;
 };
 
 export default function LoginForm() {
-
-
-// useEffect(() => {
-//   const params = new URLSearchParams(window.location.search);
-//   const error = params.get("error");
-
-//   if (error === "user_exists") {
-//     toast.current?.show({
-//       severity: "error",
-//       summary: "Login Error",
-//       detail: "User already exists. Please log in.",
-//     });
-
-//     //  remove error from URL after showing toast
-//     const newUrl = window.location.origin + window.location.pathname;
-//     window.history.replaceState({}, document.title, newUrl);
-//   }
-// }, []);
-
   const {
     register,
     handleSubmit,
@@ -70,11 +50,6 @@ export default function LoginForm() {
 
   return (
     <div className="flex  flex-col sm:flex-row h-screen bg-white text-black">
-      <img
-        src="/logo2.png"
-        alt="logo"
-        className="absolute top-0 self-center sm:left-4 w-30 sm:w-28 h-auto z-10 custom-height"
-      />
       <div className="hidden w-1/2 h-full sm:flex items-center justify-center bg-[#ffe4dc]">
         <img
           src="/eating2.png"
@@ -147,7 +122,7 @@ export default function LoginForm() {
             Login
           </button>
         </form>
-                <div className="flex flex-col items-center justify-center p-6 bg-white">
+        <div className="flex flex-col items-center justify-center p-6 bg-white">
           {/* Divider with text */}
           <div className="flex items-center w-full max-w-md mb-6">
             <div className="flex-1 h-px bg-gray-500"></div>

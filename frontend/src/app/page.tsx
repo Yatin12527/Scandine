@@ -1,8 +1,6 @@
 "use client";
-import Navbar from "../components/navbar";
 import Image from "next/image";
 import { ChartNoAxesCombined, Clock, QrCode, Plus, Play } from "lucide-react";
-
 import { ArrowRight, Zap, RefreshCw, TrendingUp } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -30,8 +28,6 @@ const Home: React.FC = () => {
       </div>
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-200 to-transparent rounded-full -translate-x-32 translate-y-32 opacity-30"></div>
       <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-amber-200 to-transparent rounded-full opacity-20"></div>
-
-      <Navbar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
 
       {/* Hero Section */}
 

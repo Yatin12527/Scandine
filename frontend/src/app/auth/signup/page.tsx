@@ -55,11 +55,7 @@ export default function SignupForm() {
 
   return (
     <div className="flex  flex-col sm:flex-row h-screen bg-white text-black">
-      <img
-        src="/logo2.png"
-        alt="logo"
-        className="absolute top-0 self-center sm:left-4 w-30 sm:w-28 h-auto z-10 custom-height"
-      />
+      
 
       <div className="hidden w-1/2 h-full sm:flex items-center justify-center bg-[#ffe4dc]">
         <img
