@@ -1,11 +1,11 @@
 "use client";
 
+import QRCodeModal from "@/components/qrModal";
 import axios from "axios";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname,useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
-import QRCode from "react-qr-code";
 
 interface MenuItem {
   id: number;
@@ -32,35 +32,54 @@ interface MenuData {
 
 function CompletedMenu() {
   const params = useParams();
+  const router=useRouter();
   const [data, setData] = useState<MenuData | null>(null);
   const [isOwner, setIsOwner] = useState<boolean>(false);
+  const [showQRModal, setShowQRModal] = useState<boolean>(false);
   const pathname = usePathname();
   const fullUrl = `${process.env.NEXT_PUBLIC_CLIENT}${pathname}`;
 
   useEffect(() => {
     const fetchMenuData = async () => {
+      const menuId = params.id;
+
       try {
-        const menuId = params.id;
-        const [menuResponse, userResponse] = await Promise.all([
+        const [menuResult, userResult] = await Promise.allSettled([
           axios.get(
-            `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`,
-            { withCredentials: true }
+            `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`
           ),
           axios.get(`${process.env.NEXT_PUBLIC_SERVER}/users/me`, {
             withCredentials: true,
           }),
         ]);
-        setData(menuResponse.data);
-        if (userResponse.data.id === menuResponse.data.owner) {
-          setIsOwner(true);
+
+        if (menuResult.status === "fulfilled") {
+          setData(menuResult.value.data);
+
+          if (
+            userResult.status === "fulfilled" &&
+            userResult.value.data.id === menuResult.value.data.owner
+          ) {
+            setIsOwner(true);
+          }
         }
-      } catch (error) {
-        console.error("Error fetching menu data:", error);
+      } catch (err) {
+        console.error("Error fetching data:", err);
       }
     };
 
     fetchMenuData();
   }, []);
+
+  const handleGenerateQR = () => {
+    setShowQRModal(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseQR = () => {
+    setShowQRModal(false);
+    document.body.style.overflow = "unset";
+  };
 
   // Convert sections object to array
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
@@ -71,25 +90,24 @@ function CompletedMenu() {
       style={{ backgroundImage: "url('/bg1.png')" }}
     >
       {isOwner && (
-        <div className="w-full max-w-7xl mb-6 flex justify-center gap-4 flex-col">
-          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2 cursor-pointer">
+        <div className="w-full max-w-7xl mb-6 flex justify-center gap-4 ">
+          <button
+            onClick={handleGenerateQR}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-105"
+          >
             <MdOutlineQrCode2 size={20} />
             Generate QR
           </button>
           <button
-            // onClick={}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2 cursor-pointer"
+          onClick={() => router.push("/menu/minimilist/create")}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-105"
           >
             <RiArrowGoBackFill size={20} />
             Back to Editing
           </button>
-          <QRCode
-            size={250}
-            value={fullUrl}
-            viewBox={`0 0 256 256`}
-          />
         </div>
       )}
+
       <div className="text-center mb-8 ">
         <div className="flex items-center justify-center mb-4 p-2">
           {data?.logo && (
@@ -143,6 +161,15 @@ function CompletedMenu() {
           </div>
         ))}
       </div>
+
+      {/* QR Code Modal */}
+      {showQRModal && (
+        <QRCodeModal
+          url={fullUrl}
+          menuTitle={data?.title || "Menu"}
+          onClose={handleCloseQR}
+        />
+      )}
     </div>
   );
 }
