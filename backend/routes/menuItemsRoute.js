@@ -11,5 +11,5 @@ router.post("/addmenuItems",validateToken,addMenu);
 // @desc = getting all items by id
 // @route = /api/items/menuItems/:menuId
 // @access = private
-router.get("/menuItems/:menuId",validateToken,getMenuById);
+router.get("/menuItems/:menuId",getMenuById);
 export default router;

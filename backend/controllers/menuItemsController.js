@@ -29,11 +29,10 @@ export const addMenu = async (req, res) => {
 
 export const getMenuById = async (req, res) => {
   try {
-    const userId = req.data.id; // from auth middleware
     const menuId = req.params.menuId; // from URL
 
     // fetch only if this menu belongs to the logged-in user
-    const menu = await menuItems.findOne({ _id: menuId, owner: userId });
+    const menu = await menuItems.findOne({ _id: menuId });
 
     if (!menu) {
       return res.status(404).json({ message: "Menu not found or not yours" });

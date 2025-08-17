@@ -30,6 +30,17 @@ const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Check if current route should hide navbar
+  const shouldHideNavbar = () => {
+    const regex = /^\/menu\/minimilist\/[^\/]+$/;
+    return regex.test(pathname);
+  };
+
+  // Don't render navbar if on excluded route
+  if (shouldHideNavbar()) {
+    return null;
+  }
+
   const getMobileBackground = () => {
     if (pathname === "/") {
       return "bg-[#fffbf5]";

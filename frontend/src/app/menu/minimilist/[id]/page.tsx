@@ -1,8 +1,11 @@
 "use client";
 
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { MdOutlineQrCode2 } from "react-icons/md";
+import { RiArrowGoBackFill } from "react-icons/ri";
+import QRCode from "react-qr-code";
 
 interface MenuItem {
   id: number;
@@ -25,31 +28,38 @@ interface MenuData {
   logo: string;
   sections: { [key: string]: Section };
   owner: string;
-  __v: number;
 }
 
 function CompletedMenu() {
   const params = useParams();
   const [data, setData] = useState<MenuData | null>(null);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+  const pathname = usePathname();
+  const fullUrl = `${process.env.NEXT_PUBLIC_CLIENT}${pathname}`;
 
   useEffect(() => {
-    const menuId = params.id;
-    console.log(menuId);
-    const apiCall = async () => {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`,
-        {
-          withCredentials: true,
-        }
-      );
+    const fetchMenuData = async () => {
       try {
-        setData(response.data);
-        console.log(response.data);
-      } catch (err) {
-        console.error(err);
+        const menuId = params.id;
+        const [menuResponse, userResponse] = await Promise.all([
+          axios.get(
+            `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`,
+            { withCredentials: true }
+          ),
+          axios.get(`${process.env.NEXT_PUBLIC_SERVER}/users/me`, {
+            withCredentials: true,
+          }),
+        ]);
+        setData(menuResponse.data);
+        if (userResponse.data.id === menuResponse.data.owner) {
+          setIsOwner(true);
+        }
+      } catch (error) {
+        console.error("Error fetching menu data:", error);
       }
     };
-    apiCall();
+
+    fetchMenuData();
   }, []);
 
   // Convert sections object to array
@@ -60,6 +70,26 @@ function CompletedMenu() {
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
       style={{ backgroundImage: "url('/bg1.png')" }}
     >
+      {isOwner && (
+        <div className="w-full max-w-7xl mb-6 flex justify-center gap-4 flex-col">
+          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2 cursor-pointer">
+            <MdOutlineQrCode2 size={20} />
+            Generate QR
+          </button>
+          <button
+            // onClick={}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-colors duration-200 flex items-center gap-2 cursor-pointer"
+          >
+            <RiArrowGoBackFill size={20} />
+            Back to Editing
+          </button>
+          <QRCode
+            size={250}
+            value={fullUrl}
+            viewBox={`0 0 256 256`}
+          />
+        </div>
+      )}
       <div className="text-center mb-8 ">
         <div className="flex items-center justify-center mb-4 p-2">
           {data?.logo && (
