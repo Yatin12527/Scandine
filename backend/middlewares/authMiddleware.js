@@ -19,6 +19,7 @@ const validateToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWTSECRET);
+    // req passes data forward res is for seinding data back to client
     req.data = decoded; 
     next();
   } catch (err) {

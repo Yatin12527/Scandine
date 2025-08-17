@@ -1,7 +1,15 @@
 import express from "express";
-import {addmenuItems, getAllMenuItems } from "../controllers/menuItemsController.js";
+import {addMenu, getMenuById } from "../controllers/menuItemsController.js";
+import validateToken from "../middlewares/authMiddleware.js";
 const router=express.Router();
 
-router.post("/addmenuItems",addmenuItems);
-router.get("/addmenuItems",getAllMenuItems);
+// @desc = adding a new item
+// @route = /api/items/addmenuItems
+// @access = private
+router.post("/addmenuItems",validateToken,addMenu);
+
+// @desc = getting all items by id
+// @route = /api/items/menuItems/:menuId
+// @access = private
+router.get("/menuItems/:menuId",validateToken,getMenuById);
 export default router;

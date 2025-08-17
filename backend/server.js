@@ -27,6 +27,7 @@ app.use(express.json());
 app.use("/api/users", authRoute);
 app.use("/api/items", menuRoute);
 app.use("/api",uploadRoute);
+
 // for navbar and telling frontend that im logged in 
 app.get("/api/users/me", validateToken, (req, res) => {
   res.json(req.data);

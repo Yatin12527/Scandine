@@ -14,7 +14,7 @@ const navMenu = [
     link: "/",
   },
   {
-    title: "Menus",
+    title: "Templates",
     link: "/menu",
   },
   {
@@ -31,10 +31,14 @@ const Navbar: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getMobileBackground = () => {
-    if (pathname === "/" || "/menu") {
+    if (pathname === "/") {
       return "bg-[#fffbf5]";
-    } else if (pathname.startsWith("/menu/")) {
-      return "bg-[#dfdedf]";
+    } else if (pathname === "/menu") {
+      return "bg-[#fffbf5]";
+    } else if (pathname === "/menu/minimilist") {
+      return "bg-[#e3e4e2]";
+    } else if (pathname.startsWith("/menu/minimilist")) {
+      return "bg-[#e0dcdc]";
     } else {
       return "bg-white";
     }
