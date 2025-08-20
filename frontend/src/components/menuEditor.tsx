@@ -11,6 +11,7 @@ type MenuOneProps = {
 
 export default function MenuOne({ mode, menuId }: MenuOneProps) {
   const [sectionIds, setSectionIds] = useState<number[]>([]);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
     if (mode === "create") {
@@ -31,7 +32,6 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
           );
           const arr = Object.keys(response.data.sections);
           const saved = arr.map(Number);
-          console.log(saved);
           if (saved.length > 0) {
             setSectionIds(saved);
           }
@@ -39,9 +39,28 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
           console.log(error);
         }
       };
+      setHasUnsavedChanges(true);
       fetchData();
     }
   }, [mode]);
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (hasUnsavedChanges) {
+        const message =
+          "Your changes are not saved, reloading will delete all the changes!";
+        event.preventDefault();
+        event.returnValue = message;
+        return message;
+      }
+    };
+
+    if (mode !== "create") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [hasUnsavedChanges, mode]);
 
   const addSection = () => {
     const newId = Date.now();
