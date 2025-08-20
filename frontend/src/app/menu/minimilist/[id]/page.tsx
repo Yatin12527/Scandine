@@ -2,7 +2,7 @@
 
 import QRCodeModal from "@/components/qrModal";
 import axios from "axios";
-import { useParams, usePathname,useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -32,17 +32,16 @@ interface MenuData {
 
 function CompletedMenu() {
   const params = useParams();
-  const router=useRouter();
+  const router = useRouter();
   const [data, setData] = useState<MenuData | null>(null);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [showQRModal, setShowQRModal] = useState<boolean>(false);
   const pathname = usePathname();
   const fullUrl = `${process.env.NEXT_PUBLIC_CLIENT}${pathname}`;
+  const menuId = params.id;
 
   useEffect(() => {
     const fetchMenuData = async () => {
-      const menuId = params.id;
-
       try {
         const [menuResult, userResult] = await Promise.allSettled([
           axios.get(
@@ -99,7 +98,7 @@ function CompletedMenu() {
             Generate QR
           </button>
           <button
-          onClick={() => router.push("/menu/minimilist/create")}
+            onClick={() => router.push(`/menu/minimilist/${menuId}/edit `)}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-105"
           >
             <RiArrowGoBackFill size={20} />
@@ -125,39 +124,49 @@ function CompletedMenu() {
 
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
         {sectionsArray.map((section, sectionIndex) => (
-          <div key={sectionIndex} className="max-w-xl mx-auto sm:p-0 p-10">
-            <div className="flex justify-between items-center ">
-              <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
-                {section.sectionTitle}
-              </h2>
-            </div>
-            <div className="bg-gray-500 w-full h-0.5 mb-4" />
-            <div className="space-y-2">
-              {section.items.map((item, index) => (
-                <div key={index} className="flex justify-between items-start">
-                  <div className="flex-1 pr-4">
-                    <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
-                      {item.value}
-                    </h3>
-                    <p className="text-xs text-gray-600 cursor-pointer hover:text-green-600 leading-tight">
-                      {item.description}
-                    </p>
-                  </div>
-                  <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
-                    {item.price}
-                  </span>
+          <div
+            className="flex flex-col justify-between w-full"
+            key={sectionIndex}
+          >
+            <div>
+              <div className="max-w-xl mx-auto sm:p-0 p-10">
+                <div className="flex justify-between items-center ">
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
+                    {section.sectionTitle}
+                  </h2>
                 </div>
-              ))}
-            </div>
-            {section.image && section.image.trim() !== "" && (
-              <div className="w-full h-60 mt-4">
-                <img
-                  src={section.image}
-                  alt="Section Preview"
-                  className="w-full h-full object-cover rounded-lg"
-                />
+                <div className="bg-gray-500 w-full h-0.5 mb-4" />
+                <div className="space-y-2">
+                  {section.items.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex justify-between items-start"
+                    >
+                      <div className="flex-1 pr-4">
+                        <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
+                          {item.value}
+                        </h3>
+                        <p className="text-xs text-gray-600 cursor-pointer hover:text-green-600 leading-tight">
+                          {item.description}
+                        </p>
+                      </div>
+                      <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
+                        {item.price}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {section.image && section.image.trim() !== "" && (
+                  <div className="w-full h-60 mt-4">
+                    <img
+                      src={section.image}
+                      alt="Section Preview"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>

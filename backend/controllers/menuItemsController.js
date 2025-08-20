@@ -43,3 +43,31 @@ export const getMenuById = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch menu" });
   }
 };
+
+export const editMenu = async (req, res) => {
+  try {
+    const { title, logo, sections, menuId } = req.body;
+    const owner = req.data.id;
+    if (!title || !sections) {
+      return res
+        .status(400)
+        .json({ message: "Title and sections are required" });
+    }
+    console.log(menuId)
+    await menuItems.findByIdAndUpdate(
+      menuId,
+      {
+        title,
+        logo,
+        sections,
+        owner,
+      },
+      { new: true }
+    );
+
+     res.json({ msg: "Menu added successfully", menuId: menuId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to edit menu" });
+  }
+};

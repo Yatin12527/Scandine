@@ -36,11 +36,6 @@ const Navbar: React.FC = () => {
     return regex.test(pathname);
   };
 
-  // Don't render navbar if on excluded route
-  if (shouldHideNavbar()) {
-    return null;
-  }
-
   const getMobileBackground = () => {
     if (pathname === "/") {
       return "bg-[#fffbf5]";
@@ -54,8 +49,6 @@ const Navbar: React.FC = () => {
       return "bg-white";
     }
   };
-
-  const mobileBackground = getMobileBackground();
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -94,6 +87,13 @@ const Navbar: React.FC = () => {
     };
     fetchData();
   }, []);
+
+  // Don't render navbar if on excluded route - MOVED AFTER ALL HOOKS
+  if (shouldHideNavbar()) {
+    return null;
+  }
+
+  const mobileBackground = getMobileBackground();
 
   return (
     <>
