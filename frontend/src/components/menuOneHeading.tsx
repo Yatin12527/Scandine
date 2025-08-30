@@ -21,7 +21,7 @@ export default function HeadingOne() {
   };
 
   const [heading, setHeading] = useState<Heading>({});
-  const [isEditing, setIsEditing] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
@@ -36,6 +36,9 @@ export default function HeadingOne() {
         restaurantName: savedRestaurantName || undefined,
         logo: savedLogo || undefined,
       });
+      setIsEditing(false);
+    } else {
+      setIsEditing(true);
     }
     setIsHydrated(true);
   }, []);
@@ -98,10 +101,14 @@ export default function HeadingOne() {
         <Loader />
       </div>
     );
+
+  const shouldShowModal =
+    isEditing && !heading.restaurantName && !localStorage.getItem("Heading");
+
   return (
     <div className=" font-inter">
       <div>
-        {isEditing && !heading.restaurantName ? (
+        {shouldShowModal ? (
           <div className="p-4 md:p-8">
             <div className="flex justify-center mb-8">
               <div className="w-full flex flex-col max-w-md bg-white p-6 rounded-2xl shadow-lg border border-gray-200">

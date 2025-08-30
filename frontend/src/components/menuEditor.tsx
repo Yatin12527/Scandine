@@ -30,19 +30,32 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
             `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`,
             { withCredentials: true }
           );
-          const arr = Object.keys(response.data.sections);
-          const saved = arr.map(Number);
-          if (saved.length > 0) {
-            setSectionIds(saved);
+          const sections = response.data.sections;
+          const sectionIdsArray = Object.keys(sections).map(Number);
+          console.log(response);
+
+          if (sectionIdsArray.length > 0) {
+            setSectionIds(sectionIdsArray);
+            localStorage.setItem(
+              "menuSectionIds",
+              JSON.stringify(sectionIdsArray)
+            );
+            localStorage.setItem("Heading", response.data.title);
+            localStorage.setItem("menuItems", JSON.stringify(sections));
+            if (response.data.logo) {
+              localStorage.setItem("Logo", response.data.logo);
+            }
           }
         } catch (error) {
           console.log(error);
         }
       };
+
       setHasUnsavedChanges(true);
       fetchData();
     }
-  }, [mode]);
+  }, [mode, menuId]);
+
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (hasUnsavedChanges) {
@@ -81,26 +94,37 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
   };
 
   const finalSubmit = async () => {
-    const payload = {
-      title: localStorage.getItem("Heading"),
-      logo: localStorage.getItem("Logo"),
-      sections: JSON.parse(localStorage.getItem("menuItems") ?? "{}"),
-      menuId,
-    };
+    try {
+      const payload = {
+        title: localStorage.getItem("Heading"),
+        logo: localStorage.getItem("Logo"),
+        sections: JSON.parse(localStorage.getItem("menuItems") ?? "{}"),
+        menuId,
+      };
 
-    const url =
-      mode === "create"
-        ? `${process.env.NEXT_PUBLIC_SERVER}/items/addmenuItems`
-        : `${process.env.NEXT_PUBLIC_SERVER}/items/editmenuItems`;
+      const url =
+        mode === "create"
+          ? `${process.env.NEXT_PUBLIC_SERVER}/items/addmenuItems`
+          : `${process.env.NEXT_PUBLIC_SERVER}/items/editmenuItems`;
 
-    const method = mode === "create" ? "post" : "put";
+      const method = mode === "create" ? "post" : "put";
 
-    const response = await axios[method](url, payload, {
-      withCredentials: true,
-    });
+      const response = await axios[method](url, payload, {
+        withCredentials: true,
+      });
 
-    alert(response.data.msg);
-    router.push(`/menu/minimilist/${response.data.menuId}`);
+      localStorage.removeItem("Heading");
+      localStorage.removeItem("Logo");
+      localStorage.removeItem("menuItems");
+      localStorage.removeItem("menuSectionIds");
+      setHasUnsavedChanges(false);
+
+      alert(response.data.msg);
+      router.push(`/menu/minimilist/${response.data.menuId}`);
+    } catch (error) {
+      console.error("Error submitting menu:", error);
+      alert("Failed to save menu. Please try again.");
+    }
   };
 
   return (

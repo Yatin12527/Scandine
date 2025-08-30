@@ -7,8 +7,8 @@ const Templates = [
       "Clean, structured layout with subtle engraved background, designed to present your menu with clarity and style",
     Subheading: "Perfect for cafes & modern eateries.",
     Image: "/minimilist.png",
-    Preview: "menu/minimilist",
-    Use: "menu/minimilist/123",
+    Preview: "menu/minimilist/preview",
+    Use: "menu/minimilist/create",
     badge: "Popular",
   },
   {
