@@ -18,8 +18,8 @@ const navMenu = [
     link: "/menu",
   },
   {
-    title: "title 3",
-    link: "/title3",
+    title: "Dashboard",
+    link: "/dashboard",
   },
 ];
 

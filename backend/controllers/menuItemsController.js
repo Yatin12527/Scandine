@@ -1,5 +1,4 @@
 import menuItems from "../models/menuItemsModel.js";
-
 export const addMenu = async (req, res) => {
   try {
     const { title, logo, sections } = req.body;
@@ -15,6 +14,7 @@ export const addMenu = async (req, res) => {
       logo,
       sections,
       owner,
+  
     });
 
     res.json({ msg: "Menu added successfully", menuId: createdMenu.id });
@@ -53,7 +53,7 @@ export const editMenu = async (req, res) => {
         .status(400)
         .json({ message: "Title and sections are required" });
     }
-    console.log(menuId)
+    console.log(menuId);
     await menuItems.findByIdAndUpdate(
       menuId,
       {
@@ -65,9 +65,23 @@ export const editMenu = async (req, res) => {
       { new: true }
     );
 
-     res.json({ msg: "Menu added successfully", menuId: menuId });
+    res.json({ msg: "Menu added successfully", menuId: menuId });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to edit menu" });
+  }
+};
+
+export const getMenusById = async (req, res) => {
+  try {
+    const owner = req.data.id;
+    const allMenus = await menuItems.find(
+      { owner: owner },
+      { _id: 1, title: 1, logo: 1, owner: 1, createdAt: 1 }
+    );
+    res.json(allMenus);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch menus" });
   }
 };

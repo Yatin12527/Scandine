@@ -3,6 +3,7 @@ import {
   addMenu,
   getMenuById,
   editMenu,
+  getMenusById,
 } from "../controllers/menuItemsController.js";
 import validateToken from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -19,5 +20,9 @@ router.put("/editmenuItems", validateToken, editMenu);
 // @route = /api/items/menuItems/:menuId
 // @access = private
 router.get("/menuItems/:menuId", getMenuById);
+// @desc = getting all menus by id
+// @route = /api/items/menus
+// @access = private
+router.get("/menus", validateToken, getMenusById);
 
 export default router;

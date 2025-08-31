@@ -23,6 +23,7 @@ const menuItemsSchema = new mongoose.Schema({
   },
   // ref looks up for models not collections
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const menuItems = mongoose.model("menuItems", menuItemsSchema);
