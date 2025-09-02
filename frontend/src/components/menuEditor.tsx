@@ -1,7 +1,12 @@
 import Data from "@/components/menuOneData";
 import HeadingOne from "@/components/menuOneHeading";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 type MenuOneProps = {
@@ -13,7 +18,10 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
   const [sectionIds, setSectionIds] = useState<number[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const router = useRouter();
+  const params = usePathname();
+  const parts = params.split("/");
   useEffect(() => {
+    localStorage.setItem("style", parts[2]);
     if (mode === "create") {
       const saved = JSON.parse(localStorage.getItem("menuSectionIds") || "[]");
       if (saved.length > 0) {
@@ -99,6 +107,7 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
         title: localStorage.getItem("Heading"),
         logo: localStorage.getItem("Logo"),
         sections: JSON.parse(localStorage.getItem("menuItems") ?? "{}"),
+        style: localStorage.getItem("style"),
         menuId,
       };
 
@@ -117,6 +126,7 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
       localStorage.removeItem("Logo");
       localStorage.removeItem("menuItems");
       localStorage.removeItem("menuSectionIds");
+      localStorage.removeItem("style");
       setHasUnsavedChanges(false);
 
       alert(response.data.msg);

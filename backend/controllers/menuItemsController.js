@@ -1,7 +1,7 @@
 import menuItems from "../models/menuItemsModel.js";
 export const addMenu = async (req, res) => {
   try {
-    const { title, logo, sections } = req.body;
+    const { title, logo, sections, style } = req.body;
     const owner = req.data.id;
     if (!title || !sections) {
       return res
@@ -14,7 +14,7 @@ export const addMenu = async (req, res) => {
       logo,
       sections,
       owner,
-  
+      style,
     });
 
     res.json({ msg: "Menu added successfully", menuId: createdMenu.id });
@@ -77,7 +77,7 @@ export const getMenusById = async (req, res) => {
     const owner = req.data.id;
     const allMenus = await menuItems.find(
       { owner: owner },
-      { _id: 1, title: 1, logo: 1, owner: 1, createdAt: 1 }
+      { _id: 1, title: 1, logo: 1, owner: 1, createdAt: 1,style: 1 }
     );
     res.json(allMenus);
   } catch (error) {
