@@ -29,9 +29,8 @@ function Data({ sectionId }: { sectionId: number }) {
   useEffect(() => {
     const allSections = JSON.parse(localStorage.getItem("menuItems") || "{}");
     const current = allSections[sectionId];
-
+    // check if data is already present or not
     if (current) {
-      // we keep your internal shape: sections[0] is the active section
       setSections([current]);
       setImgUrl(current?.image ?? "");
       setIspreview(true);
@@ -42,7 +41,6 @@ function Data({ sectionId }: { sectionId: number }) {
       });
       setNextId(maxId + 1);
     } else {
-      // fresh empty modal for a new ID
       setSections([
         {
           sectionTitle: "",

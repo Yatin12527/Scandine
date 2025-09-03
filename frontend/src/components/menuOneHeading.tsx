@@ -25,6 +25,7 @@ export default function HeadingOne() {
   const [isUploading, setIsUploading] = useState(false);
   const [imageSelected, setImageSelected] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
 
   // Load data from localStorage on component mount
   useEffect(() => {
@@ -53,6 +54,12 @@ export default function HeadingOne() {
     }
   }, [isEditing, setValue]);
 
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement> | null) => {
+    const file = e?.target?.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
   const imgsubmit = async (data: any) => {
     try {
       setIsUploading(true);
@@ -102,8 +109,7 @@ export default function HeadingOne() {
       </div>
     );
 
-  const shouldShowModal =
-    isEditing && !heading.restaurantName && !localStorage.getItem("Heading");
+  const shouldShowModal = isEditing;
 
   return (
     <div className=" font-inter">
@@ -113,44 +119,130 @@ export default function HeadingOne() {
             <div className="flex justify-center mb-8">
               <div className="w-full flex flex-col max-w-md bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
                 <form onSubmit={handleImageSubmit(imgsubmit)}>
-                  <label className="block mb-4">
-                    <span className="text-gray-600 font-medium">
+                  <div className="flex flex-col  items-center sm:items-start">
+                    <span className="text-gray-600 font-medium ml-2">
                       Upload your logo
                     </span>
-                    <input
-                      {...registerImage("logo")}
-                      type="file"
-                      accept="image/*"
-                      disabled={isUploading}
-                      onChange={(e) =>
-                        setImageSelected(
-                          !!e.target.files && e.target.files.length > 0
-                        )
-                      }
-                      className={`mt-2 w-full text-sm file:mr-4 file:py-2 file:px-4
-    file:rounded-full file:border-0
-    file:text-sm file:font-semibold
-    file:bg-green-100 file:text-green-700
-    ${
-      isUploading
-        ? "file:bg-gray-200 file:text-gray-400 file:cursor-not-allowed"
-        : "hover:file:bg-green-200 file:cursor-pointer"
-    }
-    disabled:cursor-not-allowed
-  `}
-                    />
-                  </label>
-                  <button
-                    type="submit"
-                    disabled={isUploading}
-                    className={`mb-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs ${
-                      isUploading
-                        ? "bg-orange-300 text-white cursor-not-allowed"
-                        : "bg-orange-400 hover:bg-orange-500 text-white cursor-pointer"
-                    }`}
-                  >
-                    {isUploading ? "Uploading..." : "Upload"}
-                  </button>
+
+                    {heading.logo || localStorage.getItem("Logo") ? (
+                      <div className="p-2 sm:p-4 flex flex-col items-center">
+                        <div className="w-16 h-16 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 overflow-hidden">
+                          <img
+                            src={
+                              heading.logo || localStorage.getItem("Logo") || ""
+                            }
+                            alt="Uploaded Preview"
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setHeading((prev) => ({ ...prev, logo: "" }));
+                            setImage(null);
+                            localStorage.removeItem("Logo");
+                          }}
+                          className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-red-400 hover:bg-red-500 text-white cursor-pointer"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="p-2 sm:p-4 flex flex-col items-center">
+                        <label
+                          htmlFor="file-upload"
+                          className={`w-16 h-16 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 transition-colors duration-200 ${
+                            isUploading
+                              ? "cursor-not-allowed opacity-50"
+                              : "cursor-pointer hover:bg-gray-200"
+                          }`}
+                        >
+                          <div className="max-w-xs w-full">
+                            {image ? (
+                              <img
+                                src={URL.createObjectURL(image)}
+                                alt="Selected Preview"
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                            ) : (
+                              <span className="block w-full text-gray-700 text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                                + 
+                              </span>
+                            )}
+                          </div>
+                        </label>
+
+                        <input
+                          {...registerImage("logo")}
+                          id="file-upload"
+                          name="file-upload"
+                          type="file"
+                          className="sr-only"
+                          accept="image/*"
+                          disabled={isUploading}
+                          onChange={(e) => {
+                            const hasFile =
+                              !!e.target.files && e.target.files.length > 0;
+                            setImageSelected(hasFile);
+                            if (hasFile) {
+                              handleImage(e);
+                            }
+                          }}
+                        />
+
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!image) return;
+
+                            try {
+                              setIsUploading(true);
+
+                              // Compress image if larger than 1MB
+                              const compressedFile = await imageCompression(
+                                image,
+                                {
+                                  maxSizeMB: 0.5,
+                                  maxWidthOrHeight: 1280,
+                                  useWebWorker: true,
+                                }
+                              );
+
+                              const formData = new FormData();
+                              formData.append("file", compressedFile);
+
+                              const response = await axios.post(
+                                "http://localhost:4000/api/upload-image",
+                                formData,
+                                {
+                                  headers: {
+                                    "Content-Type": "multipart/form-data",
+                                  },
+                                }
+                              );
+
+                              // Store final image URL for persistence
+                              setHeading((prev) => ({
+                                ...prev,
+                                logo: response.data.url,
+                              }));
+                              localStorage.setItem("Logo", response.data.url);
+                              setImage(null);
+                              setImageSelected(false);
+                            } catch (error) {
+                              console.error("Upload failed:", error);
+                            } finally {
+                              setIsUploading(false);
+                            }
+                          }}
+                          disabled={!image || isUploading}
+                          className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-orange-400 hover:bg-orange-500 text-white cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        >
+                          {isUploading ? "Uploading..." : "Upload"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </form>
 
                 <form onSubmit={handleTextSubmit(textsubmit)}>
@@ -164,7 +256,10 @@ export default function HeadingOne() {
                       })}
                       type="text"
                       placeholder="ScanDine outlet"
-                      defaultValue={heading.restaurantName || ""}
+                      defaultValue={
+                        localStorage.getItem("Heading") ||
+                        heading.restaurantName
+                      }
                       className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300
                         focus:outline-none focus:ring-2 focus:ring-green-400 text-xl font-dancing font-bold"
                     />
@@ -208,8 +303,6 @@ export default function HeadingOne() {
             </div>
             <button
               onClick={() => {
-                localStorage.removeItem("Heading");
-                setHeading({});
                 setIsEditing(true);
               }}
               className="cursor-pointer px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition duration-150"

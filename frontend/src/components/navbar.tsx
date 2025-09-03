@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
 
   // Check if current route should hide navbar
   const shouldHideNavbar = () => {
-    if (pathname.includes("preview")) return false; 
+    if (pathname.includes("preview")) return false;
     const regex = /^\/menu\/minimilist\/[^\/]+$/;
     return regex.test(pathname);
   };
@@ -42,8 +42,6 @@ const Navbar: React.FC = () => {
       return "bg-[#fffbf5]";
     } else if (pathname === "/menu") {
       return "bg-[#fffbf5]";
-    } else if (pathname === "/menu/minimilist") {
-      return "bg-[#e3e4e2]";
     } else if (pathname.startsWith("/menu/minimilist")) {
       return "bg-gray-200";
     } else {
