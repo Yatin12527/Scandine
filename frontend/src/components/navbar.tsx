@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
+import ProfileModal from "./profileModal";
 
 const navMenu = [
   {
@@ -29,6 +30,8 @@ const Navbar: React.FC = () => {
   const [pfp, setPfp] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userData, setUserData] = useState([]);
+  const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
 
   // Check if current route should hide navbar
   const shouldHideNavbar = () => {
@@ -56,12 +59,14 @@ const Navbar: React.FC = () => {
     } else {
       document.body.style.overflow = "unset";
     }
-
-    // Cleanup function
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
+
+  const handleProfileModalClose = () => {
+    setShowProfileModal(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +80,7 @@ const Navbar: React.FC = () => {
         if (response.data && response.data.picture) {
           setIsLoggedIn(true);
           setPfp(response.data.picture);
+          setUserData(response.data);
           console.log(response.data.picture);
         }
       } catch (error) {
@@ -87,7 +93,6 @@ const Navbar: React.FC = () => {
     fetchData();
   }, []);
 
-  // Don't render navbar if on excluded route - MOVED AFTER ALL HOOKS
   if (shouldHideNavbar()) {
     return null;
   }
@@ -96,10 +101,19 @@ const Navbar: React.FC = () => {
 
   return (
     <>
+      {/* Mobile menu backdrop */}
       {isMenuOpen && (
         <div
           className="fixed inset-0 bg-black/20 z-40 md:hidden"
           onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+
+      {/* Profile modal backdrop */}
+      {showProfileModal && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40"
+          onClick={handleProfileModalClose}
         />
       )}
 
@@ -143,10 +157,21 @@ const Navbar: React.FC = () => {
                     ))}
                   </div>
 
-                  <Avatar className="cursor-pointer">
-                    <AvatarImage src={pfp} alt="Profile" />
-                    <AvatarFallback>AV</AvatarFallback>
-                  </Avatar>
+                  <div className="relative">
+                    <Avatar
+                      className="cursor-pointer"
+                      onClick={() => setShowProfileModal((prev) => !prev)}
+                    >
+                      <AvatarImage src={pfp} alt="Profile" />
+                      <AvatarFallback>AV</AvatarFallback>
+                    </Avatar>
+                    {showProfileModal && (
+                      <ProfileModal
+                        userData={userData}
+                        onClose={handleProfileModalClose}
+                      />
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>

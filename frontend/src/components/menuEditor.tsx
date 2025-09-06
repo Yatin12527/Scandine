@@ -2,10 +2,8 @@ import Data from "@/components/menuOneData";
 import HeadingOne from "@/components/menuOneHeading";
 import axios from "axios";
 import {
-  useParams,
   usePathname,
   useRouter,
-  useSearchParams,
 } from "next/navigation";
 import React, { useState, useEffect } from "react";
 

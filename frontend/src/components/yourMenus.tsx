@@ -112,7 +112,8 @@ const Menus = () => {
 
       {/* Create New Menu CTA */}
       <div className="text-center mt-20 mb-20 sm:mb-0">
-        <button className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-xl hover:bg-slate-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+        <button className="px-8 py-4 bg-slate-900 text-white font-semibold rounded-xl hover:bg-white hover:text-slate-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+        onClick={()=>router.push("/menu")}>
           Browse Templates
         </button>
       </div>

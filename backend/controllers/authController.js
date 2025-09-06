@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, 
+    secure: false,
     sameSite: "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
@@ -80,6 +80,25 @@ export const login = async (req, res) => {
   });
 };
 
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during logout",
+    });
+  }
+};
 export const googleLogin = (_req, res) => {
   const redirectUrl =
     `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -111,8 +130,8 @@ export const callback = async (req, res) => {
       },
     }
   );
-  
-  const { name, email,picture} = userRes.data;
+
+  const { name, email, picture } = userRes.data;
   const existingUser = await User.findOne({ username: email });
   //incase someone's token expired and theyare trying to login again with google give them fresh token
   if (existingUser) {
@@ -121,7 +140,7 @@ export const callback = async (req, res) => {
         id: existingUser.id,
         name: existingUser.name,
         username: existingUser.username,
-        picture:existingUser.picture,
+        picture: existingUser.picture,
       },
       process.env.JWTSECRET,
       { expiresIn: "30d" }
@@ -141,7 +160,7 @@ export const callback = async (req, res) => {
     name: name,
     username: email,
     password: "GOOGLE",
-    picture:picture,
+    picture: picture,
   });
 
   let user = await User.findOne({ username: email });
@@ -150,7 +169,7 @@ export const callback = async (req, res) => {
       id: user.id,
       name: user.name,
       username: user.username,
-      picture:user.picture,
+      picture: user.picture,
     },
     process.env.JWTSECRET,
     { expiresIn: "30d" }
