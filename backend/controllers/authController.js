@@ -82,10 +82,10 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    const cookieOptions = getCookieOptions();
-    delete cookieOptions.maxAge; 
-
-    res.clearCookie("token", cookieOptions);
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: "lax",
+    });
 
     res.status(200).json({
       success: true,
@@ -99,7 +99,6 @@ export const logout = async (req, res) => {
     });
   }
 };
-
 export const googleLogin = (_req, res) => {
   const redirectUrl =
     `https://accounts.google.com/o/oauth2/v2/auth?` +
