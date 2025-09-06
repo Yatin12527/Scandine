@@ -39,8 +39,9 @@ export const signup = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: "lax",
+    domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
   return res.status(200).json({
@@ -84,7 +85,9 @@ export const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: "lax",
+      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
     });
 
     res.status(200).json({
@@ -148,8 +151,9 @@ export const callback = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: "lax",
+      domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
@@ -177,9 +181,10 @@ export const callback = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production',
     sameSite: "lax",
+    domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
-  res.redirect("http://localhost:3000");
+  res.redirect(process.env.FRONTEND_SERVICE);
 };

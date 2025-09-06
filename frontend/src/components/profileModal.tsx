@@ -21,10 +21,16 @@ const ProfileModal = ({ userData, onClose }) => {
       );
 
       if (response.status === 200) {
-       window.location.reload();
+        // Clear any local storage if needed
+        localStorage.clear();
+        // Force a hard reload to clear any cached state
+        window.location.href = '/';
       }
     } catch (error) {
       console.error("Logout failed:", error);
+      // Even if logout fails on server, clear local state
+      localStorage.clear();
+      window.location.href = '/';
     }
   };
 
