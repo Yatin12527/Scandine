@@ -133,7 +133,7 @@ export const callback = async (req, res) => {
 
   const { name, email, picture } = userRes.data;
   const existingUser = await User.findOne({ username: email });
-  
+  //incase someone's token expired and theyare trying to login again with google give them fresh token
   if (existingUser) {
     const token = jwt.sign(
       {
@@ -146,21 +146,16 @@ export const callback = async (req, res) => {
       { expiresIn: "30d" }
     );
 
-    console.log('=== GOOGLE LOGIN - SETTING COOKIE ===');
-    console.log('Setting cookie for existing user');
-
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "lax",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
-    console.log('Redirecting to:', process.env.FRONTEND_SERVICE);
     return res.redirect(process.env.FRONTEND_SERVICE);
   }
 
-  // Rest of the function stays the same...
   await User.create({
     name: name,
     username: email,
@@ -180,15 +175,11 @@ export const callback = async (req, res) => {
     { expiresIn: "30d" }
   );
 
-  console.log('=== GOOGLE LOGIN - SETTING COOKIE FOR NEW USER ===');
-  
   res.cookie("token", token, {
     httpOnly: true,
-    secure: true, 
-    sameSite: "none",
+    secure: true,
+    sameSite: "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
-  
-  console.log('Redirecting to:', process.env.FRONTEND_SERVICE);
-  res.redirect(process.env.FRONTEND_SERVICE); // Fixed: should use env variable, not localhost
+  res.redirect("http://localhost:3000");
 };
