@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { MdEmail } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Toast } from "primereact/toast";
 import Link from "next/link";
 
 type LoginFormInputs = {
@@ -20,31 +19,11 @@ export default function LoginForm() {
   } = useForm<LoginFormInputs>();
   const [showpass, setshowpass] = useState(false);
 
-  const toast = useRef<Toast>(null);
-
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}/users/login`,
-        data
-      );
-      const token = response.data.token;
-      localStorage.setItem("token", token);
-      toast.current?.show({
-        severity: "success",
-        summary: "Login Success",
-        detail: "Successfully logged in",
-      });
-    } catch (error: any) {
-      const message =
-        error.response?.status === 401
-          ? "Wrong credentials."
-          : "Wrong credentials.";
-      toast.current?.show({
-        severity: "error",
-        summary: "Login Error",
-        detail: message,
-      });
+      await axios.post(`${process.env.NEXT_PUBLIC_SERVER}/users/login`, data);
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   };
 
@@ -114,7 +93,6 @@ export default function LoginForm() {
             {errors.password?.message || ""}
           </span>
 
-          <Toast ref={toast} />
           <button
             type="submit"
             className="bg-[#ff7c7c] text-white rounded-lg px-4 py-2 font-semibold mt-2 cursor-pointer hover:bg-[#e05555]"
@@ -168,7 +146,7 @@ export default function LoginForm() {
           {/* Sign Up Link */}
           <div className="mt-4 text-center">
             <span className="text-sm text-gray-600 ">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
             </span>
             <Link
               href="/auth/signup"

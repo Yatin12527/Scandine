@@ -60,7 +60,7 @@ export default function HeadingOne() {
       setImage(file);
     }
   };
-  const imgsubmit = async (data: any) => {
+  const imgsubmit = async (data) => {
     try {
       setIsUploading(true);
       const file = data.logo[0];
@@ -94,7 +94,7 @@ export default function HeadingOne() {
     }
   };
 
-  const textsubmit = (data: any) => {
+  const textsubmit = (data) => {
     setHeading((prev) => ({
       ...prev,
       restaurantName: data.restaurantName,

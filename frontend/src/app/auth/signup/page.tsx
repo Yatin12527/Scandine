@@ -1,10 +1,9 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { MdDriveFileRenameOutline, MdEmail } from "react-icons/md";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Toast } from "primereact/toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -22,7 +21,6 @@ export default function SignupForm() {
   } = useForm<SignupFormInputs>();
   const router = useRouter();
   const [showpass, setshowpass] = useState(false);
-  const toast = useRef<Toast>(null);
 
   const onSubmit = async (data: SignupFormInputs) => {
     try {
@@ -34,29 +32,13 @@ export default function SignupForm() {
       if (response.data.redirect) {
         router.push(response.data.redirect);
       }
-      toast.current?.show({
-        severity: "success",
-        summary: "Signup Success",
-        detail: "Successfully signed up",
-      });
-    } catch (error: any) {
-      const message =
-        error.response?.status === 401
-          ? "This user already exists. Try logging in?"
-          : "Something went wrong.";
-
-      toast.current?.show({
-        severity: "error",
-        summary: "Signup Error",
-        detail: message,
-      });
+    } catch (error) {
+      console.error("Signup failed:", error);
     }
   };
 
   return (
     <div className="flex  flex-col sm:flex-row h-screen bg-white text-black">
-      
-
       <div className="hidden w-1/2 h-full sm:flex items-center justify-center bg-[#ffe4dc]">
         <img
           src="/eating.png"
@@ -136,7 +118,6 @@ export default function SignupForm() {
             {errors.password?.message || ""}
           </span>
 
-          <Toast ref={toast} />
           <button
             type="submit"
             className="bg-[#ff7c7c] text-white rounded-lg px-4 py-2 font-semibold mt-2 cursor-pointer hover:bg-[#e05555]"

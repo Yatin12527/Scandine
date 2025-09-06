@@ -1,6 +1,5 @@
 "use client";
 import MenuOne from "@/components/menuEditor";
-import { param } from "framer-motion/client";
 import { useParams } from "next/navigation";
 import React from "react";
 

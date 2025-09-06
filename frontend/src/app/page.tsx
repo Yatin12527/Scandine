@@ -158,7 +158,7 @@ const Home: React.FC = () => {
               Why Choose <span className="text-orange-500">ScanDine</span>?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Everything you need to modernize your restaurant's ordering
+              Everything you need to modernize your restaurant&apos;s ordering
               experience
             </p>
           </div>

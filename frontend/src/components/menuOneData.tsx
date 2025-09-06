@@ -36,7 +36,7 @@ function Data({ sectionId }: { sectionId: number }) {
       setIspreview(true);
 
       let maxId = 0;
-      current?.items?.forEach((item: any) => {
+      current?.items?.forEach((item) => {
         if (item.id > maxId) maxId = item.id;
       });
       setNextId(maxId + 1);
