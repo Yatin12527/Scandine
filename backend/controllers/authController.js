@@ -86,7 +86,7 @@ export const logout = async (req, res) => {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      // sameSite: "lax",
+      sameSite: "strict",
       domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
     });
 
@@ -152,7 +152,7 @@ export const callback = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      // sameSite: "lax",
+      sameSite: "strict",
       domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
@@ -182,7 +182,7 @@ export const callback = async (req, res) => {
   res.cookie("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    // sameSite: "lax",
+    sameSite: "strict",
     domain: process.env.NODE_ENV === 'production' ? process.env.COOKIE_DOMAIN : undefined,
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
