@@ -71,34 +71,12 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const getCookieValue = (name) => {
-          const cookies = document.cookie.split(";");
-          for (let cookie of cookies) {
-            const [cookieName, cookieValue] = cookie.trim().split("=");
-            if (cookieName === name) {
-              return cookieValue;
-            }
-          }
-          return null;
-        };
-
-        const token = getCookieValue("token");
-
-        if (!token) {
-          setIsLoggedIn(false);
-          setIsLoading(false);
-          return;
-        }
-
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER}/users/me`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials: true,
           }
         );
-
         if (response.data && response.data.picture) {
           setIsLoggedIn(true);
           setPfp(response.data.picture);
