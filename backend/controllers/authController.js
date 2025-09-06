@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false,
+    secure: true,
     sameSite: "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
@@ -148,7 +148,7 @@ export const callback = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: "lax",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
@@ -177,7 +177,7 @@ export const callback = async (req, res) => {
 
   res.cookie("token", token, {
     httpOnly: true,
-    secure: false, // true in production (HTTPS)
+    secure: true, 
     sameSite: "lax",
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
