@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import ProfileModal from "./profileModal";
@@ -26,6 +26,7 @@ const navMenu = [
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [pfp, setPfp] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -138,6 +139,8 @@ const Navbar: React.FC = () => {
                 width={100}
                 height={50}
                 alt="QR Menu Logo"
+                onClick={()=>router.push("/")}
+                className="cursor-pointer"
               />
             </div>
             <div>

@@ -52,7 +52,7 @@ const Home: React.FC = () => {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center 979:justify-start">
                 <button
-                  className="bg-orange-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-all transform hover:scale-105 flex items-center justify-center gap-2"
+                  className="bg-orange-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-orange-600 transition-all transform hover:scale-105 flex items-center justify-center gap-2 cursor-pointer"
                   onClick={() => {
                     router.push("/menu");
                   }}

@@ -2,6 +2,8 @@
 import Menus from "@/components/yourMenus";
 import React, { useState } from "react";
 import { IoRestaurant, IoBarChart, IoSettings } from "react-icons/io5";
+import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 const navItems = [
   { key: "menus", label: "Your Menus", icon: IoRestaurant },
@@ -10,9 +12,21 @@ const navItems = [
 ];
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("menus");
+  const router= useRouter();
 
   return (
     <div className="min-h-screen bg-[#fffcf4] py-8 px-4">
+      <button
+        className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-18 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
+        onClick={() => router.back()}
+      >
+        <div className="w-8 h-8 hidden  rounded-full bg-gray-100 sm:flex items-center justify-center  transition-colors sm:mr-2">
+          <IoIosArrowBack size={18} className="text-gray-700 " />
+        </div>
+        <span className="text-sm font-medium text-gray-800 hidden sm:flex">
+          Back
+        </span>
+      </button>
       <div className="max-w-7xl mx-auto">
         {/* desktop Navigation */}
         <div className="hidden mb-12 items-center sm:flex justify-center mt-10">
