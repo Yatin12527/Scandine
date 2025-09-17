@@ -153,7 +153,7 @@ export default function SignupForm() {
               </span>
             </button>
 
-            <button
+            {/* <button
               className="flex-1 flex items-center justify-center gap-3 p-3 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-lg shadow-sm cursor-pointer"
               onClick={() =>
                 (window.location.href = `${process.env.NEXT_PUBLIC_SERVER}/users/google`)
@@ -166,7 +166,7 @@ export default function SignupForm() {
               <span className="font-medium text-sm hidden sm:inline">
                 Facebook
               </span>
-            </button>
+            </button> */}
           </div>
 
           {/* Sign Up Link */}
