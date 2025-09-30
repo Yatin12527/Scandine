@@ -6,7 +6,7 @@ const ProfileModal = ({ userData, onClose }) => {
   const router = useRouter();
 
   const menuItems = [
-    { name: "Profile", icon: User, route: "/profile" },
+    { name: "Account", icon: User, route: "/account" },
     { name: "Dashboard", icon: BarChart3, route: "/dashboard" },
     { name: "Settings", icon: Settings, route: "/settings" },
     { name: "Logout", icon: LogOut, route: null },

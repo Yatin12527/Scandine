@@ -138,7 +138,6 @@ export const callback = async (req, res) => {
         },
       }
     );
-
     const { name, email, picture } = userRes.data;
     let user = await User.findOne({ username: email });
 
@@ -172,5 +171,22 @@ export const callback = async (req, res) => {
     return res.redirect(
       `${process.env.FRONTEND_SERVICE}/auth/login?error=google_oauth_failed`
     );
+  }
+};
+
+export const addData = async (req, res) => {
+  try {
+    const ownerId = req.data.id;
+    const { lastName, businessName, role, phone, about } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      ownerId,
+      { lastName, businessName, role, phone, about },
+      { new: true }
+      // ususal behaviour of mongo is to return previous data not the updated doing new:true gives updated data
+    );
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update profile" });
   }
 };
