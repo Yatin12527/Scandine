@@ -203,3 +203,25 @@ export const addData = async (req, res) => {
     res.status(500).json({ error: "Failed to update profile" });
   }
 };
+
+export const me = async (req, res) => {
+  try {
+    const user = await User.findById(req.data.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const response = {
+      name: user.name ?? null,
+      username: user.username ?? null,
+      picture: user.picture ?? null,
+      lastName: user.lastName ?? null,
+      businessName: user.businessName ?? null,
+      role: user.role ?? null,
+      phone: user.phone ?? null,
+      about: user.about ?? null,
+    };
+
+    res.json(response);
+  } catch (e) {
+    res.status(500).json({ message: "Failed to load profile" });
+  }
+};
