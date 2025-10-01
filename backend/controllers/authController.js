@@ -176,15 +176,28 @@ export const callback = async (req, res) => {
 
 export const addData = async (req, res) => {
   try {
-    const ownerId = req.data.id;
-    const { lastName, businessName, role, phone, about } = req.body;
+    const userId = req.data.id;
+    const {
+      name,
+      username,
+      picture,
+      lastName,
+      businessName,
+      role,
+      phone,
+      about,
+    } = req.body;
+
+    if (phone && !/^\+?[0-9]{7,15}$/.test(phone)) {
+      return res.status(400).json({ error: "Invalid phone number format" });
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
-      ownerId,
-      { lastName, businessName, role, phone, about },
+      userId,
+      { lastName, businessName, role, phone, about, name, username, picture },
       { new: true }
       // ususal behaviour of mongo is to return previous data not the updated doing new:true gives updated data
-    );
+    ).select("-password");
     res.status(200).json(updatedUser);
   } catch (error) {
     res.status(500).json({ error: "Failed to update profile" });

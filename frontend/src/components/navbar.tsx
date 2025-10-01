@@ -82,7 +82,6 @@ const Navbar: React.FC = () => {
           setIsLoggedIn(true);
           setPfp(response.data.picture);
           setUserData(response.data);
-          console.log(response.data.picture);
         }
       } catch (error) {
         console.error("Failed to fetch user data:", error);

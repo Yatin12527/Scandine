@@ -36,7 +36,6 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
           );
           const sections = response.data.sections;
           const sectionIdsArray = Object.keys(sections).map(Number);
-          console.log(response);
 
           if (sectionIdsArray.length > 0) {
             setSectionIds(sectionIdsArray);
@@ -83,7 +82,6 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
     const newId = Date.now();
     const updated = [...sectionIds, newId];
     setSectionIds(updated);
-    console.log("updated:", updated);
     localStorage.setItem("menuSectionIds", JSON.stringify(updated));
   };
 

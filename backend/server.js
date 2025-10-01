@@ -7,16 +7,19 @@ import uploadRoute from "./routes/upload.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import validateToken from "./middlewares/authMiddleware.js";
+import User from "./models/Authmodel.js";
 
 dotenv.config();
 const app = express();
-app.use(cors({
+app.use(
+  cors({
     origin: process.env.FRONTEND_SERVICE,
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
-    exposedHeaders: ['Set-Cookie']
-  }));
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
+  })
+);
 app.use(cookieParser());
 const port = process.env.PORT;
 
@@ -29,11 +32,29 @@ async function main() {
 app.use(express.json());
 app.use("/api/users", authRoute);
 app.use("/api/items", menuRoute);
-app.use("/api",uploadRoute);
+app.use("/api", uploadRoute);
 
-// for navbar and telling frontend that im logged in 
-app.get("/api/users/me", validateToken, (req, res) => {
-  res.json(req.data);
+// for navbar and telling frontend that im logged in
+app.get("/api/users/me", validateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.data.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const response = {
+      name: user.name ?? null,
+      username: user.username ?? null,
+      picture: user.picture ?? null,
+      lastName: user.lastName ?? null,
+      businessName: user.businessName ?? null,
+      role: user.role ?? null,
+      phone: user.phone ?? null,
+      about: user.about ?? null,
+    };
+
+    res.json(response);
+  } catch (e) {
+    res.status(500).json({ message: "Failed to load profile" });
+  }
 });
 
 app.listen(port, () => {

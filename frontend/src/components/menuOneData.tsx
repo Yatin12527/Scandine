@@ -65,7 +65,6 @@ function Data({ sectionId }: { sectionId: number }) {
       },
     ]);
     setNextId((prevId) => prevId + 1);
-    console.log(sections);
   };
 
   const deleteItem = (idToDelete: number) => {

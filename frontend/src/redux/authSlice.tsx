@@ -2,21 +2,25 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface AuthState {
-  id: string | null;
   name: string | null;
   username: string | null;
   picture: string | null;
-  iat: number | null;
-  exp: number | null;
+  lastName: string | null;
+  businessName: string | null;
+  role: string | null;
+  phone: string | null;
+  about: string | null;
 }
 
 const initialState: AuthState = {
-  id: null,
   name: null,
   username: null,
   picture: null,
-  iat: null,
-  exp: null,
+  lastName: null,
+  businessName: null,
+  role: null,
+  phone: null,
+  about: null,
 };
 
 export const asyncGetApi = createAsyncThunk<AuthState, void>(
@@ -26,7 +30,28 @@ export const asyncGetApi = createAsyncThunk<AuthState, void>(
       `${process.env.NEXT_PUBLIC_SERVER}/users/me`,
       { withCredentials: true }
     );
-    return response.data; 
+    return response.data;
+  }
+);
+export const asyncPutApi = createAsyncThunk<AuthState, AuthState>(
+  "auth/putUserData",
+  async (payload) => {
+    const response = await axios.put<AuthState>(
+      `${process.env.NEXT_PUBLIC_SERVER}/users/addData`,
+      {
+        name: payload.name,
+        username: payload.username,
+        picture: payload.picture,
+        lastName: payload.lastName,
+        businessName: payload.businessName,
+        role: payload.role,
+        phone: payload.phone,
+        about: payload.about,
+      },
+      { withCredentials: true }
+    );
+    return response.data;
+    
   }
 );
 
@@ -38,7 +63,13 @@ const authSlice = createSlice({
     builder.addCase(
       asyncGetApi.fulfilled,
       (state, action: PayloadAction<AuthState>) => {
-        return action.payload; 
+        return action.payload;
+      }
+    );
+    builder.addCase(
+      asyncPutApi.fulfilled,
+      (state, action: PayloadAction<AuthState>) => {
+        return action.payload;
       }
     );
   },

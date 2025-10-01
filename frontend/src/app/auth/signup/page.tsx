@@ -28,7 +28,6 @@ export default function SignupForm() {
         `${process.env.NEXT_PUBLIC_SERVER}/users/signup`,
         data
       );
-      console.log(response);
       if (response.data.redirect) {
         router.push(response.data.redirect);
       }

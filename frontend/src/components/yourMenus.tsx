@@ -30,7 +30,6 @@ const Menus = () => {
       }
     };
     getMenus();
-    console.log(userMenus);
   }, []);
 
   return (

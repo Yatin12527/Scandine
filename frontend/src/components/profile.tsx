@@ -1,6 +1,6 @@
 "use client";
-import { asyncGetApi } from "@/redux/authSlice";
-import { useEffect } from "react";
+import { asyncGetApi, asyncPutApi } from "@/redux/authSlice";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../redux/store";
 import { FaPencil } from "react-icons/fa6";
@@ -8,11 +8,62 @@ import Image from "next/image";
 
 const Profile = () => {
   const auth = useSelector((state: RootState) => state.auth);
+  const [changes, setChanges] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
+  const [formData, setFormData] = useState({
+    name: "",
+    username: "",
+    picture: "",
+    lastName: "",
+    businessName: "",
+    role: "",
+    phone: "",
+    about: "",
+  });
   useEffect(() => {
     dispatch(asyncGetApi());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (auth && Object.keys(auth).length > 0) {
+      setFormData({
+        name: auth.name || "",
+        username: auth.username || "",
+        picture: auth.picture || "",
+        lastName: auth.lastName || "",
+        businessName: auth.businessName || "",
+        role: auth.role || "",
+        phone: auth.phone || "",
+        about: auth.about || "",
+      });
+    }
+  }, [auth]);
+
   console.log(auth);
+
+  const handleInputChange = (fieldName, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [fieldName]: value,
+    }));
+    setChanges(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(
+      asyncPutApi({
+        name: formData.name,
+        username: formData.username,
+        picture: formData.picture,
+        lastName: formData.lastName,
+        businessName: formData.businessName,
+        role: formData.role,
+        phone: formData.phone,
+        about: formData.about,
+      })
+    );
+  };
   return (
     <div className="min-h-screen">
       <div className="mb-8">
@@ -38,23 +89,32 @@ const Profile = () => {
         </div>
       </div>
       <div>
-        <form className="grid grid-cols-2 gap-x-8 gap-y-4 mt-4">
-          {/* Full Name */}
+        <form
+          className="grid grid-cols-2 gap-x-8 gap-y-4 mt-4"
+          onSubmit={handleSubmit}
+        >
+          {/* First & Last Name */}
           <div className="flex flex-col">
             <label>First Name</label>
             <input
               type="text"
+              name="name"
               placeholder="First Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={auth.name || ""}
+              value={formData.name}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
+
           <div className="flex flex-col">
             <label>Last Name</label>
             <input
               type="text"
+              name="lastName"
               placeholder="Last Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
+              value={formData.lastName}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
 
@@ -63,17 +123,23 @@ const Profile = () => {
             <label>Email</label>
             <input
               type="email"
+              name="username"
               placeholder="Email"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={auth.username||""}
+              value={formData.username}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
+
           <div className="flex flex-col">
             <label>Full Name</label>
             <input
               type="text"
+              name="fullName"
               placeholder="Full Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
+              value={formData.name + " " + formData.lastName}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
 
@@ -82,16 +148,23 @@ const Profile = () => {
             <label>Business Name</label>
             <input
               type="text"
+              name="businessName"
               placeholder="Business Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
+              value={formData.businessName}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
+
           <div className="flex flex-col">
             <label>Role</label>
             <input
               type="text"
+              name="role"
               placeholder="Role"
               className="border border-gray-400 p-3 rounded-lg mt-1"
+              value={formData.role}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
 
@@ -100,8 +173,12 @@ const Profile = () => {
             <label>Phone Number</label>
             <input
               type="tel"
+              name="phone"
               placeholder="Phone Number"
+              pattern="[0-9]{10}"
               className="border border-gray-400 p-3 rounded-lg mt-1"
+              value={formData.phone}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
 
@@ -109,10 +186,27 @@ const Profile = () => {
           <div className="flex flex-col col-span-2">
             <label>Tell us about yourself</label>
             <textarea
+              name="about"
               placeholder="Tell us about yourself"
               className="border border-gray-400 p-3 rounded-lg mt-1 resize-none h-24"
+              value={formData.about}
+              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
+
+          {/* Save Button */}
+          <button
+            type="submit"
+            disabled={!changes}
+            className={`w-fit px-4 py-2 rounded-lg text-white duration-150 transition-all
+      ${
+        changes
+          ? "bg-orange-400 cursor-pointer hover:bg-amber-600"
+          : "bg-orange-300 cursor-not-allowed"
+      }`}
+          >
+            Save
+          </button>
         </form>
       </div>
     </div>
