@@ -8,7 +8,6 @@ const ProfileModal = ({ userData, onClose }) => {
   const menuItems = [
     { name: "Account", icon: User, route: "/account" },
     { name: "Dashboard", icon: BarChart3, route: "/dashboard" },
-    { name: "Settings", icon: Settings, route: "/settings" },
     { name: "Logout", icon: LogOut, route: null },
   ];
 
