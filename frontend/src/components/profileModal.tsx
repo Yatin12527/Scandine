@@ -1,4 +1,4 @@
-import { User, BarChart3, Settings, LogOut } from "lucide-react";
+import { User, BarChart3, LogOut } from "lucide-react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
