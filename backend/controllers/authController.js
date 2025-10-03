@@ -188,7 +188,7 @@ export const addData = async (req, res) => {
       about,
     } = req.body;
 
-    if (phone && !/^\+?[0-9]{7,15}$/.test(phone)) {
+    if (phone && !/^(?:\+\d{1,4}\s?)?[0-9]{7,15}$/.test(phone)) {
       return res.status(400).json({ error: "Invalid phone number format" });
     }
 

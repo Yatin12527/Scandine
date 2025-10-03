@@ -8,6 +8,7 @@ import Image from "next/image";
 import axios from "axios";
 import imageCompression from "browser-image-compression";
 import { ToastContainer, toast, Bounce } from "react-toastify";
+import PhoneSelector from "./ui/phoneSelector";
 
 const Profile = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -15,6 +16,7 @@ const Profile = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [img, setImg] = useState<string>();
   const [tempImg, setTempImg] = useState<string | null>(null);
+  const [countryCode, setCountryCode] = useState("+91");
   const [accountData, setAccountData] = useState({
     name: "",
     username: "",
@@ -46,7 +48,8 @@ const Profile = () => {
         lastName: auth.lastName || "",
         businessName: auth.businessName || "",
         role: auth.role || "",
-        phone: auth.phone || "",
+        phone:
+          typeof auth.phone === "string" ? auth.phone.split(" ")[1] || "" : "",
         about: auth.about || "",
       });
     }
@@ -72,7 +75,7 @@ const Profile = () => {
           lastName: accountData.lastName,
           businessName: accountData.businessName,
           role: accountData.role,
-          phone: accountData.phone,
+          phone: countryCode + " " + accountData.phone,
           about: accountData.about,
         })
       ).unwrap();
@@ -277,15 +280,19 @@ const Profile = () => {
           {/* Phone Number - full width */}
           <div className="flex flex-col col-span-2">
             <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Phone Number"
-              pattern="[0-9]{10}"
-              className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={accountData.phone}
-              onChange={(e) => handleInputChange(e.target.name, e.target.value)}
-            />
+            <div className="flex items-center">
+              <PhoneSelector value={countryCode} onChange={setCountryCode} />
+              <input
+                type="tel"
+                name="phone"
+                placeholder="Phone Number"
+                className="border border-gray-400 p-3 rounded-lg mt-1"
+                value={accountData.phone}
+                onChange={(e) =>
+                  handleInputChange(e.target.name, e.target.value)
+                }
+              />
+            </div>
           </div>
 
           {/* Tell us about yourself - full width */}

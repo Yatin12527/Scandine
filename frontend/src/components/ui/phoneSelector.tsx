@@ -16,11 +16,11 @@ type Country = {
 };
 
 type PhoneSelectorProps = {
-  value: string;
+  value?: string;
   onChange: (value: string) => void;
 };
 
-const PhoneSelector = ({ value, onChange }: PhoneSelectorProps) => {
+const PhoneSelector = ({ value = "+91", onChange }: PhoneSelectorProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
