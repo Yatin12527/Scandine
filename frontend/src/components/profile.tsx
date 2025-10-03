@@ -164,23 +164,21 @@ const Profile = () => {
       <ToastContainer />
       <div>
         <form
-          className="grid grid-cols-2 gap-x-8 gap-y-4 mt-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-x-8 gap-y-4 mt-4"
           onSubmit={handleSubmit}
         >
-          <div className="relative w-max flex flex-col col-span-2">
-            {/* Profile picture */}
+          {/* Profile Picture */}
+          <div className="relative w-max flex flex-col col-span-1 md:col-span-2">
             {auth.picture || tempImg ? (
-              <Image
+              <img
                 src={tempImg || auth.picture}
                 alt="Profile picture"
-                width={95}
-                height={95}
-                className="rounded-full object-cover"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover"
               />
             ) : (
-              <div className="w-[95px] h-[95px] rounded-full bg-gray-300" />
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gray-300" />
             )}
-            {/* Hidden file input */}
+
             <input
               type="file"
               id="profilePic"
@@ -193,7 +191,7 @@ const Profile = () => {
                 }
               }}
             />
-            {/* Pencil icon triggers file input */}
+
             <div
               onClick={() => document.getElementById("profilePic")?.click()}
               className="absolute bottom-0 right-0 bg-orange-500 p-2 text-white border-[#fffcf4] border-3 rounded-full cursor-pointer"
@@ -202,7 +200,7 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* First & Last Name */}
+          {/* First Name */}
           <div className="flex flex-col">
             <label>First Name</label>
             <input
@@ -215,6 +213,7 @@ const Profile = () => {
             />
           </div>
 
+          {/* Last Name */}
           <div className="flex flex-col">
             <label>Last Name</label>
             <input
@@ -227,7 +226,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Email & Full Name */}
+          {/* Email */}
           <div className="flex flex-col">
             <label>Email</label>
             <input
@@ -240,6 +239,7 @@ const Profile = () => {
             />
           </div>
 
+          {/* Full Name */}
           <div className="flex flex-col">
             <label>Full Name</label>
             <input
@@ -252,7 +252,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Business Name & Role */}
+          {/* Business Name */}
           <div className="flex flex-col">
             <label>Business Name</label>
             <input
@@ -265,6 +265,7 @@ const Profile = () => {
             />
           </div>
 
+          {/* Role */}
           <div className="flex flex-col">
             <label>Role</label>
             <input
@@ -277,16 +278,16 @@ const Profile = () => {
             />
           </div>
 
-          {/* Phone Number - full width */}
-          <div className="flex flex-col col-span-2">
+          {/* Phone Number */}
+          <div className="flex flex-col col-span-1 md:col-span-2">
             <label>Phone Number</label>
-            <div className="flex items-center">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <PhoneSelector value={countryCode} onChange={setCountryCode} />
               <input
                 type="tel"
                 name="phone"
                 placeholder="Phone Number"
-                className="border border-gray-400 p-3 rounded-lg mt-1"
+                className="border border-gray-400 p-3 rounded-lg mt-1 flex-1"
                 value={accountData.phone}
                 onChange={(e) =>
                   handleInputChange(e.target.name, e.target.value)
@@ -295,8 +296,8 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Tell us about yourself - full width */}
-          <div className="flex flex-col col-span-2">
+          {/* About */}
+          <div className="flex flex-col col-span-1 md:col-span-2">
             <label>Tell us about yourself</label>
             <textarea
               name="about"
@@ -311,7 +312,7 @@ const Profile = () => {
           <button
             type="submit"
             disabled={!changes}
-            className={`w-fit px-4 py-2 rounded-lg text-white duration-150 transition-all
+            className={`w-fit mb-20 sm:mb-0 px-4 py-2 rounded-lg text-white duration-150 transition-all
       ${
         changes && !auth.loading
           ? "bg-orange-400 cursor-pointer hover:bg-amber-600"
@@ -320,6 +321,7 @@ const Profile = () => {
           >
             {auth.loading ? "Saving..." : "Save"}
           </button>
+        
         </form>
       </div>
     </div>
