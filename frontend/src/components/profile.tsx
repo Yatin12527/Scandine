@@ -5,12 +5,17 @@ import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../redux/store";
 import { FaPencil } from "react-icons/fa6";
 import Image from "next/image";
+import axios from "axios";
+import imageCompression from "browser-image-compression";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 
 const Profile = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const [changes, setChanges] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
-  const [formData, setFormData] = useState({
+  const [img, setImg] = useState<string>();
+  const [tempImg, setTempImg] = useState<string | null>(null);
+  const [accountData, setAccountData] = useState({
     name: "",
     username: "",
     picture: "",
@@ -21,12 +26,20 @@ const Profile = () => {
     about: "",
   });
   useEffect(() => {
-    dispatch(asyncGetApi());
+    const fetchData = async () => {
+      try {
+        await dispatch(asyncGetApi()).unwrap();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   useEffect(() => {
     if (auth && Object.keys(auth).length > 0) {
-      setFormData({
+      setAccountData({
         name: auth.name || "",
         username: auth.username || "",
         picture: auth.picture || "",
@@ -39,30 +52,92 @@ const Profile = () => {
     }
   }, [auth]);
 
-  console.log(auth);
-
   const handleInputChange = (fieldName, value) => {
-    setFormData((prev) => ({
+    setAccountData((prev) => ({
       ...prev,
       [fieldName]: value,
     }));
     setChanges(true);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(
-      asyncPutApi({
-        name: formData.name,
-        username: formData.username,
-        picture: formData.picture,
-        lastName: formData.lastName,
-        businessName: formData.businessName,
-        role: formData.role,
-        phone: formData.phone,
-        about: formData.about,
-      })
-    );
+
+    try {
+      await dispatch(
+        asyncPutApi({
+          name: accountData.name,
+          username: accountData.username,
+          picture: img,
+          lastName: accountData.lastName,
+          businessName: accountData.businessName,
+          role: accountData.role,
+          phone: accountData.phone,
+          about: accountData.about,
+        })
+      ).unwrap();
+      setChanges(false);
+      toast.success("Changes saved", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (error) {
+      console.error(error);
+      setChanges(true);
+    }
+  };
+
+  const handleImage = async (file) => {
+    try {
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1280,
+        useWebWorker: true,
+      });
+      setTempImg(URL.createObjectURL(compressedFile));
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+      const response = await axios.post(
+        "http://localhost:4000/api/upload-image",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      setImg(response.data.url);
+      setChanges(true);
+      toast.success("Image uploaded successfully!", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.warn(error, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
   };
   return (
     <div className="min-h-screen">
@@ -71,28 +146,46 @@ const Profile = () => {
         <div className="h-1 w-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-full"></div>
       </div>
       <h2 className="text-xl font-bold text-gray-600 mb-2">Account details</h2>
-      <div className="relative w-max">
-        {auth.picture ? (
-          <Image
-            src={auth.picture}
-            alt="Profile picture"
-            width={95}
-            height={95}
-            className="rounded-full"
-          />
-        ) : (
-          <div className="w-[95px] h-[95px] rounded-full bg-gray-300" />
-        )}
-
-        <div className="absolute bottom-0 right-0 bg-orange-500 p-2 text-white border-[#fffcf4] border-3 rounded-full cursor-pointer">
-          <FaPencil />
-        </div>
-      </div>
+      <ToastContainer />
       <div>
         <form
           className="grid grid-cols-2 gap-x-8 gap-y-4 mt-4"
           onSubmit={handleSubmit}
         >
+          <div className="relative w-max flex flex-col col-span-2">
+            {/* Profile picture */}
+            {auth.picture || tempImg ? (
+              <Image
+                src={tempImg || auth.picture}
+                alt="Profile picture"
+                width={95}
+                height={95}
+                className="rounded-full"
+              />
+            ) : (
+              <div className="w-[95px] h-[95px] rounded-full bg-gray-300" />
+            )}
+            {/* Hidden file input */}
+            <input
+              type="file"
+              id="profilePic"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  handleImage(file);
+                }
+              }}
+            />
+            {/* Pencil icon triggers file input */}
+            <div
+              onClick={() => document.getElementById("profilePic")?.click()}
+              className="absolute bottom-0 right-0 bg-orange-500 p-2 text-white border-[#fffcf4] border-3 rounded-full cursor-pointer"
+            >
+              <FaPencil />
+            </div>
+          </div>
+
           {/* First & Last Name */}
           <div className="flex flex-col">
             <label>First Name</label>
@@ -101,7 +194,7 @@ const Profile = () => {
               name="name"
               placeholder="First Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.name}
+              value={accountData.name}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -113,7 +206,7 @@ const Profile = () => {
               name="lastName"
               placeholder="Last Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.lastName}
+              value={accountData.lastName}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -126,7 +219,7 @@ const Profile = () => {
               name="username"
               placeholder="Email"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.username}
+              value={accountData.username}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -138,7 +231,7 @@ const Profile = () => {
               name="fullName"
               placeholder="Full Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.name + " " + formData.lastName}
+              value={accountData.name + " " + accountData.lastName}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -151,7 +244,7 @@ const Profile = () => {
               name="businessName"
               placeholder="Business Name"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.businessName}
+              value={accountData.businessName}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -163,7 +256,7 @@ const Profile = () => {
               name="role"
               placeholder="Role"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.role}
+              value={accountData.role}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -177,7 +270,7 @@ const Profile = () => {
               placeholder="Phone Number"
               pattern="[0-9]{10}"
               className="border border-gray-400 p-3 rounded-lg mt-1"
-              value={formData.phone}
+              value={accountData.phone}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -189,7 +282,7 @@ const Profile = () => {
               name="about"
               placeholder="Tell us about yourself"
               className="border border-gray-400 p-3 rounded-lg mt-1 resize-none h-24"
-              value={formData.about}
+              value={accountData.about}
               onChange={(e) => handleInputChange(e.target.name, e.target.value)}
             />
           </div>
@@ -200,12 +293,12 @@ const Profile = () => {
             disabled={!changes}
             className={`w-fit px-4 py-2 rounded-lg text-white duration-150 transition-all
       ${
-        changes
+        changes && !auth.loading
           ? "bg-orange-400 cursor-pointer hover:bg-amber-600"
           : "bg-orange-300 cursor-not-allowed"
       }`}
           >
-            Save
+            {auth.loading ? "Saving..." : "Save"}
           </button>
         </form>
       </div>

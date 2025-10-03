@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
+import { Satellite } from "lucide-react";
 
 interface AuthState {
   name: string | null;
@@ -10,6 +11,8 @@ interface AuthState {
   role: string | null;
   phone: string | null;
   about: string | null;
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: AuthState = {
@@ -21,6 +24,8 @@ const initialState: AuthState = {
   role: null,
   phone: null,
   about: null,
+  loading: false,
+  error: null,
 };
 
 export const asyncGetApi = createAsyncThunk<AuthState, void>(
@@ -33,7 +38,7 @@ export const asyncGetApi = createAsyncThunk<AuthState, void>(
     return response.data;
   }
 );
-export const asyncPutApi = createAsyncThunk<AuthState, AuthState>(
+export const asyncPutApi = createAsyncThunk<AuthState, Partial<AuthState>>(
   "auth/putUserData",
   async (payload) => {
     const response = await axios.put<AuthState>(
@@ -51,7 +56,6 @@ export const asyncPutApi = createAsyncThunk<AuthState, AuthState>(
       { withCredentials: true }
     );
     return response.data;
-    
   }
 );
 
@@ -60,18 +64,34 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    //get
+    builder.addCase(asyncGetApi.pending, (state) => {
+      state.error = null;
+    });
     builder.addCase(
       asyncGetApi.fulfilled,
       (state, action: PayloadAction<AuthState>) => {
         return action.payload;
       }
     );
+    builder.addCase(asyncGetApi.rejected, (state, action) => {
+      state.error = action.error.message || "Failed to fetch data";
+    });
+    //put
+    builder.addCase(asyncPutApi.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
     builder.addCase(
       asyncPutApi.fulfilled,
       (state, action: PayloadAction<AuthState>) => {
         return action.payload;
       }
     );
+    builder.addCase(asyncPutApi.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message || "Failed to update data";
+    });
   },
 });
 
