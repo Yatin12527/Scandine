@@ -5,9 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import axios from "axios";
 import Link from "next/link";
 import ProfileModal from "./profileModal";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { asyncGetApi } from "@/redux/authSlice";
+import { AuthState } from "@/redux/authSlice";
 
 const navMenu = [
   {
@@ -28,11 +31,11 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [pfp, setPfp] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [userData, setUserData] = useState([]);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const auth = useSelector((state: RootState) => state.auth);
 
   // Check if current route should hide navbar
   const shouldHideNavbar = () => {
@@ -72,17 +75,9 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}/users/me`,
-          {
-            withCredentials: true,
-          }
-        );
-        if (response.data && response.data.picture) {
-          setIsLoggedIn(true);
-          setPfp(response.data.picture);
-          setUserData(response.data);
-        }
+        await dispatch(asyncGetApi()).unwrap();
+        setIsLoggedIn(true);
+        console.log("rerender");
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         setIsLoggedIn(false);
@@ -91,7 +86,7 @@ const Navbar: React.FC = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   if (shouldHideNavbar()) {
     return null;
@@ -138,7 +133,7 @@ const Navbar: React.FC = () => {
                 width={100}
                 height={50}
                 alt="QR Menu Logo"
-                onClick={()=>router.push("/")}
+                onClick={() => router.push("/")}
                 className="cursor-pointer"
               />
             </div>
@@ -164,12 +159,12 @@ const Navbar: React.FC = () => {
                       className="cursor-pointer"
                       onClick={() => setShowProfileModal((prev) => !prev)}
                     >
-                      <AvatarImage src={pfp} alt="Profile" />
+                      <AvatarImage src={auth.picture} alt="Profile" />
                       <AvatarFallback>AV</AvatarFallback>
                     </Avatar>
                     {showProfileModal && (
                       <ProfileModal
-                        userData={userData}
+                        userData={auth}
                         onClose={handleProfileModalClose}
                       />
                     )}

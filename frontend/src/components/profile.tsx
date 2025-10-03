@@ -77,6 +77,8 @@ const Profile = () => {
         })
       ).unwrap();
       setChanges(false);
+      setTempImg(null);
+
       toast.success("Changes saved", {
         position: "top-right",
         autoClose: 2000,
@@ -90,11 +92,21 @@ const Profile = () => {
       });
     } catch (error) {
       console.error(error);
-      setChanges(true);
+      toast.error("Failed to save changes", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
-  const handleImage = async (file) => {
+  const handleImage = async (file: File) => {
     try {
       const compressedFile = await imageCompression(file, {
         maxSizeMB: 0.5,
@@ -126,7 +138,7 @@ const Profile = () => {
       });
     } catch (error) {
       console.log(error);
-      toast.warn(error, {
+      toast.error("Failed to upload image", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -160,7 +172,7 @@ const Profile = () => {
                 alt="Profile picture"
                 width={95}
                 height={95}
-                className="rounded-full"
+                className="rounded-full object-cover"
               />
             ) : (
               <div className="w-[95px] h-[95px] rounded-full bg-gray-300" />
@@ -169,6 +181,7 @@ const Profile = () => {
             <input
               type="file"
               id="profilePic"
+              accept="image/*"
               className="hidden"
               onChange={(e) => {
                 const file = e.target.files?.[0];
