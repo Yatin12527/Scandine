@@ -10,7 +10,6 @@ import ProfileModal from "./profileModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { asyncGetApi } from "@/redux/authSlice";
-import { AuthState } from "@/redux/authSlice";
 
 const navMenu = [
   {
