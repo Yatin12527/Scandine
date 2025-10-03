@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Satellite } from "lucide-react";
 
 interface AuthState {
   name: string | null;
