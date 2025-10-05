@@ -5,11 +5,19 @@ import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import Navbar from "@/components/navbar";
 import ReduxProvider from "../redux/reduxProvider";
+import localFont from "next/font/local";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const captureIt = localFont({
+  src: "../../public/fonts/Capture-it.ttf",
+  variable: "--font-capture-it",
+  weight: "400",
+  style: "normal",
 });
 
 export const metadata: Metadata = {
@@ -28,13 +36,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${captureIt.variable}`}
+    >
       <head>
         <link rel="icon" href="/logo2.png" type="image/png" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className="antialiased">
         <ReduxProvider>
           <Navbar />
           {children}

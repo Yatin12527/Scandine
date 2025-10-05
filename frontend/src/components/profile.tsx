@@ -119,7 +119,7 @@ const Profile = () => {
       const formData = new FormData();
       formData.append("file", compressedFile);
       const response = await axios.post(
-        "http://localhost:4000/api/upload-image",
+        `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

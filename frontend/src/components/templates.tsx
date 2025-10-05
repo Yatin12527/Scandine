@@ -15,8 +15,8 @@ const Templates = [
       "Rich colors, bold fonts, and tempting food shots in a clean, well-spaced layout. Perfect for showcasing vibrant dishes with maximum visual appeal.",
     Subheading: "Perfect for restaurants & cafés.",
     Image: "/classic_black.jpg",
-    Preview: "menu/minimilist",
-    Use: "menu/minimilist/123",
+    Preview: "menu/classic_black/preview",
+    Use: "menu/classic_black/create",
     badge: "Premium",
   },
   {

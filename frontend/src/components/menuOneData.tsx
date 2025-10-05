@@ -3,9 +3,64 @@ import React, { useEffect, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import axios from "axios";
-import { HiPencilSquare } from "react-icons/hi2";
+import Minimilist from "./minimilistPreview";
+
+const themes = {
+  default: {
+    header: "from-orange-500 to-orange-600",
+    headerFocus: "focus:text-white",
+    accent: "green",
+    bg: "white",
+    text: "gray-900",
+    label: "gray-700",
+    inputBg: "gray-50",
+    border: "gray-200",
+  },
+  dark: {
+    header: "from-gray-700 to-gray-800",
+    headerFocus: "focus:text-white focus:bg-gray-700",
+    accent: "green",
+    bg: "gray-800",
+    text: "white",
+    label: "gray-300",
+    inputBg: "gray-700",
+    border: "gray-600",
+  },
+  purple: {
+    header: "from-purple-500 to-purple-600",
+    headerFocus: "focus:text-purple-600",
+    accent: "purple",
+    bg: "purple-50",
+    text: "purple-900",
+    label: "purple-900",
+    inputBg: "white",
+    border: "purple-200",
+  },
+  ocean: {
+    header: "from-cyan-500 to-blue-500",
+    headerFocus: "focus:text-cyan-600",
+    accent: "cyan",
+    bg: "cyan-50",
+    text: "cyan-900",
+    label: "cyan-900",
+    inputBg: "white",
+    border: "cyan-200",
+  },
+  sunset: {
+    header: "from-rose-500 to-orange-500",
+    headerFocus: "focus:text-rose-600",
+    accent: "rose",
+    bg: "rose-50",
+    text: "rose-900",
+    label: "rose-900",
+    inputBg: "white",
+    border: "rose-200",
+  },
+};
 
 function Data({ sectionId }: { sectionId: number }) {
+  const [currentTheme, setCurrentTheme] = useState("default");
+  const t = themes[currentTheme];
   const [sections, setSections] = useState([
     {
       sectionTitle: "",
@@ -154,62 +209,28 @@ function Data({ sectionId }: { sectionId: number }) {
   return (
     <div>
       {isPreview ? (
-        <div className="max-w-xl mx-auto sm:p-0 p-10">
-          <div className="flex justify-between items-center ">
-            <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
-              {sections[0].sectionTitle}
-            </h2>
-
-            <HiPencilSquare
-              size={30}
-              style={{ color: "#f97316" }}
-              className="cursor-pointer mb-4 "
-              onClick={() => setIspreview(false)}
-            />
-          </div>
-          <div className="bg-gray-500 w-full h-0.5 mb-4" />
-          <div className="space-y-2">
-            {sections[0].items.map((data, index) => (
-              <div key={index} className="flex justify-between items-start">
-                <div className="flex-1 pr-4">
-                  <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
-                    {data.value}
-                  </h3>
-                  <p className="text-xs text-gray-600 cursor-pointer  hover:text-green-600 leading-tight">
-                    {data.description}
-                  </p>
-                </div>
-                <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
-                  {data.price}
-                </span>
-              </div>
-            ))}
-          </div>
-          {imgUrl && imgUrl.trim() !== "" && (
-            <div className="w-full h-60 mt-4">
-              <img
-                src={imgUrl}
-                alt="Uploaded Preview"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-          )}
-        </div>
+        <Minimilist
+          data={sections[0]}
+          imgUrl={imgUrl}
+          setIspreview={setIspreview}
+        />
       ) : (
         <div className="w-full sm:p-4">
           <form
-            className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+            className={`bg-${t.bg} rounded-2xl shadow-xl border border-${t.border} overflow-hidden`}
             onSubmit={handleFinalSubmit}
           >
-            <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-8 py-6 flex items-center gap-4">
+            <div
+              className={`bg-gradient-to-r ${t.header} px-8 py-6 flex items-center gap-4`}
+            >
               <input
-                className="w-full text-base sm:text-lg md:text-xl font-semibold rounded-2xl p-2 sm:p-3 border-white border-2 text-white bg-transparent placeholder-white focus:bg-white focus:text-orange-600 transition disabled:bg-gray-300 disabled:cursor-not-allowed"
+                className={`w-full text-base sm:text-lg md:text-xl font-semibold rounded-2xl p-2 sm:p-3 border-white border-2 text-white bg-transparent placeholder-white ${t.headerFocus} transition disabled:bg-gray-300 disabled:cursor-not-allowed`}
                 placeholder="Section Title"
                 value={sections[0].sectionTitle}
                 onChange={(e) =>
                   handleItemChange(undefined, "Section Title", e.target.value)
                 }
-                required={true}
+                required
               />
             </div>
 
@@ -217,25 +238,29 @@ function Data({ sectionId }: { sectionId: number }) {
               <div className="group relative space-y-6">
                 {sections[0].items.map((data, index) => (
                   <div key={data.id}>
-                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-3">
                       <div className="flex-1 space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label
+                          className={`block text-sm font-medium text-${t.label}`}
+                        >
                           Item
                         </label>
                         <input
-                          className="w-full px-4 py-3 bg-gray-50 border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                          className={`w-full px-4 py-3 bg-${t.inputBg} border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-${t.accent}-500 focus:border-transparent transition-all duration-200 text-${t.text} placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed`}
                           placeholder="Enter item name"
                           value={data.value}
                           onChange={(e) =>
                             handleItemChange(data.id, "value", e.target.value)
                           }
-                          required={true}
+                          required
                         />
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label
+                          className={`block text-sm font-medium text-${t.label}`}
+                        >
                           Description
                         </label>
                         <input
-                          className="w-full px-4 py-3 bg-gray-50 border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                          className={`w-full px-4 py-3 bg-${t.inputBg} border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-${t.accent}-500 focus:border-transparent transition-all duration-200 text-${t.text} placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed`}
                           placeholder="Enter Description"
                           value={data.description}
                           onChange={(e) =>
@@ -249,11 +274,13 @@ function Data({ sectionId }: { sectionId: number }) {
                       </div>
 
                       <div className="flex-1 space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
+                        <label
+                          className={`block text-sm font-medium text-${t.label}`}
+                        >
                           Price
                         </label>
                         <input
-                          className="w-full px-4 py-3 bg-gray-50 border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
+                          className={`w-full px-4 py-3 bg-${t.inputBg} border border-green-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-${t.accent}-500 focus:border-transparent transition-all duration-200 text-${t.text} placeholder-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed`}
                           placeholder="₹0.00"
                           value={data.price}
                           onChange={(e) =>
@@ -276,16 +303,16 @@ function Data({ sectionId }: { sectionId: number }) {
                     </div>
 
                     {index < sections[0].items.length - 1 && (
-                      <div className="border-b border-gray-200"></div>
+                      <div className={`border-b border-${t.border}`}></div>
                     )}
                   </div>
                 ))}
               </div>
 
-              <div className="pt-6 border-t border-gray-200">
+              <div className={`pt-6 border-t border-${t.border}`}>
                 <button
                   type="button"
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white font-semibold rounded-xl hover:bg-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                  className={`w-full flex items-center justify-center gap-2 px-4 py-2 bg-${t.accent}-600 hover:bg-${t.accent}-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none`}
                   onClick={addItem}
                 >
                   <Plus size={20} />
@@ -296,7 +323,9 @@ function Data({ sectionId }: { sectionId: number }) {
 
             {imgUrl ? (
               <div className="p-6 sm:p-8 flex flex-col items-center">
-                <div className="w-full h-60 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 overflow-hidden">
+                <div
+                  className={`w-full h-60 bg-${t.inputBg} bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${t.border} overflow-hidden`}
+                >
                   <img
                     src={imgUrl}
                     alt="Uploaded Preview"
@@ -318,22 +347,27 @@ function Data({ sectionId }: { sectionId: number }) {
             ) : (
               <div className="p-6 sm:p-8 flex flex-col items-center">
                 <label
-                  htmlFor="file-upload"
-                  className={`w-full h-60 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 transition-colors duration-200 ${
+                  htmlFor="menu-item-image-upload"
+                  className={`w-full h-60 bg-${
+                    t.inputBg
+                  } bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${
+                    t.border
+                  } transition-colors duration-200 ${
                     isUploading
                       ? "cursor-not-allowed opacity-50"
                       : "cursor-pointer hover:bg-gray-200"
                   }`}
                 >
                   <div className="max-w-xs w-full">
-                    <span className="block w-full text-gray-700 text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <span
+                      className={`block w-full text-${t.label} text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis`}
+                    >
                       {image ? image.name : "+ Select Image"}
                     </span>
                   </div>
                 </label>
                 <input
-                  id="file-upload"
-                  name="file-upload"
+                  id="menu-item-image-upload"
                   type="file"
                   className="sr-only"
                   accept="image/*"
@@ -354,10 +388,9 @@ function Data({ sectionId }: { sectionId: number }) {
               <button
                 disabled={isUploading}
                 type="submit"
-                className=" w-1/2 mb-3 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                className="w-1/2 mb-3 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
               >
-                {" "}
-                Submit{" "}
+                Submit
               </button>
             </span>
           </form>

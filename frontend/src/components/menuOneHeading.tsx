@@ -76,7 +76,7 @@ export default function HeadingOne() {
       formData.append("file", compressedFile);
 
       const response = await axios.post(
-        "http://localhost:4000/api/upload-image",
+        `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -150,7 +150,7 @@ export default function HeadingOne() {
                     ) : (
                       <div className="p-2 sm:p-4 flex flex-col items-center">
                         <label
-                          htmlFor="file-upload"
+                          htmlFor="logo-image-upload"
                           className={`w-16 h-16 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 transition-colors duration-200 ${
                             isUploading
                               ? "cursor-not-allowed opacity-50"
@@ -166,7 +166,7 @@ export default function HeadingOne() {
                               />
                             ) : (
                               <span className="block w-full text-gray-700 text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis">
-                                + 
+                                +
                               </span>
                             )}
                           </div>
@@ -174,8 +174,8 @@ export default function HeadingOne() {
 
                         <input
                           {...registerImage("logo")}
-                          id="file-upload"
-                          name="file-upload"
+                          id="logo-image-upload"
+                          name="logo-image-upload"
                           type="file"
                           className="sr-only"
                           accept="image/*"
@@ -212,7 +212,7 @@ export default function HeadingOne() {
                               formData.append("file", compressedFile);
 
                               const response = await axios.post(
-                                "http://localhost:4000/api/upload-image",
+                                `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
                                 formData,
                                 {
                                   headers: {

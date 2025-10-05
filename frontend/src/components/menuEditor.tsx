@@ -140,7 +140,7 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
         className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
         onClick={() => router.back()}
       >
-        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center  transition-colors sm:mr-2">
+        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center  transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2">
           <IoIosArrowBack size={18} className="text-gray-700" />
         </div>
         <span className="text-sm font-medium text-gray-800 hidden sm:flex">
