@@ -52,7 +52,7 @@ function Preview() {
   return (
     <div
       className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
-      style={{ backgroundImage: "url('/bg1.png')" }}
+      style={{ backgroundImage: "url('/minimilistBG.png')" }}
     >
       <div className=" text-center mb-8 ">
         <button

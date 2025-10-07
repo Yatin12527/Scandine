@@ -1,78 +1,146 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import axios from "axios";
-import Minimilist from "./minimilistPreview";
+import { themes } from "./data/themes";
 
-const themes = {
-  default: {
-    header: "from-orange-500 to-orange-600",
-    headerFocus: "focus:text-white",
-    accent: "green",
-    bg: "white",
-    text: "gray-900",
-    label: "gray-700",
-    inputBg: "gray-50",
-    border: "gray-200",
-  },
-  dark: {
-    header: "from-gray-700 to-gray-800",
-    headerFocus: "focus:text-white focus:bg-gray-700",
-    accent: "green",
-    bg: "gray-800",
-    text: "white",
-    label: "gray-300",
-    inputBg: "gray-700",
-    border: "gray-600",
-  },
-  purple: {
-    header: "from-purple-500 to-purple-600",
-    headerFocus: "focus:text-purple-600",
-    accent: "purple",
-    bg: "purple-50",
-    text: "purple-900",
-    label: "purple-900",
-    inputBg: "white",
-    border: "purple-200",
-  },
-  ocean: {
-    header: "from-cyan-500 to-blue-500",
-    headerFocus: "focus:text-cyan-600",
-    accent: "cyan",
-    bg: "cyan-50",
-    text: "cyan-900",
-    label: "cyan-900",
-    inputBg: "white",
-    border: "cyan-200",
-  },
-  sunset: {
-    header: "from-rose-500 to-orange-500",
-    headerFocus: "focus:text-rose-600",
-    accent: "rose",
-    bg: "rose-50",
-    text: "rose-900",
-    label: "rose-900",
-    inputBg: "white",
-    border: "rose-200",
-  },
-};
-const MenuForm = (
-  handleFinalSubmit,
-  data,
-  handleItemChange,
-  deleteItem,
+interface MenuItem {
+  id: number;
+  value: string;
+  description: string;
+  price: string;
+}
+
+interface SectionData {
+  sectionTitle: string;
+  items: MenuItem[];
+  image?: string;
+}
+
+interface MenuFormProps {
+  sectionData: SectionData;
+  imgUrl: string;
+  setImage: React.Dispatch<React.SetStateAction<File | null>>;
+  setImgUrl: React.Dispatch<React.SetStateAction<string>>;
+  image: File | null;
+  sectionId: number;
+  setIspreview: React.Dispatch<React.SetStateAction<boolean>>;
+  setSections: React.Dispatch<React.SetStateAction<SectionData[]>>;
+  nextId: number;
+  setNextId: React.Dispatch<React.SetStateAction<number>>;
+  currentTheme: string;
+}
+const MenuForm: React.FC<MenuFormProps> = ({
+  sectionData,
   imgUrl,
   setImage,
   setImgUrl,
-  isUploading,
-  handleImage,
   image,
-  imageSubmit,
-  addItem
-) => {
-  const [currentTheme, setCurrentTheme] = useState("default");
+  sectionId,
+  setIspreview,
+  setSections,
+  nextId,
+  setNextId,
+  currentTheme,
+}) => {
   const t = themes[currentTheme];
+  const [isUploading, setIsUploading] = useState(false);
+  const handleFinalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const allSections = JSON.parse(localStorage.getItem("menuItems") || "{}");
+    allSections[sectionId] = sectionData;
+    localStorage.setItem("menuItems", JSON.stringify(allSections));
+    setIspreview(true);
+  };
+
+  const handleItemChange = (
+    itemId: number | undefined,
+    field: "value" | "price" | "Section Title" | "description",
+    newValue: string
+  ) => {
+    setSections((currentSections) => {
+      const newSections = [...currentSections];
+      const sectionToUpdate = newSections[0];
+      if (field === "Section Title") {
+        sectionToUpdate.sectionTitle = newValue;
+      } else {
+        const itemToUpdate = sectionToUpdate.items.find(
+          (item: { id: number }) => item.id === itemId
+        );
+
+        if (itemToUpdate) {
+          itemToUpdate[field] = newValue;
+        }
+      }
+      return newSections;
+    });
+  };
+
+  const handleImage = (e: React.ChangeEvent<HTMLInputElement> | null) => {
+    const file = e?.target?.files?.[0];
+    if (file) {
+      setImage(file);
+    }
+  };
+
+  const deleteItem = (idToDelete: number) => {
+    setSections((prevSections) => [
+      {
+        ...prevSections[0],
+        items: prevSections[0].items.filter((item) => item.id !== idToDelete),
+      },
+    ]);
+  };
+
+  const addItem = () => {
+    setSections((prev) => [
+      {
+        ...prev[0],
+        items: [
+          ...prev[0].items,
+          { id: nextId, value: "", description: "", price: "" },
+        ],
+      },
+    ]);
+    setNextId((prevId) => prevId + 1);
+  };
+  const imageSubmit = async () => {
+    if (!image) return;
+
+    setIsUploading(true);
+    try {
+      const compressedFile = await imageCompression(image, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1280,
+        useWebWorker: true,
+      });
+
+      const formData = new FormData();
+      formData.append("file", compressedFile);
+
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      const uploadedImageUrl = response.data.url;
+      setImgUrl(uploadedImageUrl);
+      setSections((prevSections) => {
+        const newSections = JSON.parse(JSON.stringify(prevSections));
+        const sectionToUpdate = newSections[0];
+        sectionToUpdate.image = uploadedImageUrl;
+        return newSections;
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
   return (
     <div className="w-full sm:p-4">
       <form
@@ -85,7 +153,7 @@ const MenuForm = (
           <input
             className={`w-full text-base sm:text-lg md:text-xl font-semibold rounded-2xl p-2 sm:p-3 border-white border-2 text-white bg-transparent placeholder-white ${t.headerFocus} transition disabled:bg-gray-300 disabled:cursor-not-allowed`}
             placeholder="Section Title"
-            value={data.sectionTitle}
+            value={sectionData.sectionTitle}
             onChange={(e) =>
               handleItemChange(undefined, "Section Title", e.target.value)
             }
@@ -95,7 +163,7 @@ const MenuForm = (
 
         <div className="p-6 sm:p-8">
           <div className="group relative space-y-6">
-            {data.items.map((data, index) => (
+            {sectionData.items.map((data, index) => (
               <div key={data.id}>
                 <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mb-3">
                   <div className="flex-1 space-y-2">
@@ -143,7 +211,7 @@ const MenuForm = (
                       }
                     />
                   </div>
-                  {data.items.length > 1 && (
+                  {sectionData.items.length > 1 && (
                     <div className="flex items-center pb-2">
                       <button
                         type="button"
@@ -157,7 +225,7 @@ const MenuForm = (
                   )}
                 </div>
 
-                {index < data.items.length - 1 && (
+                {index < sectionData.items.length - 1 && (
                   <div className={`border-b border-${t.border}`}></div>
                 )}
               </div>
@@ -192,7 +260,7 @@ const MenuForm = (
               onClick={() => {
                 setImgUrl("");
                 setImage(null);
-                data.image = "";
+                sectionData.image = "";
               }}
               className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-red-400 hover:bg-red-500 text-white cursor-pointer"
             >
@@ -210,7 +278,7 @@ const MenuForm = (
               } transition-colors duration-200 ${
                 isUploading
                   ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer hover:bg-gray-200"
+                  : `cursor-pointer hover:bg-${t.hover}`
               }`}
             >
               <div className="max-w-xs w-full">
@@ -249,15 +317,6 @@ const MenuForm = (
           </button>
         </span>
       </form>
-
-      <div className="mt-8 text-center">
-        <p className="text-gray-500 text-sm">
-          Total items:{" "}
-          <span className="font-semibold text-gray-700">
-            {data.items.length}
-          </span>
-        </p>
-      </div>
     </div>
   );
 };

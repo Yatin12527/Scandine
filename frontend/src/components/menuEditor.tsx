@@ -1,5 +1,5 @@
-import Data from "@/components/menuOneData";
-import HeadingOne from "@/components/menuOneHeading";
+import Data from "@/components/menuData";
+import HeadingOne from "@/components/menuHeading";
 import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";
 import { usePathname, useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ type MenuOneProps = {
   menuId?: string;
 };
 
-export default function MenuOne({ mode, menuId }: MenuOneProps) {
+export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   const [sectionIds, setSectionIds] = useState<number[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const router = useRouter();
@@ -134,10 +134,10 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
-      style={{ backgroundImage: "url('/bg1.png')" }}
+      style={{ backgroundImage: `url('/${parts[2]}BG.png')` }}
     >
       <button
-        className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
+        className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
         onClick={() => router.back()}
       >
         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center  transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2">
@@ -147,7 +147,7 @@ export default function MenuOne({ mode, menuId }: MenuOneProps) {
           Back
         </span>
       </button>
-      <HeadingOne />
+      <HeadingOne theme={parts[2]} />
 
       <div className="w-full max-w-7xl flex justify-center mb-8">
         <button

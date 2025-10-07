@@ -1,5 +1,5 @@
 "use client";
-import MenuOne from "@/components/menuEditor";
+import MenuEditor from "@/components/menuEditor";
 import { useParams } from "next/navigation";
 import React from "react";
 
@@ -8,7 +8,7 @@ function EditMenu() {
   const menuId=params.id
   return (
     <div>
-      <MenuOne mode="edit" menuId={menuId} />
+      <MenuEditor mode="edit" menuId={menuId} />
     </div>
   );
 }

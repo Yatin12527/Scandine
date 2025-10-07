@@ -1,11 +1,11 @@
 "use client";
-import MenuOne from '@/components/menuEditor';
+import MenuEditor from '@/components/menuEditor';
 import React from 'react'
 
 function CreateMenu() {
   return (
     <div>
-      <MenuOne mode="create" />
+      <MenuEditor mode="create" />
     </div>
   )
 }

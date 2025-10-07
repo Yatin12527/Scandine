@@ -185,7 +185,7 @@ export default function RestaurantMenu() {
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url(/bg2.png)",
+          backgroundImage: "url(/classic_blackBG.png)",
           zIndex: -1,
         }}
       >

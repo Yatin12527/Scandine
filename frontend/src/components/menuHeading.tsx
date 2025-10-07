@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import imageCompression from "browser-image-compression";
 import { Loader } from "./ui/loader";
+import { themes } from "./data/themes";
 
-export default function HeadingOne() {
+export default function HeadingOne({ theme }) {
   const { handleSubmit: handleImageSubmit, register: registerImage } =
     useForm();
   const {
@@ -29,6 +30,7 @@ export default function HeadingOne() {
 
   // Load data from localStorage on component mount
   useEffect(() => {
+    const t = themes[theme];
     const savedRestaurantName = localStorage.getItem("Heading");
     const savedLogo = localStorage.getItem("Logo");
 
@@ -110,6 +112,7 @@ export default function HeadingOne() {
     );
 
   const shouldShowModal = isEditing;
+  const t = themes[theme];
 
   return (
     <div className=" font-inter">
@@ -117,16 +120,20 @@ export default function HeadingOne() {
         {shouldShowModal ? (
           <div className="p-4 md:p-8">
             <div className="flex justify-center mb-8">
-              <div className="w-full flex flex-col max-w-md bg-white p-6 rounded-2xl shadow-lg border border-gray-200">
+              <div
+                className={`w-full flex flex-col max-w-md bg-${t.bg} p-6 rounded-2xl shadow-lg border border-${t.border}`}
+              >
                 <form onSubmit={handleImageSubmit(imgsubmit)}>
                   <div className="flex flex-col  items-center sm:items-start">
-                    <span className="text-gray-600 font-medium ml-2">
+                    <span className={`text-${t.label} font-medium ml-2`}>
                       Upload your logo
                     </span>
 
                     {heading.logo || localStorage.getItem("Logo") ? (
                       <div className="p-2 sm:p-4 flex flex-col items-center">
-                        <div className="w-16 h-16 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 overflow-hidden">
+                        <div
+                          className={`w-16 h-16 bg-${t.inputBg} bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${t.border} overflow-hidden`}
+                        >
                           <img
                             src={
                               heading.logo || localStorage.getItem("Logo") || ""
@@ -151,10 +158,14 @@ export default function HeadingOne() {
                       <div className="p-2 sm:p-4 flex flex-col items-center">
                         <label
                           htmlFor="logo-image-upload"
-                          className={`w-16 h-16 bg-gray-100 bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-400 transition-colors duration-200 ${
+                          className={`w-16 h-16 bg-${
+                            t.inputBg
+                          } bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${
+                            t.border
+                          } transition-colors duration-200 ${
                             isUploading
                               ? "cursor-not-allowed opacity-50"
-                              : "cursor-pointer hover:bg-gray-200"
+                              : `cursor-pointer hover:bg-${t.hover}`
                           }`}
                         >
                           <div className="max-w-xs w-full">
@@ -165,7 +176,9 @@ export default function HeadingOne() {
                                 className="w-full h-full object-cover rounded-lg"
                               />
                             ) : (
-                              <span className="block w-full text-gray-700 text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis">
+                              <span
+                                className={`block w-full text-${t.text} text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis`}
+                              >
                                 +
                               </span>
                             )}
@@ -247,7 +260,7 @@ export default function HeadingOne() {
 
                 <form onSubmit={handleTextSubmit(textsubmit)}>
                   <label className="block">
-                    <span className="text-gray-600 font-medium">
+                    <span className={`text-${t.label} font-medium`}>
                       Restaurant name
                     </span>
                     <input
@@ -260,8 +273,8 @@ export default function HeadingOne() {
                         localStorage.getItem("Heading") ||
                         heading.restaurantName
                       }
-                      className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300
-                        focus:outline-none focus:ring-2 focus:ring-green-400 text-xl font-dancing font-bold"
+                      className={`mt-2 w-full px-4 py-2 rounded-lg border border-${t.border} bg-${t.inputBg} text-${t.text}
+                        focus:outline-none focus:ring-2 focus:ring-${t.accent}-400 text-xl font-dancing font-bold`}
                     />
                     <span className="text-red-500 text-sm min-h-[1.25rem] block">
                       {typeof errors.restaurantName?.message === "string"
@@ -275,8 +288,8 @@ export default function HeadingOne() {
                     disabled={isUploading || imageSelected}
                     className={`mt-2 px-4 py-2 w-full rounded-lg font-semibold transition duration-150 ${
                       isUploading || imageSelected
-                        ? "bg-green-400 cursor-not-allowed text-white"
-                        : "bg-green-600 hover:bg-green-700 text-white cursor-pointer"
+                        ? `bg-${t.accent}-400 cursor-not-allowed text-white`
+                        : `bg-${t.accent}-600 hover:bg-${t.accent}-700 text-white cursor-pointer`
                     }`}
                   >
                     Submit
@@ -294,10 +307,12 @@ export default function HeadingOne() {
                     heading.logo ?? localStorage.getItem("Logo") ?? undefined
                   }
                   alt="Logo Preview"
-                  className="h-20 w-20 object-contain mr-4 rounded-2xl border border-gray-300"
+                  className={`h-20 w-20 object-contain mr-4 rounded-2xl border border-${t.border}`}
                 />
               )}
-              <h1 className="text-3xl md:text-5xl font-dancing text-gray-700 font-bold drop-shadow-lg">
+              <h1
+                className={`text-3xl md:text-5xl font-dancing text-${t.text} font-bold drop-shadow-lg`}
+              >
                 {heading.restaurantName || localStorage.getItem("Heading")}
               </h1>
             </div>

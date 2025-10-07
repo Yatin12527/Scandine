@@ -76,7 +76,6 @@ const Navbar: React.FC = () => {
       try {
         await dispatch(asyncGetApi()).unwrap();
         setIsLoggedIn(true);
-        console.log("rerender");
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         setIsLoggedIn(false);
