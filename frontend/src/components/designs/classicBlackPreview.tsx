@@ -1,0 +1,248 @@
+import React from "react";
+import { HiPencilSquare } from "react-icons/hi2";
+
+type ClassicBlackProps = {
+  data: any;
+  imgUrl: any;
+  setIspreview: any;
+  sectionIndex: number;
+};
+
+const ClassicBlack = ({
+  data,
+  imgUrl,
+  setIspreview,
+  sectionIndex,
+}: ClassicBlackProps) => {
+  // Determine layout based on section index with mirror pattern
+  const getLayoutType = (index: number) => {
+    const patterns = [1, 2, 3, 4, 5, 4, 3, 2, 1];
+    return patterns[index % patterns.length];
+  };
+
+  const layoutType = getLayoutType(sectionIndex);
+
+  // Parse images - handle both string and array
+  const images = Array.isArray(imgUrl)
+    ? imgUrl.filter((url) => url && url.trim() !== "")
+    : imgUrl && imgUrl.trim() !== ""
+    ? [imgUrl]
+    : [];
+
+  // Layout 1: Appetizers style (2-col grid left + image right)
+  const Layout1 = () => (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {data.items.map((item: any, idx: number) => (
+          <div key={idx} className="flex justify-between items-start">
+            <div className="flex-1">
+              <h3 className="text-white text-lg font-semibold">{item.value}</h3>
+              <p className="text-gray-400 text-sm mt-1">{item.description}</p>
+            </div>
+            <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+              {item.price}
+            </span>
+          </div>
+        ))}
+      </div>
+      {images.length > 0 && (
+        <div className="w-full h-64">
+          <img
+            src={images[0]}
+            alt="Menu item"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+      )}
+    </div>
+  );
+
+  // Layout 2: Main Course style (3 images top + 2-col grid below)
+  const Layout2 = () => {
+    const itemsWithImages = images.length > 0 ? Math.min(images.length, 3) : 0;
+    const firstItems =
+      itemsWithImages > 0 ? data.items.slice(0, itemsWithImages) : [];
+    const remainingItems =
+      itemsWithImages > 0 ? data.items.slice(itemsWithImages) : data.items;
+
+    return (
+      <>
+        {itemsWithImages > 0 && (
+          <div
+            className={`grid grid-cols-1 md:grid-cols-${itemsWithImages} gap-6 mb-6`}
+          >
+            {firstItems.map((item: any, idx: number) => (
+              <div key={idx}>
+                <div className="w-full h-40 mb-3">
+                  <img
+                    src={images[idx]}
+                    alt="Menu item"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
+                <div className="flex justify-between items-start">
+                  <h3 className="text-white text-lg font-semibold">
+                    {item.value}
+                  </h3>
+                  <span className="text-yellow-600 font-bold ml-4 font-captureit">
+                    {item.price}
+                  </span>
+                </div>
+                <p className="text-gray-400 text-sm mt-1">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+        {remainingItems.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {remainingItems.map((item: any, idx: number) => (
+              <div key={idx} className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h3 className="text-white text-lg font-semibold">
+                    {item.value}
+                  </h3>
+                  <p className="text-gray-400 text-sm mt-1">
+                    {item.description}
+                  </p>
+                </div>
+                <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+                  {item.price}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </>
+    );
+  };
+
+  // Layout 3: Special Offer style (image left + 2-col grid right)
+  const Layout3 = () => (
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {images.length > 0 && (
+        <div className="w-full h-64">
+          <img
+            src={images[0]}
+            alt="Menu item"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+      )}
+      <div
+        className={`${
+          images.length > 0 ? "lg:col-span-2" : "lg:col-span-3"
+        } grid grid-cols-1 md:grid-cols-2 gap-6`}
+      >
+        {data.items.map((item: any, idx: number) => (
+          <div key={idx} className="flex justify-between items-start">
+            <div className="flex-1">
+              <h3 className="text-white text-lg font-semibold">{item.value}</h3>
+              <p className="text-gray-400 text-sm mt-1">{item.description}</p>
+            </div>
+            <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+              {item.price}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Layout 4: Soups/Desserts style (image top + items below)
+  const Layout4 = () => (
+    <div className="grid grid-cols-1 gap-6">
+      {images.length > 0 && (
+        <div className="w-full h-48">
+          <img
+            src={images[0]}
+            alt="Menu item"
+            className="w-full h-full object-cover rounded-lg"
+          />
+        </div>
+      )}
+      <div className="space-y-6">
+        {data.items.map((item: any, idx: number) => (
+          <div key={idx} className="flex justify-between items-start">
+            <div className="flex-1">
+              <h3 className="text-white text-lg font-semibold">{item.value}</h3>
+              <p className="text-gray-400 text-sm mt-1">{item.description}</p>
+            </div>
+            <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+              {item.price}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  // Layout 5: Salads style (just items, no image)
+  const Layout5 = () => (
+    <div className="space-y-6">
+      {data.items.map((item: any, idx: number) => (
+        <div key={idx} className="flex justify-between items-start">
+          <div className="flex-1">
+            <h3 className="text-white text-lg font-semibold">{item.value}</h3>
+            <p className="text-gray-400 text-sm mt-1">{item.description}</p>
+          </div>
+          <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+            {item.price}
+          </span>
+        </div>
+      ))}
+      {images.length > 0 && (
+        <div className="space-y-4 mt-6">
+          {images.slice(0, 2).map((img: string, idx: number) => (
+            <div key={idx} className="w-full h-48">
+              <img
+                src={img}
+                alt="Menu item"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderLayout = () => {
+    switch (layoutType) {
+      case 1:
+        return <Layout1 />;
+      case 2:
+        return <Layout2 />;
+      case 3:
+        return <Layout3 />;
+      case 4:
+        return <Layout4 />;
+      case 5:
+        return <Layout5 />;
+      default:
+        return <Layout1 />;
+    }
+  };
+
+  return (
+    <section className="mb-12 px-4 ">
+      <div className="flex justify-center items-center mb-2">
+        <div className="flex flex-col">
+          <h2 className="text-3xl md:text-4xl font-bold text-center flex-1 tracking-wider text-white font-captureit">
+            {data.sectionTitle}
+          </h2>
+          <div className="w-32 h-0.5 bg-orange-400 mx-auto mb-8"></div>
+        </div>
+
+        <HiPencilSquare
+          size={28}
+          className="text-orange-500 cursor-pointer hover:text-orange-400 transition-colors ml-4 mb-8"
+          onClick={() => setIspreview(false)}
+        />
+      </div>
+
+      {renderLayout()}
+    </section>
+  );
+};
+
+export default ClassicBlack;

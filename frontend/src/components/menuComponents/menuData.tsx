@@ -3,8 +3,15 @@ import { useEffect, useState } from "react";
 import Minimilist from "../designs/minimilistPreview";
 import MenuForm from "./menuForm";
 import { usePathname } from "next/navigation";
+import ClassicBlack from "../designs/classicBlackPreview";
 
-function Data({ sectionId }: { sectionId: number }) {
+function Data({
+  sectionId,
+  sectionIndex,
+}: {
+  sectionId: number;
+  sectionIndex?: number;
+}) {
   const [currentTheme, setCurrentTheme] = useState<string>("minimilist");
   const [sections, setSections] = useState([
     {
@@ -67,6 +74,13 @@ function Data({ sectionId }: { sectionId: number }) {
             data={sections[0]}
             imgUrl={imgUrl}
             setIspreview={setIspreview}
+          />
+        ) : activeTemplate === "classic_black" ? (
+          <ClassicBlack
+            data={sections[0]}
+            imgUrl={imgUrl}
+            setIspreview={setIspreview}
+            sectionIndex={sectionIndex ?? 0}
           />
         ) : null
       ) : (

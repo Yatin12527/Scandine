@@ -1,14 +1,20 @@
 import Data from "@/components/menuComponents/menuData";
-import HeadingOne from "@/components/menuHeading";
 import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import { themes } from "./data/themes";
+import { themes } from "../data/themes";
+import HeadingOne from "./menuHeading";
 
 type MenuOneProps = {
   mode: "create" | "edit";
   menuId?: string;
+};
+
+const TEMPLATE_LAYOUTS = {
+  minimilist: "grid",
+  classic_black: "stack",
+  trifold_gorment: "grid",
 };
 
 export default function MenuEditor({ mode, menuId }: MenuOneProps) {
@@ -18,6 +24,9 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   const params = usePathname();
   const parts = params.split("/");
   const t = themes[parts[2]];
+  const currentTemplate = parts[2];
+  const layoutType = TEMPLATE_LAYOUTS[currentTemplate] || "grid";
+
   useEffect(() => {
     localStorage.setItem("style", parts[2]);
     if (mode === "create") {
@@ -133,6 +142,62 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
     }
   };
 
+  if (layoutType === "stack") {
+    return (
+      <div
+        className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
+        style={{ backgroundImage: `url('/${parts[2]}BG.png')` }}
+      >
+        <button
+          className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
+          onClick={() => router.back()}
+        >
+          <div
+            className={`w-8 h-8 rounded-full bg-${t.bg} flex items-center justify-center transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2`}
+          >
+            <IoIosArrowBack size={18} className={`text-${t.text}`} />
+          </div>
+          <span className={`text-sm font-medium text-${t.text} hidden sm:flex`}>
+            Back
+          </span>
+        </button>
+        <HeadingOne t={t} />
+
+        <div className="w-full max-w-7xl flex justify-center mb-8">
+          <button
+            className="bg-green-500 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:bg-green-600 hover:shadow-xl hover:scale-105 text-lg cursor-pointer"
+            onClick={finalSubmit}
+          >
+            {mode === "create" ? "Create Menu" : "Update Menu"}
+          </button>
+        </div>
+
+        <div className="w-full max-w-7xl">
+          {sectionIds.map((id, index) => (
+            <div key={id} className="mb-12">
+              <Data sectionId={id} sectionIndex={index} />
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => deleteSection(id)}
+                  className="border-2 bg-red-500 text-white px-10 py-2 rounded-lg hover:bg-red-600 hover:border-red-700 cursor-pointer font-medium transition-colors duration-150"
+                >
+                  Delete Section
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <button
+          className="bg-orange-500 text-white font-bold px-8 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:bg-red-600 hover:shadow-lg hover:scale-105 mt-6"
+          onClick={addSection}
+        >
+          Add Section
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
@@ -174,9 +239,9 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       </div>
 
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-        {sectionIds.map((id) => (
+        {sectionIds.map((id, index) => (
           <div className="flex flex-col justify-between w-full" key={id}>
-            <Data sectionId={id} />
+            <Data sectionId={id} sectionIndex={index} />
             <button
               onClick={() => deleteSection(id)}
               className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150 mx-auto"

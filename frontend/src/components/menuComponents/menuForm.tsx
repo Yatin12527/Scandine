@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import imageCompression from "browser-image-compression";
 import axios from "axios";
-import { themes } from "./data/themes";
+import { themes } from "../data/themes";
 
 interface MenuItem {
   id: number;

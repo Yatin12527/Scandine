@@ -3,7 +3,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import imageCompression from "browser-image-compression";
-import { Loader } from "./ui/loader";
+import { Loader } from "../ui/loader";
+
 
 export default function HeadingOne({ t }) {
   const { handleSubmit: handleImageSubmit, register: registerImage } =
