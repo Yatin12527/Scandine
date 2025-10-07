@@ -1,5 +1,5 @@
 "use client";
-import MenuEditor from "@/components/menuEditor";
+import MenuEditor from "@/components/menuComponents/menuEditor";
 import { useParams } from "next/navigation";
 import React from "react";
 

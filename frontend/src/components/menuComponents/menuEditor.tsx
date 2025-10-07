@@ -1,4 +1,4 @@
-import Data from "@/components/menuData";
+import Data from "@/components/menuComponents/menuData";
 import HeadingOne from "@/components/menuHeading";
 import axios from "axios";
 import { IoIosArrowBack } from "react-icons/io";

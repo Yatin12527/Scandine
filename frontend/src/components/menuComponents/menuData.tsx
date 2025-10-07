@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Minimilist from "./minimilistPreview";
+import Minimilist from "../designs/minimilistPreview";
 import MenuForm from "./menuForm";
 import { usePathname } from "next/navigation";
 
