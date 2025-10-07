@@ -4,9 +4,8 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import imageCompression from "browser-image-compression";
 import { Loader } from "./ui/loader";
-import { themes } from "./data/themes";
 
-export default function HeadingOne({ theme }) {
+export default function HeadingOne({ t }) {
   const { handleSubmit: handleImageSubmit, register: registerImage } =
     useForm();
   const {
@@ -30,7 +29,6 @@ export default function HeadingOne({ theme }) {
 
   // Load data from localStorage on component mount
   useEffect(() => {
-    const t = themes[theme];
     const savedRestaurantName = localStorage.getItem("Heading");
     const savedLogo = localStorage.getItem("Logo");
 
@@ -112,8 +110,6 @@ export default function HeadingOne({ theme }) {
     );
 
   const shouldShowModal = isEditing;
-  const t = themes[theme];
-
   return (
     <div className=" font-inter">
       <div>
@@ -307,7 +303,7 @@ export default function HeadingOne({ theme }) {
                     heading.logo ?? localStorage.getItem("Logo") ?? undefined
                   }
                   alt="Logo Preview"
-                  className={`h-20 w-20 object-contain mr-4 rounded-2xl border border-${t.border}`}
+                  className="h-20 w-20 object-contain mr-4 rounded-2xl"
                 />
               )}
               <h1
