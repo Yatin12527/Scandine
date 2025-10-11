@@ -72,7 +72,7 @@ const ClassicBlack = ({
           <div
             className={`grid grid-cols-1 md:grid-cols-${itemsWithImages} gap-6 mb-6`}
           >
-            {firstItems.map((item: any, idx: number) => (
+            {firstItems.map((item, idx) => (
               <div key={idx}>
                 <div className="flex justify-center w-full h-40 mb-3">
                   <img
@@ -96,7 +96,7 @@ const ClassicBlack = ({
         )}
         {remainingItems.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {remainingItems.map((item: any, idx: number) => (
+            {remainingItems.map((item ,idx) => (
               <div key={idx} className="flex justify-between items-start">
                 <div className="flex-1">
                   <h3 className="text-white text-lg font-semibold">
@@ -134,7 +134,7 @@ const ClassicBlack = ({
           images.length > 0 ? "lg:col-span-2" : "lg:col-span-3"
         } grid grid-cols-1 md:grid-cols-2 gap-6`}
       >
-        {data.items.map((item: any, idx: number) => (
+        {data.items.map((item, idx) => (
           <div key={idx} className="flex justify-between items-start">
             <div className="flex-1">
               <h3 className="text-white text-lg font-semibold">{item.value}</h3>
@@ -162,7 +162,7 @@ const ClassicBlack = ({
         </div>
       )}
       <div className="space-y-6">
-        {data.items.map((item: any, idx: number) => (
+        {data.items.map((item, idx) => (
           <div key={idx} className="flex justify-between items-start">
             <div className="flex-1">
               <h3 className="text-white text-lg font-semibold">{item.value}</h3>
