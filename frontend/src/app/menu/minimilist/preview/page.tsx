@@ -35,7 +35,7 @@ function Preview() {
     const fetchMenuData = async () => {
       try {
         const menuResult = await axios.get(
-          `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/68b1dcee3bdae8618c034289`
+          `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/68cac114a470d6c1c4d94697`
         );
         setData(menuResult.data);
       } catch (err) {
