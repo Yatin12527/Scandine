@@ -6,7 +6,7 @@ A full-stack web app that lets restaurants create beautiful digital menus access
 
 ## 🎬 Live Demo
 
-**Check it out:** [Add Your Vercel Link Here]
+**Check it out:** https://scandine-beta.vercel.app/
 
 **Try it yourself:**
 - Create an account
