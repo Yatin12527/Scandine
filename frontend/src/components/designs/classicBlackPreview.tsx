@@ -1,10 +1,11 @@
+import { Section } from "@/types/sectionType";
 import React from "react";
 import { HiPencilSquare } from "react-icons/hi2";
 
 type ClassicBlackProps = {
-  data: any;
-  imgUrl: any;
-  setIspreview: any;
+  data: Section;
+  imgUrl: string;
+  setIspreview: (value: boolean) => void;
   sectionIndex: number;
 };
 
@@ -16,7 +17,7 @@ const ClassicBlack = ({
 }: ClassicBlackProps) => {
   // Determine layout based on section index with mirror pattern
   const getLayoutType = (index: number) => {
-    const patterns = [1, 2, 3, 4, 5, 4, 3, 2, 1];
+    const patterns = [1, 2, 3, 4, 3, 2, 1];
     return patterns[index % patterns.length];
   };
 
@@ -33,7 +34,7 @@ const ClassicBlack = ({
   const Layout1 = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {data.items.map((item: any, idx: number) => (
+        {data.items.map((item, idx) => (
           <div key={idx} className="flex justify-between items-start">
             <div className="flex-1">
               <h3 className="text-white text-lg font-semibold">{item.value}</h3>
@@ -73,11 +74,11 @@ const ClassicBlack = ({
           >
             {firstItems.map((item: any, idx: number) => (
               <div key={idx}>
-                <div className="w-full h-40 mb-3">
+                <div className="flex justify-center w-full h-40 mb-3">
                   <img
                     src={images[idx]}
                     alt="Menu item"
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-96 h-full object-cover rounded-lg"
                   />
                 </div>
                 <div className="flex justify-between items-start">
@@ -152,11 +153,11 @@ const ClassicBlack = ({
   const Layout4 = () => (
     <div className="grid grid-cols-1 gap-6">
       {images.length > 0 && (
-        <div className="w-full h-48">
+        <div className="flex justify-between w-full h-48">
           <img
             src={images[0]}
             alt="Menu item"
-            className="w-full h-full object-cover rounded-lg"
+            className="w-96 h-full object-cover rounded-lg"
           />
         </div>
       )}
@@ -176,35 +177,6 @@ const ClassicBlack = ({
     </div>
   );
 
-  // Layout 5: Salads style (just items, no image)
-  const Layout5 = () => (
-    <div className="space-y-6">
-      {data.items.map((item: any, idx: number) => (
-        <div key={idx} className="flex justify-between items-start">
-          <div className="flex-1">
-            <h3 className="text-white text-lg font-semibold">{item.value}</h3>
-            <p className="text-gray-400 text-sm mt-1">{item.description}</p>
-          </div>
-          <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-            {item.price}
-          </span>
-        </div>
-      ))}
-      {images.length > 0 && (
-        <div className="space-y-4 mt-6">
-          {images.slice(0, 2).map((img: string, idx: number) => (
-            <div key={idx} className="w-full h-48">
-              <img
-                src={img}
-                alt="Menu item"
-                className="w-full h-full object-cover rounded-lg"
-              />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
 
   const renderLayout = () => {
     switch (layoutType) {
@@ -216,13 +188,11 @@ const ClassicBlack = ({
         return <Layout3 />;
       case 4:
         return <Layout4 />;
-      case 5:
-        return <Layout5 />;
       default:
         return <Layout1 />;
     }
   };
-
+  console.log("section",sectionIndex)
   return (
     <section className="mb-12 px-4 ">
       <div className="flex justify-center items-center mb-2">

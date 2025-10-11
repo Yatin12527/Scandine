@@ -1,8 +1,9 @@
+import { Section } from "@/types/sectionType";
 import { HiPencilSquare } from "react-icons/hi2";
 type MinimilistProps = {
-  data: any;
-  imgUrl: any;
-  setIspreview: any;
+  data: Section;
+  imgUrl: string;
+  setIspreview: (value: boolean) => void;
 };
 const Minimilist = ({ data, imgUrl, setIspreview }: MinimilistProps) => {
   return (
