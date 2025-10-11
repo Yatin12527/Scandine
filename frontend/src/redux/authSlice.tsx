@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export interface AuthState {
+  id: string | null;
   name: string | null;
   username: string | null;
   picture: string | null;
@@ -15,6 +16,7 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
+  id: null,
   name: null,
   username: null,
   picture: null,

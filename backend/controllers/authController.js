@@ -210,6 +210,7 @@ export const me = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const response = {
+       id: user._id,
       name: user.name ?? null,
       username: user.username ?? null,
       picture: user.picture ?? null,

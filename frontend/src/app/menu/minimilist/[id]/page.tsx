@@ -6,6 +6,9 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { asyncGetApi } from "@/redux/authSlice";
 
 interface MenuItem {
   id: number;
@@ -33,6 +36,7 @@ interface MenuData {
 function CompletedMenu() {
   const params = useParams();
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const [data, setData] = useState<MenuData | null>(null);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [showQRModal, setShowQRModal] = useState<boolean>(false);
@@ -43,24 +47,14 @@ function CompletedMenu() {
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const [menuResult, userResult] = await Promise.allSettled([
-          axios.get(
-            `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`
-          ),
-          axios.get(`${process.env.NEXT_PUBLIC_SERVER}/users/me`, {
-            withCredentials: true,
-          }),
-        ]);
+        const menuResult = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`
+        );
+        setData(menuResult.data);
+        const userResult = await dispatch(asyncGetApi()).unwrap();
 
-        if (menuResult.status === "fulfilled") {
-          setData(menuResult.value.data);
-
-          if (
-            userResult.status === "fulfilled" &&
-            userResult.value.data.id === menuResult.value.data.owner
-          ) {
-            setIsOwner(true);
-          }
+        if (userResult && menuResult.data.owner) {
+          setIsOwner(userResult.id === menuResult.data.owner);
         }
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -68,7 +62,7 @@ function CompletedMenu() {
     };
 
     fetchMenuData();
-  }, []);
+  }, [dispatch, menuId]);
 
   const handleGenerateQR = () => {
     setShowQRModal(true);
@@ -80,13 +74,13 @@ function CompletedMenu() {
     document.body.style.overflow = "unset";
   };
 
-  // Convert sections object to array
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
+  const bg = pathname.split("/")[2];
 
   return (
     <div
       className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
-      style={{ backgroundImage: "url('/bg1.png')" }}
+      style={{ backgroundImage: `url('/${bg}BG.png')` }}
     >
       {isOwner && (
         <div className="w-full max-w-7xl mb-6 flex justify-center gap-4 ">
