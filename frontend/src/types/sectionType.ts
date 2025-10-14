@@ -8,7 +8,7 @@ export interface MenuItem {
 export interface Section {
   sectionTitle: string;
   items: MenuItem[];
-  image: string;
+  image: string[];
 }
 
 export interface MenuData {

@@ -15,15 +15,15 @@ interface MenuItem {
 interface SectionData {
   sectionTitle: string;
   items: MenuItem[];
-  image?: string;
+  image?: string[];
 }
 
 interface MenuFormProps {
   sectionData: SectionData;
-  imgUrl: string;
-  setImage: React.Dispatch<React.SetStateAction<File | null>>;
-  setImgUrl: React.Dispatch<React.SetStateAction<string>>;
-  image: File | null;
+  imgUrls: string[];
+  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  setImgUrls: React.Dispatch<React.SetStateAction<string[]>>;
+  images: File[];
   sectionId: number;
   setIspreview: React.Dispatch<React.SetStateAction<boolean>>;
   setSections: React.Dispatch<React.SetStateAction<SectionData[]>>;
@@ -33,10 +33,10 @@ interface MenuFormProps {
 }
 const MenuForm: React.FC<MenuFormProps> = ({
   sectionData,
-  imgUrl,
-  setImage,
-  setImgUrl,
-  image,
+  imgUrls,
+  setImages,
+  setImgUrls,
+  images,
   sectionId,
   setIspreview,
   setSections,
@@ -78,9 +78,10 @@ const MenuForm: React.FC<MenuFormProps> = ({
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement> | null) => {
-    const file = e?.target?.files?.[0];
-    if (file) {
-      setImage(file);
+    const files = e?.target?.files;
+    if (files && files.length > 0) {
+      const newFiles = Array.from(files);
+      setImages(prevImages => [...prevImages, ...newFiles]);
     }
   };
 
@@ -106,37 +107,46 @@ const MenuForm: React.FC<MenuFormProps> = ({
     setNextId((prevId) => prevId + 1);
   };
   const imageSubmit = async () => {
-    if (!image) return;
+    if (images.length === 0) return;
 
     setIsUploading(true);
     try {
-      const compressedFile = await imageCompression(image, {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 1280,
-        useWebWorker: true,
+      const uploadPromises = images.map(async (image) => {
+        const compressedFile = await imageCompression(image, {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1280,
+          useWebWorker: true,
+        });
+
+        const formData = new FormData();
+        formData.append("file", compressedFile);
+
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
+          formData,
+          {
+            headers: { "Content-Type": "multipart/form-data" },
+          }
+        );
+
+        return response.data.url;
       });
 
-      const formData = new FormData();
-      formData.append("file", compressedFile);
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_SERVER}/upload-image`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      const uploadedImageUrl = response.data.url;
-      setImgUrl(uploadedImageUrl);
+      const uploadedImageUrls = await Promise.all(uploadPromises);
+      const newImgUrls = [...imgUrls, ...uploadedImageUrls];
+      
+      setImgUrls(newImgUrls);
       setSections((prevSections) => {
         const newSections = JSON.parse(JSON.stringify(prevSections));
         const sectionToUpdate = newSections[0];
-        sectionToUpdate.image = uploadedImageUrl;
+        sectionToUpdate.image = newImgUrls;
         return newSections;
       });
+      
+      // Clear uploaded files
+      setImages([]);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error("Error uploading images:", error);
     } finally {
       setIsUploading(false);
     }
@@ -244,27 +254,54 @@ const MenuForm: React.FC<MenuFormProps> = ({
           </div>
         </div>
 
-        {imgUrl ? (
+        {imgUrls.length > 0 ? (
           <div className="p-6 sm:p-8 flex flex-col items-center">
-            <div
-              className={`w-full h-60 bg-${t.inputBg} bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${t.border} overflow-hidden`}
-            >
-              <img
-                src={imgUrl}
-                alt="Uploaded Preview"
-                className="w-full h-full object-cover rounded-lg"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+              {imgUrls.map((imgUrl, index) => (
+                <div key={index} className="relative">
+                  <div
+                    className={`w-full h-60 bg-${t.inputBg} bg-opacity-50 rounded-lg flex items-center justify-center border-2 border-dashed border-${t.border} overflow-hidden`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`Uploaded Preview ${index + 1}`}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newImgUrls = imgUrls.filter((_, i) => i !== index);
+                      setImgUrls(newImgUrls);
+                      setSections((prevSections) => {
+                        const newSections = JSON.parse(JSON.stringify(prevSections));
+                        const sectionToUpdate = newSections[0];
+                        sectionToUpdate.image = newImgUrls;
+                        return newSections;
+                      });
+                    }}
+                    className="absolute top-2 right-2 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-sm font-bold cursor-pointer"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
             </div>
             <button
               type="button"
               onClick={() => {
-                setImgUrl("");
-                setImage(null);
-                sectionData.image = "";
+                setImgUrls([]);
+                setImages([]);
+                setSections((prevSections) => {
+                  const newSections = JSON.parse(JSON.stringify(prevSections));
+                  const sectionToUpdate = newSections[0];
+                  sectionToUpdate.image = [];
+                  return newSections;
+                });
               }}
               className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-red-400 hover:bg-red-500 text-white cursor-pointer"
             >
-              Remove
+              Remove All
             </button>
           </div>
         ) : (
@@ -285,7 +322,7 @@ const MenuForm: React.FC<MenuFormProps> = ({
                 <span
                   className={`block w-full text-${t.label} text-xs font-medium text-center px-4 whitespace-nowrap overflow-hidden text-ellipsis`}
                 >
-                  {image ? image.name : "+ Select Image"}
+                  {images.length > 0 ? `${images.length} Image${images.length !== 1 ? 's' : ''} Selected` : "+ Select Images"}
                 </span>
               </div>
             </label>
@@ -294,16 +331,17 @@ const MenuForm: React.FC<MenuFormProps> = ({
               type="file"
               className="sr-only"
               accept="image/*"
+              multiple
               disabled={isUploading}
               onChange={handleImage}
             />
             <button
               type="button"
               onClick={imageSubmit}
-              disabled={!image || isUploading}
+              disabled={images.length === 0 || isUploading}
               className="mt-4 w-28 text-center font-medium py-1 px-3 rounded-xl shadow-sm transition duration-150 text-xs bg-orange-400 hover:bg-orange-500 text-white cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {isUploading ? "Uploading..." : "Upload"}
+              {isUploading ? "Uploading..." : `Upload ${images.length} Image${images.length !== 1 ? 's' : ''}`}
             </button>
           </div>
         )}

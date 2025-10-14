@@ -15,22 +15,15 @@ const ClassicBlack = ({
   setIspreview,
   sectionIndex,
 }: ClassicBlackProps) => {
-  // Determine layout based on section index with mirror pattern
   const getLayoutType = (index: number) => {
     const patterns = [1, 2, 3, 4, 3, 2, 1];
     return patterns[index % patterns.length];
   };
 
   const layoutType = getLayoutType(sectionIndex);
+  const images = Array.isArray(imgUrl) ? imgUrl.filter(Boolean) : imgUrl ? [imgUrl] : [];
 
-  // Parse images - handle both string and array
-  const images = Array.isArray(imgUrl)
-    ? imgUrl.filter((url) => url && url.trim() !== "")
-    : imgUrl && imgUrl.trim() !== ""
-    ? [imgUrl]
-    : [];
-
-  // Layout 1: Appetizers style (2-col grid left + image right)
+  // Layout 1
   const Layout1 = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -58,7 +51,7 @@ const ClassicBlack = ({
     </div>
   );
 
-  // Layout 2: Main Course style (3 images top + 2-col grid below)
+  // Layout 2
   const Layout2 = () => {
     const itemsWithImages = images.length > 0 ? Math.min(images.length, 3) : 0;
     const firstItems =
@@ -117,7 +110,7 @@ const ClassicBlack = ({
     );
   };
 
-  // Layout 3: Special Offer style (image left + 2-col grid right)
+  // Layout 3
   const Layout3 = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {images.length > 0 && (
@@ -149,7 +142,7 @@ const ClassicBlack = ({
     </div>
   );
 
-  // Layout 4: Soups/Desserts style (image top + items below)
+  // Layout 4
   const Layout4 = () => (
     <div className="grid grid-cols-1 gap-6">
       {images.length > 0 && (

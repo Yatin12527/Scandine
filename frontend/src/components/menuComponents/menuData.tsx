@@ -24,12 +24,12 @@ function Data({
           price: "",
         },
       ],
-      image: " ",
+      image: [],
     },
   ]);
   const [nextId, setNextId] = useState(1);
-  const [image, setImage] = useState<File | null>(null);
-  const [imgUrl, setImgUrl] = useState("");
+  const [images, setImages] = useState<File[]>([]);
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
   const [isPreview, setIspreview] = useState(false);
   const [activeTemplate, setActiveTemplate] = useState<string>("minimilist");
   const pathname = usePathname();
@@ -44,7 +44,7 @@ function Data({
     // check if data is already present or not
     if (current) {
       setSections([current]);
-      setImgUrl(current?.image ?? "");
+      setImgUrls(current?.image ?? []);
       setIspreview(true);
 
       let maxId = 0;
@@ -57,10 +57,10 @@ function Data({
         {
           sectionTitle: "",
           items: [{ id: 0, value: "", description: "", price: "" }],
-          image: " ",
+          image: [],
         },
       ]);
-      setImgUrl("");
+      setImgUrls([]);
       setIspreview(false);
       setNextId(1);
     }
@@ -72,13 +72,13 @@ function Data({
         activeTemplate === "minimilist" ? (
           <Minimilist
             data={sections[0]}
-            imgUrl={imgUrl}
+            imgUrl={imgUrls.length > 0 ? imgUrls[0] : ""}
             setIspreview={setIspreview}
           />
         ) : activeTemplate === "classic_black" ? (
           <ClassicBlack
             data={sections[0]}
-            imgUrl={imgUrl}
+            imgUrl={imgUrls.length > 0 ? imgUrls[0] : ""}
             setIspreview={setIspreview}
             sectionIndex={sectionIndex ?? 0}
           />
@@ -86,10 +86,10 @@ function Data({
       ) : (
         <MenuForm
           sectionData={sections[0]}
-          imgUrl={imgUrl}
-          setImage={setImage}
-          setImgUrl={setImgUrl}
-          image={image}
+          imgUrls={imgUrls}
+          setImages={setImages}
+          setImgUrls={setImgUrls}
+          images={images}
           sectionId={sectionId}
           setIspreview={setIspreview}
           setSections={setSections}
