@@ -10,7 +10,7 @@ const itemSchema = new mongoose.Schema({
 const sectionSchema = new mongoose.Schema({
   sectionTitle: { type: String, required: true },
   items: [itemSchema],
-  image: { type: String },
+  image: [{ type: String }],
 });
 
 const menuItemsSchema = new mongoose.Schema({

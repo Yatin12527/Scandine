@@ -15,7 +15,7 @@ interface MenuItem {
 interface Section {
   sectionTitle: string;
   items: MenuItem[];
-  image: string;
+  image: string[];
   _id: string;
 }
 
@@ -115,10 +115,10 @@ function Preview() {
                     </div>
                   ))}
                 </div>
-                {section.image && section.image.trim() !== "" && (
+                {section.image && section.image.length > 0 && section.image[0].trim() !== "" && (
                   <div className="w-full h-60 mt-4">
                     <img
-                      src={section.image}
+                      src={section.image[0]}
                       alt="Section Preview"
                       className="w-full h-full object-cover rounded-lg"
                     />
