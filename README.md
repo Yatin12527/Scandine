@@ -6,7 +6,7 @@ A full-stack web app that lets restaurants create beautiful digital menus access
 
 ## 🎬 Live Demo
 
-**Check it out:** [Add Your Vercel Link Here]
+**Check it out:** https://scandine-beta.vercel.app/
 
 **Try it yourself:**
 - Create an account
@@ -15,19 +15,6 @@ A full-stack web app that lets restaurants create beautiful digital menus access
 - Generate a QR code
 - Scan it and see your menu live!
 
-## 📸 What It Looks Like
-
-[Screenshot 1: Menu Editor]
-*The editor where you add your menu items*
-
-[Screenshot 2: Minimalist Theme Preview]
-*Clean minimalist design - perfect for modern cafes*
-
-[Screenshot 3: QR Code Generation]
-*Generate and download QR codes for your menu*
-
-[Screenshot 4: Mobile View]
-*How customers see it on their phones*
 
 ## 💡 Why I Built This
 
