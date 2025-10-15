@@ -8,7 +8,7 @@ export const themes = {
     label: "gray-700",
     inputBg: "gray-50",
     border: "gray-200",
-    hover:"gray-200"
+    hover:"gray-200",
   },
   classic_black: {
     header: "from-gray-700 to-gray-800",
@@ -19,7 +19,7 @@ export const themes = {
     label: "gray-300",
     inputBg: "gray-700",
     border: "gray-600",
-    hover:"gray-700"
+    hover:"gray-700",
   },
   trifold_gourmet: {
     header: "from-purple-500 to-purple-600",

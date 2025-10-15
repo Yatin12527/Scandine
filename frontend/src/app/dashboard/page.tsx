@@ -18,7 +18,7 @@ function Dashboard() {
     <div className="min-h-screen bg-[#fffcf4] py-8 px-4">
       <button
         className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-18 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
-        onClick={() => router.back()}
+        onClick={() => router.push("/")}
       >
         <div className="w-8 h-8 hidden  rounded-full bg-gray-100 sm:flex items-center justify-center  transition-colors sm:mr-2">
           <IoIosArrowBack size={18} className="text-gray-700 " />

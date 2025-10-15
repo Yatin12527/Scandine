@@ -10,6 +10,7 @@ import QRCodeModal from "@/components/qrModal";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MenuData } from "@/types/sectionType";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface MenuCompletedProps {
   DesignComponent: React.ComponentType<any>;
@@ -73,13 +74,28 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
       }`}
       style={{ backgroundImage: `url('/${bg}BG.png')` }}
     >
-      <div className={isDark ? "bg-black bg-opacity-80 min-h-screen" : ""}>
+      <div className="min-h-screen">
         {isOwner && (
           <div
             className={`w-full mb-6 flex justify-center gap-4 ${
               isDark ? "max-w-7xl mx-auto mt-15" : "max-w-7xl"
             }`}
           >
+            <button
+              className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-18 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
+            onClick={() => router.push("/dashboard")}
+            >
+              <div className="w-8 h-8 hidden  rounded-full bg-gray-100 sm:flex items-center justify-center  transition-colors sm:mr-2">
+                <IoIosArrowBack size={18} className="text-gray-700 " />
+              </div>
+              <span
+                className={`text-sm font-medium ${
+                  isDark ? "text-gray-200" : "text-gray-800"
+                }  hidden sm:flex`}
+              >
+                Back
+              </span>
+            </button>
             <button
               onClick={handleGenerateQR}
               className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-105"
@@ -127,7 +143,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
             <DesignComponent
               key={sectionIndex}
               data={section}
-              imgUrl={isDark ? section.image : [section.image[0] || ""]}
+              imgUrl={isDark ? section.image : section.image[0] || ""}
               setIspreview={() => {}}
               sectionIndex={sectionIndex}
               hideEdit={true}

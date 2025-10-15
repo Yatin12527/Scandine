@@ -78,7 +78,7 @@ const Menus = () => {
                 </p>
                 <div className="flex items-center justify-between text-xs text-slate-500">
                   <span className="bg-slate-100 px-2 py-1 rounded-lg">
-                    {menu.style}
+                    {menu.style.replace(/_/g, " ")}
                   </span>
                   {/* <span className="flex items-center gap-1">
                         <Eye size={12} />
@@ -91,14 +91,14 @@ const Menus = () => {
               <div className="flex gap-4 items-center">
                 <button
                   className="flex-1 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-xl transition-all duration-300 border border-slate-200 hover:border-slate-300 hover:scale-[1.02] text-sm cursor-pointer"
-                  onClick={() => router.push(`/menu/minimilist/${menu._id}`)}
+                  onClick={() => router.push(`/menu/${menu.style}/${menu._id}`)}
                 >
                   View Menu
                 </button>
                 <button
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
                   onClick={() =>
-                    router.push(`/menu/minimilist/${menu._id}/edit    `)
+                    router.push(`/menu/${menu.style}/${menu._id}/edit    `)
                   }
                 >
                   Edit Menu
@@ -111,8 +111,10 @@ const Menus = () => {
 
       {/* Create New Menu CTA */}
       <div className="text-center mt-20 mb-20 sm:mb-0">
-        <button className="px-8 py-4 bg-slate-900 text-white font-semibold rounded-xl hover:bg-white hover:text-slate-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
-        onClick={()=>router.push("/menu")}>
+        <button
+          className="px-8 py-4 bg-slate-900 text-white font-semibold rounded-xl hover:bg-white hover:text-slate-900 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer"
+          onClick={() => router.push("/menu")}
+        >
           Browse Templates
         </button>
       </div>

@@ -10,6 +10,7 @@ import ProfileModal from "./profileModal";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { asyncGetApi } from "@/redux/authSlice";
+import { themes } from "./data/themes";
 
 const navMenu = [
   {
@@ -26,6 +27,8 @@ const navMenu = [
   },
 ];
 
+type ThemeKey = keyof typeof themes;
+
 const Navbar: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
@@ -33,17 +36,26 @@ const Navbar: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [showProfileModal, setShowProfileModal] = useState<boolean>(false);
+  const [currentTheme, setCurrentTheme] = useState<ThemeKey>("minimilist");
   const dispatch = useDispatch<AppDispatch>();
   const auth = useSelector((state: RootState) => state.auth);
 
-  // Check if current route should hide navbar
+
+  const detectTheme = (path: string): ThemeKey => {
+    if (path.includes("minimilist")) return "minimilist";
+    if (path.includes("classic_black")) return "classic_black";
+    if (path.includes("trifold_gourmet")) return "trifold_gourmet";
+    return "minimilist";
+  };
+
   const shouldHideNavbar = () => {
     if (pathname.includes("preview")) return false;
-    const regex = /^\/menu\/minimilist\/[^\/]+$/;
+    const regex = /^\/menu\/(minimilist|classic_black)\/[^\/]+$/;
     return regex.test(pathname);
   };
 
   const getMobileBackground = () => {
+    const theme = themes[currentTheme];
     if (pathname === "/") {
       return "bg-[#fffbf5]";
     } else if (pathname === "/menu") {
@@ -51,7 +63,7 @@ const Navbar: React.FC = () => {
     } else if (pathname.startsWith("/menu/minimilist")) {
       return "bg-gray-200";
     } else {
-      return "bg-white";
+      return `bg-${theme.text}`;
     }
   };
 
@@ -66,6 +78,11 @@ const Navbar: React.FC = () => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
+
+  // Update theme based on pathname
+  useEffect(() => {
+    setCurrentTheme(detectTheme(pathname));
+  }, [pathname]);
 
   const handleProfileModalClose = () => {
     setShowProfileModal(false);
@@ -91,6 +108,7 @@ const Navbar: React.FC = () => {
   }
 
   const mobileBackground = getMobileBackground();
+  const theme = themes[currentTheme];
 
   return (
     <>
@@ -120,7 +138,7 @@ const Navbar: React.FC = () => {
               <div className="md:hidden mr-2">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                  className="text-gray-800 hover:opacity-80 transition-colors"
                   aria-label="Toggle menu"
                 >
                   {isMenuOpen ? <X size={24} /> : <HiMenuAlt2 size={24} />}
@@ -145,7 +163,7 @@ const Navbar: React.FC = () => {
                       <Link
                         key={item.title}
                         href={item.link}
-                        className="text-gray-600 hover:text-gray-800 font-medium transition-colors"
+                        className={`text-${theme.text} hover:opacity-80 font-medium transition-colors`}
                       >
                         {item.title}
                       </Link>
@@ -198,7 +216,7 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.title}
                   href={item.link}
-                  className="block text-center px-3 py-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
+                  className="block text-center px-3 py-2 text-gray-600 hover:bg-gray-800 rounded transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.title}
