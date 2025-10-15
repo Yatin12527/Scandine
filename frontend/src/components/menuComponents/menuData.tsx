@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Minimilist from "../designs/minimilistPreview";
-import MenuForm from "./menuForm";
 import { usePathname } from "next/navigation";
 import ClassicBlack from "../designs/classicBlackPreview";
+import MenuFormClassicBlack from "./menuFormClassicBlack";
+import MenuFormMinimalist from "./menuFormMinimilist";
 
 function Data({
   sectionId,
@@ -83,8 +84,8 @@ function Data({
             sectionIndex={sectionIndex ?? 0}
           />
         ) : null
-      ) : (
-        <MenuForm
+      ) : activeTemplate === "minimilist" ? (
+        <MenuFormMinimalist
           sectionData={sections[0]}
           imgUrls={imgUrls}
           setImages={setImages}
@@ -97,7 +98,21 @@ function Data({
           setNextId={setNextId}
           currentTheme={currentTheme}
         />
-      )}
+      ) : activeTemplate === "classic_black" ? (
+        <MenuFormClassicBlack
+          sectionData={sections[0]}
+          imgUrls={imgUrls}
+          setImages={setImages}
+          setImgUrls={setImgUrls}
+          images={images}
+          sectionId={sectionId}
+          setIspreview={setIspreview}
+          setSections={setSections}
+          nextId={nextId}
+          setNextId={setNextId}
+          currentTheme={currentTheme}
+        />
+      ) : null}
     </div>
   );
 }
