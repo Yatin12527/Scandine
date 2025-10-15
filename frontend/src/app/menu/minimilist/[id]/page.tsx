@@ -9,6 +9,7 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { asyncGetApi } from "@/redux/authSlice";
+import Minimilist from "@/components/designs/minimilistPreview";
 
 interface MenuItem {
   id: number;
@@ -92,7 +93,7 @@ function CompletedMenu() {
             Generate QR
           </button>
           <button
-            onClick={() => router.push(`/menu/minimilist/${menuId}/edit `)}
+            onClick={() => router.push(`/menu/${bg}/${menuId}/edit `)}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-105"
           >
             <RiArrowGoBackFill size={20} />
@@ -118,50 +119,13 @@ function CompletedMenu() {
 
       <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
         {sectionsArray.map((section, sectionIndex) => (
-          <div
-            className="flex flex-col justify-between w-full"
+          <Minimilist
             key={sectionIndex}
-          >
-            <div>
-              <div className="max-w-xl mx-auto sm:p-0 p-10">
-                <div className="flex justify-between items-center ">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-800 cursor-pointer hover:text-green-600 drop-shadow-md">
-                    {section.sectionTitle}
-                  </h2>
-                </div>
-                <div className="bg-gray-500 w-full h-0.5 mb-4" />
-                <div className="space-y-2">
-                  {section.items.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between items-start"
-                    >
-                      <div className="flex-1 pr-4">
-                        <h3 className="font-semibold text-gray-800 cursor-pointer hover:text-green-600 text-sm">
-                          {item.value}
-                        </h3>
-                        <p className="text-xs text-gray-600 cursor-pointer hover:text-green-600 leading-tight">
-                          {item.description}
-                        </p>
-                      </div>
-                      <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
-                        {item.price}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                {section.image && section.image.length > 0 && section.image[0].trim() !== "" && (
-                  <div className="w-full h-60 mt-4">
-                    <img
-                      src={section.image[0]}
-                      alt="Section Preview"
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+            data={section}
+            imgUrl={section.image[0] || ""}
+            setIspreview={() => {}}
+            hideEdit={true}
+          />
         ))}
       </div>
 

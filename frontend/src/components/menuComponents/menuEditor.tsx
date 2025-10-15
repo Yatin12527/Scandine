@@ -135,7 +135,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       setHasUnsavedChanges(false);
 
       alert(response.data.msg);
-      router.push(`/menu/minimilist/${response.data.menuId}`);
+      router.push(`/menu/${parts[2]}/${response.data.menuId}`);
     } catch (error) {
       console.error("Error submitting menu:", error);
       alert("Failed to save menu. Please try again.");

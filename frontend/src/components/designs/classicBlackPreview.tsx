@@ -7,6 +7,7 @@ type ClassicBlackProps = {
   imgUrl: string[];
   setIspreview: (value: boolean) => void;
   sectionIndex: number;
+  hideEdit?: boolean;
 };
 
 const ClassicBlack = ({
@@ -14,6 +15,7 @@ const ClassicBlack = ({
   imgUrl,
   setIspreview,
   sectionIndex,
+  hideEdit,
 }: ClassicBlackProps) => {
   const getLayoutType = (index: number) => {
     const patterns = [1, 2, 3, 4, 3, 2, 1];
@@ -201,11 +203,13 @@ const ClassicBlack = ({
           <div className="w-32 h-0.5 bg-orange-400 mx-auto mb-8"></div>
         </div>
 
-        <HiPencilSquare
-          size={28}
-          className="text-orange-500 cursor-pointer hover:text-orange-400 transition-colors ml-4 mb-8"
-          onClick={() => setIspreview(false)}
-        />
+        {!hideEdit && (
+          <HiPencilSquare
+            size={28}
+            className="text-orange-500 cursor-pointer hover:text-orange-400 transition-colors ml-4 mb-8"
+            onClick={() => setIspreview(false)}
+          />
+        )}
       </div>
 
       {renderLayout()}

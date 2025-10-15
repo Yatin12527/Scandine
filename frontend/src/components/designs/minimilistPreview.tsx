@@ -4,8 +4,14 @@ type MinimilistProps = {
   data: Section;
   imgUrl: string;
   setIspreview: (value: boolean) => void;
+  hideEdit?: boolean;
 };
-const Minimilist = ({ data, imgUrl, setIspreview }: MinimilistProps) => {
+const Minimilist = ({
+  data,
+  imgUrl,
+  setIspreview,
+  hideEdit,
+}: MinimilistProps) => {
   return (
     <div>
       <div className="max-w-xl mx-auto sm:p-0 p-10">
@@ -14,12 +20,13 @@ const Minimilist = ({ data, imgUrl, setIspreview }: MinimilistProps) => {
             {data.sectionTitle}
           </h2>
 
-          <HiPencilSquare
-            size={30}
-            style={{ color: "#f97316" }}
-            className="cursor-pointer mb-4 "
-            onClick={() => setIspreview(false)}
-          />
+          {!hideEdit && (
+            <HiPencilSquare
+              size={28}
+              className="text-orange-500 cursor-pointer hover:text-orange-400 transition-colors ml-4 mb-8"
+              onClick={() => setIspreview(false)}
+            />
+          )}
         </div>
         <div className="bg-gray-500 w-full h-0.5 mb-4" />
         <div className="space-y-2">
