@@ -79,7 +79,7 @@ function Data({
         ) : activeTemplate === "classic_black" ? (
           <ClassicBlack
             data={sections[0]}
-            imgUrl={imgUrls.length > 0 ? imgUrls[0] : ""}
+            imgUrl={imgUrls.length > 0 ? imgUrls : []}
             setIspreview={setIspreview}
             sectionIndex={sectionIndex ?? 0}
           />

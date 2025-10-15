@@ -4,7 +4,7 @@ import { HiPencilSquare } from "react-icons/hi2";
 
 type ClassicBlackProps = {
   data: Section;
-  imgUrl: string;
+  imgUrl: string[];
   setIspreview: (value: boolean) => void;
   sectionIndex: number;
 };
@@ -21,8 +21,11 @@ const ClassicBlack = ({
   };
 
   const layoutType = getLayoutType(sectionIndex);
-  const images = Array.isArray(imgUrl) ? imgUrl.filter(Boolean) : imgUrl ? [imgUrl] : [];
-
+  const images = Array.isArray(imgUrl)
+    ? imgUrl.filter(Boolean)
+    : imgUrl
+    ? [imgUrl]
+    : [];
   // Layout 1
   const Layout1 = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -40,12 +43,16 @@ const ClassicBlack = ({
         ))}
       </div>
       {images.length > 0 && (
-        <div className="w-full h-64">
-          <img
-            src={images[0]}
-            alt="Menu item"
-            className="w-full h-full object-cover rounded-lg"
-          />
+        <div className="grid grid-cols-1 gap-4">
+          {images.map((img, i) => (
+            <div key={i} className="w-full h-64">
+              <img
+                src={img}
+                alt="Menu item"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -53,73 +60,71 @@ const ClassicBlack = ({
 
   // Layout 2
   const Layout2 = () => {
-    const itemsWithImages = images.length > 0 ? Math.min(images.length, 3) : 0;
-    const firstItems =
-      itemsWithImages > 0 ? data.items.slice(0, itemsWithImages) : [];
-    const remainingItems =
-      itemsWithImages > 0 ? data.items.slice(itemsWithImages) : data.items;
-
     return (
       <>
-        {itemsWithImages > 0 && (
-          <div
-            className={`grid grid-cols-1 md:grid-cols-${itemsWithImages} gap-6 mb-6`}
-          >
-            {firstItems.map((item, idx) => (
+        {images.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            {images.slice(0, 3).map((img, idx) => (
               <div key={idx}>
                 <div className="flex justify-center w-full h-40 mb-3">
                   <img
-                    src={images[idx]}
+                    src={img}
                     alt="Menu item"
-                    className="w-96 h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
-                <div className="flex justify-between items-start">
-                  <h3 className="text-white text-lg font-semibold">
-                    {item.value}
-                  </h3>
-                  <span className="text-yellow-600 font-bold ml-4 font-captureit">
-                    {item.price}
-                  </span>
-                </div>
+                {data.items[idx] && (
+                  <>
+                    <div className="flex justify-between items-start">
+                      <h3 className="text-white text-lg font-semibold">
+                        {data.items[idx].value}
+                      </h3>
+                      <span className="text-yellow-600 font-bold ml-4 font-captureit">
+                        {data.items[idx].price}
+                      </span>
+                    </div>
+                    <p className="text-gray-400 text-sm mt-1">
+                      {data.items[idx].description}
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {data.items.slice(images.length).map((item, idx) => (
+            <div key={idx} className="flex justify-between items-start">
+              <div className="flex-1">
+                <h3 className="text-white text-lg font-semibold">
+                  {item.value}
+                </h3>
                 <p className="text-gray-400 text-sm mt-1">{item.description}</p>
               </div>
-            ))}
-          </div>
-        )}
-        {remainingItems.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {remainingItems.map((item ,idx) => (
-              <div key={idx} className="flex justify-between items-start">
-                <div className="flex-1">
-                  <h3 className="text-white text-lg font-semibold">
-                    {item.value}
-                  </h3>
-                  <p className="text-gray-400 text-sm mt-1">
-                    {item.description}
-                  </p>
-                </div>
-                <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-                  {item.price}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+              <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
+                {item.price}
+              </span>
+            </div>
+          ))}
+        </div>
       </>
     );
   };
-
   // Layout 3
   const Layout3 = () => (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {images.length > 0 && (
-        <div className="w-full h-64">
-          <img
-            src={images[0]}
-            alt="Menu item"
-            className="w-full h-full object-cover rounded-lg"
-          />
+        <div className="grid grid-cols-1 gap-4">
+          {images.map((img, i) => (
+            <div key={i} className="w-full h-64">
+              <img
+                src={img}
+                alt="Menu item"
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </div>
+          ))}
         </div>
       )}
       <div
@@ -145,15 +150,16 @@ const ClassicBlack = ({
   // Layout 4
   const Layout4 = () => (
     <div className="grid grid-cols-1 gap-6">
-      {images.length > 0 && (
-        <div className="flex justify-between w-full h-48">
-          <img
-            src={images[0]}
-            alt="Menu item"
-            className="w-96 h-full object-cover rounded-lg"
-          />
-        </div>
-      )}
+      {images.length > 0 &&
+        images.map((img, i) => (
+          <div key={i} className="w-full h-64">
+            <img
+              src={img}
+              alt="Menu item"
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </div>
+        ))}
       <div className="space-y-6">
         {data.items.map((item, idx) => (
           <div key={idx} className="flex justify-between items-start">
@@ -170,7 +176,6 @@ const ClassicBlack = ({
     </div>
   );
 
-
   const renderLayout = () => {
     switch (layoutType) {
       case 1:
@@ -185,7 +190,7 @@ const ClassicBlack = ({
         return <Layout1 />;
     }
   };
-  console.log("section",sectionIndex)
+
   return (
     <section className="mb-12 px-4 ">
       <div className="flex justify-center items-center mb-2">
