@@ -35,9 +35,7 @@ interface MenuFormProps {
 const MenuFormClassicBlack: React.FC<MenuFormProps> = ({
   sectionData,
   imgUrls,
-  setImages,
   setImgUrls,
-  images,
   sectionId,
   setIspreview,
   setSections,
