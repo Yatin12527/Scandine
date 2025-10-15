@@ -46,10 +46,10 @@ const Minimilist = ({
             </div>
           ))}
         </div>
-        {imgUrl && imgUrl.trim() !== "" && (
+        {imgUrl && imgUrl[0].trim() !== "" && (
           <div className="w-full h-60 mt-4">
             <img
-              src={imgUrl}
+              src={imgUrl[0]}
               alt="Uploaded Preview"
               className="w-full h-full object-cover rounded-lg"
             />
