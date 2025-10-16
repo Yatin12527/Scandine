@@ -36,6 +36,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
         localStorage.removeItem("Logo");
         localStorage.removeItem("menuItems");
         localStorage.removeItem("menuSectionIds");
+         window.dispatchEvent(new Event("localStorageCleared"));
       }
       localStorage.setItem("menuMode", "create");
 
@@ -69,6 +70,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
             if (response.data.logo) {
               localStorage.setItem("Logo", response.data.logo);
             }
+             window.dispatchEvent(new Event("localStorageCleared"));
           }
         } catch (error) {
           console.log(error);

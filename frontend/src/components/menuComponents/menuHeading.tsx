@@ -29,20 +29,23 @@ export default function HeadingOne({ t }) {
   const [image, setImage] = useState<File | null>(null);
 
   // Load data from localStorage on component mount
-  useEffect(() => {
-    const savedRestaurantName = localStorage.getItem("Heading");
-    const savedLogo = localStorage.getItem("Logo");
+ useEffect(() => {
+    const loadFromStorage = () => {
+      const savedRestaurantName = localStorage.getItem("Heading");
+      const savedLogo = localStorage.getItem("Logo");
 
-    if (savedRestaurantName || savedLogo) {
       setHeading({
         restaurantName: savedRestaurantName || undefined,
         logo: savedLogo || undefined,
       });
-      setIsEditing(false);
-    } else {
-      setIsEditing(true);
-    }
+      setIsEditing(!savedRestaurantName && !savedLogo);
+    };
+
+    loadFromStorage();
     setIsHydrated(true);
+
+    window.addEventListener("localStorageCleared", loadFromStorage);
+    return () => window.removeEventListener("localStorageCleared", loadFromStorage);
   }, []);
 
   // Set form value when editing starts
