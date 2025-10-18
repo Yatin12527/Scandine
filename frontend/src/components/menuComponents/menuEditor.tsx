@@ -5,6 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { themes } from "../data/themes";
 import HeadingOne from "./menuHeading";
+import { Loader } from "../ui/loader";
+import StackMenuSkeleton from "../ui/stackLoader";
+import GridMenuSkeleton from "../ui/gridLoader";
 
 type MenuOneProps = {
   mode: "create" | "edit";
@@ -20,6 +23,7 @@ const TEMPLATE_LAYOUTS = {
 export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   const [sectionIds, setSectionIds] = useState<number[]>([]);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   const params = usePathname();
   const parts = params.split("/");
@@ -36,7 +40,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
         localStorage.removeItem("Logo");
         localStorage.removeItem("menuItems");
         localStorage.removeItem("menuSectionIds");
-         window.dispatchEvent(new Event("localStorageCleared"));
+        window.dispatchEvent(new Event("localStorageCleared"));
       }
       localStorage.setItem("menuMode", "create");
 
@@ -48,6 +52,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
         setSectionIds([firstId]);
         localStorage.setItem("menuSectionIds", JSON.stringify([firstId]));
       }
+      setIsLoading(false);
     } else {
       localStorage.setItem("menuMode", "edit");
       const fetchData = async () => {
@@ -70,10 +75,12 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
             if (response.data.logo) {
               localStorage.setItem("Logo", response.data.logo);
             }
-             window.dispatchEvent(new Event("localStorageCleared"));
+            window.dispatchEvent(new Event("localStorageCleared"));
           }
         } catch (error) {
           console.log(error);
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -163,7 +170,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       >
         <button
           className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
-          onClick={() => router.back()}
+          onClick={() => router.push("/dashboard")}
         >
           <div
             className={`w-8 h-8 rounded-full bg-${t.bg} flex items-center justify-center transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2`}
@@ -176,37 +183,43 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
         </button>
         <HeadingOne t={t} />
 
-        <div className="w-full max-w-7xl flex justify-center mb-8">
-          <button
-            className="bg-green-500 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:bg-green-600 hover:shadow-xl hover:scale-105 text-lg cursor-pointer"
-            onClick={finalSubmit}
-          >
-            {mode === "create" ? "Create Menu" : "Update Menu"}
-          </button>
-        </div>
-
-        <div className="w-full max-w-7xl">
-          {sectionIds.map((id, index) => (
-            <div key={id} className="mb-12">
-              <Data sectionId={id} sectionIndex={index} />
-              <div className="flex justify-center mt-6">
-                <button
-                  onClick={() => deleteSection(id)}
-                  className="border-2 bg-red-500 text-white px-10 py-2 rounded-lg hover:bg-red-600 hover:border-red-700 cursor-pointer font-medium transition-colors duration-150"
-                >
-                  Delete Section
-                </button>
-              </div>
+        {isLoading ? (
+          <StackMenuSkeleton />
+        ) : (
+          <>
+            <div className="w-full max-w-7xl flex justify-center mb-8">
+              <button
+                className="bg-green-500 text-white font-bold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:bg-green-600 hover:shadow-xl hover:scale-105 text-lg cursor-pointer"
+                onClick={finalSubmit}
+              >
+                {mode === "create" ? "Create Menu" : "Update Menu"}
+              </button>
             </div>
-          ))}
-        </div>
 
-        <button
-          className="bg-orange-500 text-white font-bold px-8 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:bg-red-600 hover:shadow-lg hover:scale-105 mt-6"
-          onClick={addSection}
-        >
-          Add Section
-        </button>
+            <div className="w-full max-w-7xl">
+              {sectionIds.map((id, index) => (
+                <div key={id} className="mb-12">
+                  <Data sectionId={id} sectionIndex={index} />
+                  <div className="flex justify-center mt-6">
+                    <button
+                      onClick={() => deleteSection(id)}
+                      className="border-2 bg-red-500 text-white px-10 py-2 rounded-lg hover:bg-red-600 hover:border-red-700 cursor-pointer font-medium transition-colors duration-150"
+                    >
+                      Delete Section
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              className="bg-orange-500 text-white font-bold px-8 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:bg-red-600 hover:shadow-lg hover:scale-105 mt-6"
+              onClick={addSection}
+            >
+              Add Section
+            </button>
+          </>
+        )}
       </div>
     );
   }
@@ -230,10 +243,13 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
         </span>
       </button>
       <HeadingOne t={t} />
-
-      <div className="w-full max-w-7xl flex justify-center mb-8">
-        <button
-          className="
+      {isLoading ? (
+        <GridMenuSkeleton />
+      ) : (
+        <>
+          <div className="w-full max-w-7xl flex justify-center mb-8">
+            <button
+              className="
             bg-green-500 text-white
             font-bold
             px-8 py-3
@@ -247,28 +263,28 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
             hover:scale-105
             text-lg cursor-pointer
           "
-          onClick={finalSubmit}
-        >
-          {mode === "create" ? "Create Menu" : "Update Menu"}
-        </button>
-      </div>
-
-      <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-        {sectionIds.map((id, index) => (
-          <div className="flex flex-col justify-between w-full" key={id}>
-            <Data sectionId={id} sectionIndex={index} />
-            <button
-              onClick={() => deleteSection(id)}
-              className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150 mx-auto"
+              onClick={finalSubmit}
             >
-              Delete
+              {mode === "create" ? "Create Menu" : "Update Menu"}
             </button>
           </div>
-        ))}
-      </div>
 
-      <button
-        className="
+          <div className="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+            {sectionIds.map((id, index) => (
+              <div className="flex flex-col justify-between w-full" key={id}>
+                <Data sectionId={id} sectionIndex={index} />
+                <button
+                  onClick={() => deleteSection(id)}
+                  className="border-2 bg-black text-white w-fit px-10 py-2 mt-10 sm:mt-2 mb-10 rounded-lg hover:bg-white hover:text-black hover:border-black cursor-pointer font-medium transition-colors duration-150 mx-auto"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="
           bg-orange-500 text-white
           font-bold
           px-8 py-3
@@ -282,10 +298,12 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
           hover:scale-105
           mt-6
         "
-        onClick={addSection}
-      >
-        Add Section
-      </button>
+            onClick={addSection}
+          >
+            Add Section
+          </button>
+        </>
+      )}
     </div>
   );
 }

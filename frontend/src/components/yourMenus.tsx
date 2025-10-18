@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import MenuSkeleton from "./ui/menuLoader";
 interface menusInterface {
   _id: string;
   title: string;
@@ -15,6 +16,7 @@ const Menus = () => {
   dayjs.extend(relativeTime);
   const router = useRouter();
   const [userMenus, setUserMenus] = useState<menusInterface[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   useEffect(() => {
     const getMenus = async () => {
       try {
@@ -25,8 +27,10 @@ const Menus = () => {
           }
         );
         setUserMenus(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(true);
       }
     };
     getMenus();
@@ -43,6 +47,7 @@ const Menus = () => {
           Manage and view all your created menus in one place
         </p>
       </div>
+      {isLoading && <MenuSkeleton />}
 
       {/* Menus Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
