@@ -11,6 +11,7 @@ import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MenuData } from "@/types/sectionType";
 import { IoIosArrowBack } from "react-icons/io";
+import Image from "next/image";
 
 interface MenuCompletedProps {
   DesignComponent;
@@ -69,11 +70,21 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
 
   return (
     <div
-      className={`min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter p-5 sm:p-8 ${
+      className={`relative min-h-screen font-inter p-5 sm:p-8 ${
         isDark ? "" : "flex flex-col items-center"
       }`}
-      style={{ backgroundImage: `url('/${bg}BG.png')` }}
     >
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src={`/${bg}BG.png`}
+          alt="Background"
+          fill
+          quality={100}
+          priority
+          className="object-cover object-center"
+        />
+      </div>
+
       <div className="min-h-screen">
         {isOwner && (
           <div
@@ -83,7 +94,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
           >
             <button
               className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-18 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
-            onClick={() => router.push("/dashboard")}
+              onClick={() => router.push("/dashboard")}
             >
               <div className="w-8 h-8 hidden  rounded-full bg-gray-100 sm:flex items-center justify-center  transition-colors sm:mr-2">
                 <IoIosArrowBack size={18} className="text-gray-700 " />

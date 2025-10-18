@@ -2,6 +2,7 @@
 import Minimilist from "@/components/designs/minimilistPreview";
 import { MenuData } from "@/types/sectionType";
 import axios from "axios";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
@@ -28,10 +29,17 @@ function Preview() {
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
 
   return (
-    <div
-      className="relative min-h-screen bg-cover bg-center bg-no-repeat bg-fixed font-inter flex flex-col items-center p-5 sm:p-8"
-      style={{ backgroundImage: "url('/minimilistBG.png')" }}
-    >
+    <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
+      <div className="fixed inset-0 -z-10">
+        <Image
+          src="/minimilistBG.png"
+          alt="Background"
+          fill
+          quality={100}
+          priority
+          className="object-cover object-center"
+        />
+      </div>
       <div className="text-center mb-8">
         <button
           className="absolute left-4 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-100 group"
