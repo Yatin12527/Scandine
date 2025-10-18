@@ -8,6 +8,7 @@ const Templates = [
     Preview: "menu/minimilist/preview",
     Use: "menu/minimilist/create",
     badge: "Popular",
+    status: "active",
   },
   {
     Title: "Classic Black",
@@ -18,6 +19,7 @@ const Templates = [
     Preview: "menu/classic_black/preview",
     Use: "menu/classic_black/create",
     badge: "Premium",
+    status: "active",
   },
   {
     Title: "Trifold Gourmet",
@@ -28,6 +30,7 @@ const Templates = [
     Preview: "menu/trifold",
     Use: "menu/trifold/123",
     badge: "Premium",
+    status: "inactive",
   },
 ];
 export default Templates;

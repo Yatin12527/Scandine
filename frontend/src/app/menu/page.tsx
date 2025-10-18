@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Templates from "@/components/templates";
+import Locked from "@/components/ui/lockedOverlay";
 
 function Menu() {
   return (
@@ -23,6 +24,8 @@ function Menu() {
               key={index}
               className="group relative bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-slate-200/50 hover:border-slate-300/50 hover:-translate-y-2"
             >
+              {items.status !== "active" && <Locked />}
+
               {/* Badge */}
               {items.badge && (
                 <div className="absolute top-6 right-6 z-10">
