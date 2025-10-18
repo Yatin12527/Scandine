@@ -6,8 +6,7 @@ import menuRoute from "./routes/menuItemsRoute.js";
 import uploadRoute from "./routes/upload.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import validateToken from "./middlewares/authMiddleware.js";
-import User from "./models/Authmodel.js";
+
 
 dotenv.config();
 const app = express();
@@ -28,7 +27,7 @@ async function main() {
   await mongoose.connect(process.env.DB_STRING);
   console.log("db connected");
 }
-// Parse JSON body
+
 app.use(express.json());
 app.use("/api/users", authRoute);
 app.use("/api/items", menuRoute);

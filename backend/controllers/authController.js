@@ -6,11 +6,11 @@ import axios from "axios";
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  sameSite: "lax", 
+  domain: process.env.NODE_ENV === "production" ? ".scandine.food" : undefined, 
   path: "/",
-  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
 };
-
 export const signup = async (req, res) => {
   const { name, username, password } = req.body;
 
@@ -210,7 +210,7 @@ export const me = async (req, res) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const response = {
-       id: user._id,
+      id: user._id,
       name: user.name ?? null,
       username: user.username ?? null,
       picture: user.picture ?? null,

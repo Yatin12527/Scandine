@@ -13,7 +13,7 @@ import { MenuData } from "@/types/sectionType";
 import { IoIosArrowBack } from "react-icons/io";
 
 interface MenuCompletedProps {
-  DesignComponent: React.ComponentType<any>;
+  DesignComponent;
   template?: string;
 }
 
