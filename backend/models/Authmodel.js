@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   businessName: { type: String, required: false },
   role: { type: String, required: false },
   phone: { type: String, required: false },
-  about: { type: String, required: true },
+  about: { type: String, required: false },
 });
 const User = mongoose.model("users", userSchema);
 export default User;
