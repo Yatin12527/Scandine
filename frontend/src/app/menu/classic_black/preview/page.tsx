@@ -35,7 +35,7 @@ export default function RestaurantMenu() {
       <div className="min-h-screen">
         <div className="text-center mb-8">
           <button
-            className="absolute left-4 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600 group"
+            className="absolute left-4  sm:left-8 md:left-16 lg:left-60 top-26 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg border border-gray-600 group"
             onClick={() => router.back()}
           >
             <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center transition-colors sm:mr-2">

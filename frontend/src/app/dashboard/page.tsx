@@ -49,7 +49,7 @@ function Dashboard() {
           </div>
         </div>
         {/* mobile navigation*/}
-        <div className=" sm:hidden fixed bottom-0 left-0 right-0 z-50">
+        <div className=" sm:hidden fixed bottom-0 left-0 right-0 z-40">
           <div className="bg-white rounded-t-3xl shadow-lg border-t border-gray-200">
             <div className="flex items-center justify-center gap-x-2 p-2">
               {navItems.map(({ key, label, icon: Icon }) => (

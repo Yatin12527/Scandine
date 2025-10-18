@@ -40,7 +40,6 @@ const Navbar: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const auth = useSelector((state: RootState) => state.auth);
 
-
   const detectTheme = (path: string): ThemeKey => {
     if (path.includes("minimilist")) return "minimilist";
     if (path.includes("classic_black")) return "classic_black";
@@ -55,15 +54,16 @@ const Navbar: React.FC = () => {
   };
 
   const getMobileBackground = () => {
-    const theme = themes[currentTheme];
     if (pathname === "/") {
       return "bg-[#fffbf5]";
     } else if (pathname === "/menu") {
       return "bg-[#fffbf5]";
     } else if (pathname.startsWith("/menu/minimilist")) {
       return "bg-gray-200";
+    } else if (pathname.startsWith("/menu/classic_black")) {
+      return "bg-gray-800";
     } else {
-      return `bg-${theme.text}`;
+      return "bg-[#fffcf7]";
     }
   };
 
@@ -123,7 +123,7 @@ const Navbar: React.FC = () => {
       {/* Profile modal backdrop */}
       {showProfileModal && (
         <div
-          className="fixed inset-0 bg-black/30 z-40"
+          className="fixed inset-0 bg-black/30 z-50"
           onClick={handleProfileModalClose}
         />
       )}
@@ -138,17 +138,19 @@ const Navbar: React.FC = () => {
               <div className="md:hidden mr-2">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="text-gray-800 hover:opacity-80 transition-colors"
+                  className={`text-${theme.text} hover:opacity-80 transition-colors`}
                   aria-label="Toggle menu"
                 >
                   {isMenuOpen ? <X size={24} /> : <HiMenuAlt2 size={24} />}
                 </button>
               </div>
               <Image
-                src="/logo2.png"
+                src={
+                  currentTheme === "minimilist" ? "/logo2.png" : "/logoDark.png"
+                }
                 width={100}
                 height={50}
-                alt="QR Menu Logo"
+                alt="ScanDine Logo"
                 onClick={() => router.push("/")}
                 className="cursor-pointer"
               />
@@ -211,12 +213,12 @@ const Navbar: React.FC = () => {
           <div
             className={`${mobileBackground} md:bg-transparent shadow-lg md:shadow-none`}
           >
-            <div className="px-4 space-y-2">
+            <div className="px-4 space-y-2 ">
               {navMenu.map((item) => (
                 <Link
                   key={item.title}
                   href={item.link}
-                  className="block text-center px-3 py-2 text-gray-600 hover:bg-gray-800 rounded transition-colors"
+                  className={`block text-center px-3 py-2 text-${theme.text} hover:bg-gray-800 rounded transition-colors`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.title}

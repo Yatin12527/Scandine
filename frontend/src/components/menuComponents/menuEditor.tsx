@@ -170,7 +170,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       >
         <button
           className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => router.back()}
         >
           <div
             className={`w-8 h-8 rounded-full bg-${t.bg} flex items-center justify-center transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2`}
@@ -231,7 +231,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
     >
       <button
         className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
-        onClick={() => router.push("/dashboard")}
+        onClick={() => router.back()}
       >
         <div
           className={`w-8 h-8 rounded-full bg-${t.bg} flex items-center justify-center  transition-colors mt-5 sm:mt-0 ml-2 sm:ml-0 sm:mr-2`}
