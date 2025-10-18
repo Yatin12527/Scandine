@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { themes } from "../data/themes";
 import HeadingOne from "./menuHeading";
-import { Loader } from "../ui/loader";
 import StackMenuSkeleton from "../ui/stackLoader";
 import GridMenuSkeleton from "../ui/gridLoader";
 
