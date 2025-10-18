@@ -84,13 +84,29 @@ export const login = async (req, res) => {
   });
 };
 
-res.clearCookie("token", {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  domain: process.env.NODE_ENV === "production" ? ".scandine.food" : undefined,
-  path: "/",
-});
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax", 
+      domain:
+        process.env.NODE_ENV === "production" ? ".scandine.food" : undefined, // must match
+      path: "/",
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully",
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error during logout",
+    });
+  }
+};
 
 export const googleLogin = (_req, res) => {
   const redirectUrl =
