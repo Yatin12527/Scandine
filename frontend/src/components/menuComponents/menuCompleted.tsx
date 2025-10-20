@@ -11,7 +11,7 @@ import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { MenuData } from "@/types/sectionType";
 import { IoIosArrowBack } from "react-icons/io";
-import Image from "next/image";
+
 
 interface MenuCompletedProps {
   DesignComponent;
