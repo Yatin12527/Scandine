@@ -30,11 +30,12 @@ export default function RestaurantMenu() {
   return (
     <div className="relative min-h-screen font-inter p-5 sm:p-8">
       <div
-        className="fixed inset-0 -z-10 before:absolute before:inset-0 before:bg-cover before:bg-center before:bg-no-repeat"
+        className="fixed inset-0 -z-10 bg-black"
         style={{
-          background:
-            "url('/classic_blackBG.png') center/cover no-repeat fixed",
-          willChange: "transform",
+          backgroundImage: "url('/classic_blackBG.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       />
       <div className="min-h-screen">
