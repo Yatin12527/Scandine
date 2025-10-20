@@ -36,6 +36,8 @@ export default function RestaurantMenu() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
+          transform: "translateZ(0)", 
+          backfaceVisibility: "hidden", 
         }}
       />
       <div className="min-h-screen">
