@@ -30,16 +30,14 @@ export default function RestaurantMenu() {
 
   return (
     <div className="relative min-h-screen font-inter p-5 sm:p-8">
-      <div className="absolute md:fixed inset-0 -z-10">
-        <Image
-          src="/classic_blackBG.png"
-          alt="Background"
-          fill
-          quality={100}
-          priority
-          className="object-cover object-center"
-        />
-      </div>
+      <div
+        className="fixed inset-0 -z-10 before:absolute before:inset-0 before:bg-cover before:bg-center before:bg-no-repeat"
+        style={{
+          background:
+            "url('/classic_blackBG.png') center/cover no-repeat fixed",
+          willChange: "transform",
+        }}
+      />
       <div className="min-h-screen">
         <div className="text-center mb-8">
           <button
