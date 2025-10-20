@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import ClassicBlack from "@/components/designs/classicBlackPreview";
 import { MenuData } from "@/types/sectionType";
-import Image from "next/image";
 
 export default function RestaurantMenu() {
   const [data, setData] = useState<MenuData | null>(null);
