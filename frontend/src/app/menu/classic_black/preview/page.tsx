@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import ClassicBlack from "@/components/designs/classicBlackPreview";
 import { MenuData } from "@/types/sectionType";
+import Image from "next/image";
 
 export default function RestaurantMenu() {
   const [data, setData] = useState<MenuData | null>(null);
@@ -29,17 +30,16 @@ export default function RestaurantMenu() {
 
   return (
     <div className="relative min-h-screen font-inter p-5 sm:p-8">
-      <div
-        className="fixed inset-0 -z-10 bg-black"
-        style={{
-          backgroundImage: "url('/classic_blackBG.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          transform: "translateZ(0)", 
-          backfaceVisibility: "hidden", 
-        }}
-      />
+      <div className="absolute md:fixed inset-0 -z-10">
+        <Image
+          src="/classic_blackBG.png"
+          alt="Background"
+          fill
+          quality={100}
+          priority
+          className="object-cover object-center"
+        />
+      </div>
       <div className="min-h-screen">
         <div className="text-center mb-8">
           <button
