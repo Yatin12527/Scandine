@@ -75,23 +75,18 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
       }`}
     >
       <div
-        className="fixed inset-0 -z-10"
-        style={{ backgroundColor: "#yourBackgroundColor" }}
-      >
-        <Image
-          src={`/${bg}BG.png`}
-          alt="Background"
-          fill
-          quality={100}
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-          style={{
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
-          }}
-        />
-      </div>
+        className="fixed inset-0 -z-10 bg-[#1a1a1a]"
+        style={{
+          backgroundImage: `url('/${bg}BG.png')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+          height: "100vh",
+          width: "100vw",
+        }}
+      />
 
       <div className="min-h-screen">
         {isOwner && (
