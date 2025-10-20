@@ -18,7 +18,7 @@ router.post("/addmenuItems", validateToken, addMenu);
 router.put("/editmenuItems", validateToken, editMenu);
 // @desc = getting all items by id
 // @route = /api/items/menuItems/:menuId
-// @access = private
+// @access = public
 router.get("/menuItems/:menuId", getMenuById);
 // @desc = getting all menus by id
 // @route = /api/items/menus

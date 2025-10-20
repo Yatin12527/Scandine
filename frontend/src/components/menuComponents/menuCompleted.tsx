@@ -74,14 +74,22 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
         isDark ? "" : "flex flex-col items-center"
       }`}
     >
-      <div className="fixed inset-0 -z-10">
+      <div
+        className="fixed inset-0 -z-10"
+        style={{ backgroundColor: "#yourBackgroundColor" }}
+      >
         <Image
           src={`/${bg}BG.png`}
           alt="Background"
           fill
           quality={100}
           priority
+          sizes="100vw"
           className="object-cover object-center"
+          style={{
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
+          }}
         />
       </div>
 

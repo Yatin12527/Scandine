@@ -30,8 +30,6 @@ export const addMenu = async (req, res) => {
 export const getMenuById = async (req, res) => {
   try {
     const menuId = req.params.menuId; // from URL
-
-    // fetch only if this menu belongs to the logged-in user
     const menu = await menuItems.findOne({ _id: menuId });
 
     if (!menu) {
