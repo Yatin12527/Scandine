@@ -28,7 +28,7 @@ function Preview() {
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
 
   return (
-    <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8 overflow-hidden">
+    <div className="relative min-h-screen font-inter flex flex-col items-center  sm:p-8 overflow-hidden">
       <div
         className="fixed inset-0 -z-10"
         style={{
