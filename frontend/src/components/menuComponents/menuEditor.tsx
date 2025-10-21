@@ -7,6 +7,8 @@ import { themes } from "../data/themes";
 import HeadingOne from "./menuHeading";
 import StackMenuSkeleton from "../ui/stackLoader";
 import GridMenuSkeleton from "../ui/gridLoader";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 type MenuOneProps = {
   mode: "create" | "edit";
@@ -29,6 +31,18 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   const t = themes[parts[2]];
   const currentTemplate = parts[2];
   const layoutType = TEMPLATE_LAYOUTS[currentTemplate] || "grid";
+  const auth = useSelector((state: RootState) => state.auth);
+
+  useEffect(() => {
+    if (auth.loading) {
+      setIsLoading(true);
+      return;
+    }
+    if (auth.error) {
+      setIsLoading(false);
+      router.push("/auth/login");
+    }
+  }, [auth.loading, auth.error, router]);
 
   useEffect(() => {
     localStorage.setItem("style", parts[2]);
@@ -161,6 +175,9 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
     }
   };
 
+  if (auth.error) {
+    return null;
+  }
   if (layoutType === "stack") {
     return (
       <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">

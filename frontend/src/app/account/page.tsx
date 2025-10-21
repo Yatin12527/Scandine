@@ -1,8 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoBarChart, IoSettings } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import Profile from "@/components/profile";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { useRouter } from "next/navigation";
 
 const AccountItems = [
   { key: "Profile", icon: CgProfile },
@@ -11,8 +14,22 @@ const AccountItems = [
 ];
 
 const Account = () => {
+  const auth = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+  useEffect(() => {
+    if (auth.loading) {
+      return;
+    }
+    if (auth.error) {
+      router.push("/auth/login");
+    }
+  }, [auth.loading, auth.error, router]);
+
   const [activeTab, setActiveTab] = useState("Profile");
 
+  if (auth.error) {
+    return null;
+  }
   return (
     <div className="min-h-screen bg-[#fffcf4] flex">
       {/* Sidebar */}
@@ -78,7 +95,7 @@ const Account = () => {
       <div className="flex-1 p-8">
         <div className="max-w-4xl">
           <div className="p-8 ">
-            {activeTab === "Profile" && <Profile/>}
+            {activeTab === "Profile" && <Profile />}
 
             {activeTab === "Analytics" && <div>work under progress</div>}
 

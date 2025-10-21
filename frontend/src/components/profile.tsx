@@ -1,5 +1,5 @@
 "use client";
-import { asyncGetApi, asyncPutApi } from "@/redux/authSlice";
+import { asyncPutApi } from "@/redux/authSlice";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../redux/store";
@@ -8,6 +8,7 @@ import axios from "axios";
 import imageCompression from "browser-image-compression";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import PhoneSelector from "./ui/phoneSelector";
+
 
 const Profile = () => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -26,17 +27,6 @@ const Profile = () => {
     phone: "",
     about: "",
   });
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await dispatch(asyncGetApi()).unwrap();
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   useEffect(() => {
     if (auth && Object.keys(auth).length > 0) {
@@ -320,7 +310,6 @@ const Profile = () => {
           >
             {auth.loading ? "Saving..." : "Save"}
           </button>
-        
         </form>
       </div>
     </div>
