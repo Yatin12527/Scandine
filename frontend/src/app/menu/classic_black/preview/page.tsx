@@ -30,7 +30,7 @@ export default function RestaurantMenu() {
   return (
     <div className="relative min-h-screen font-inter p-5 sm:p-8 overflow-hidden">
       <div
-        className="absolute md:fixed inset-0 -z-10"
+        className="fixed inset-0 -z-10"
         style={{
           backgroundImage: "url('/classic_blackBG.png')",
           backgroundSize: "cover",
