@@ -93,7 +93,7 @@ const PhoneSelector = ({ value = "+91", onChange }: PhoneSelectorProps) => {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute z-50 w-80 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+        <div className="absolute z-50 w-72 sm:w-80 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
           {/* Search Input */}
           <div className="p-2 border-b border-gray-200">
             <input
