@@ -9,6 +9,7 @@ import StackMenuSkeleton from "../ui/stackLoader";
 import GridMenuSkeleton from "../ui/gridLoader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { ToastContainer, toast, Bounce } from "react-toastify";
 
 type MenuOneProps = {
   mode: "create" | "edit";
@@ -166,12 +167,31 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       localStorage.removeItem("style");
       localStorage.removeItem("menuMode");
       setHasUnsavedChanges(false);
-
-      alert(response.data.msg);
+      toast.success(response.data.msg, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       router.push(`/menu/${parts[2]}/${response.data.menuId}`);
     } catch (error) {
       console.error("Error submitting menu:", error);
-      alert("Failed to save menu. Please try again.");
+      toast.error("Failed to save menu. Please try again.", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -181,6 +201,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   if (layoutType === "stack") {
     return (
       <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
+        <ToastContainer />
         <div
           className="fixed inset-0 -z-10"
           style={{
@@ -251,6 +272,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
 
   return (
     <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
+      <ToastContainer />
       <div
         className="fixed inset-0 -z-10"
         style={{
