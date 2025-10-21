@@ -7,23 +7,32 @@ export default function StackMenuSkeleton() {
         <Skeleton className="h-8 w-30 rounded-lg" />
         <Skeleton className="h-12 w-40 rounded-lg" />
       </div>
+
+      {/* Menu sections */}
       <div className="w-full">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="mb-12">
-            <div className="space-y-4 mb-6">
-              <Skeleton className="h-12 w-48 rounded-lg" />
-              <Skeleton className="h-32 w-full rounded-lg" />
-              <div className="space-y-2">
-                <Skeleton className="h-6 w-full rounded" />
-                <Skeleton className="h-6 w-full rounded" />
-                <Skeleton className="h-6 w-3/4 rounded" />
-              </div>
+        <div className="mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((item) => (
+                <div key={item} className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <Skeleton className="h-6 w-32 rounded mb-2" />
+                    <Skeleton className="h-4 w-full rounded" />
+                  </div>
+                  <Skeleton className="h-6 w-16 rounded ml-4" />
+                </div>
+              ))}
             </div>
-            <div className="flex justify-center mt-6">
-              <Skeleton className="h-10 w-40 rounded-lg" />
+            <div className="grid grid-cols-1 gap-4">
+              {[1, 2].map((img) => (
+                <Skeleton key={img} className="w-full h-64 rounded-lg" />
+              ))}
             </div>
           </div>
-        ))}
+          <div className="flex justify-center mt-6">
+            <Skeleton className="h-10 w-40 rounded-lg" />
+          </div>
+        </div>
       </div>
       <div className="flex justify-center mt-6">
         <Skeleton className="h-12 w-36 rounded-lg" />
