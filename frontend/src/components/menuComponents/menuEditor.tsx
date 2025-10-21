@@ -173,6 +173,8 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
             backgroundRepeat: "no-repeat",
             transform: "translate3d(0, 0, 0)",
             willChange: "transform",
+            height: "100vh",
+            width: "100vw",
           }}
         />
         <button
@@ -241,6 +243,8 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
           backgroundRepeat: "no-repeat",
           transform: "translate3d(0, 0, 0)",
           willChange: "transform",
+          height: "100vh",
+          width: "100vw",
         }}
       />
       <button

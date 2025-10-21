@@ -82,6 +82,8 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
           backgroundRepeat: "no-repeat",
           transform: "translate3d(0, 0, 0)",
           willChange: "transform",
+          height: "100vh",
+          width: "100vw",
         }}
       />
 
