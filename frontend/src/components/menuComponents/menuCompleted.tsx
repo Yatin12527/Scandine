@@ -93,7 +93,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
       ) : isLoading && !isDark ? (
         <GridMenuSkeleton />
       ) : (
-        <div className="min-h-screen">
+        <>
           {isOwner && (
             <div
               className={`w-full mb-6 flex justify-center gap-4 ${
@@ -179,7 +179,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
               onClose={handleCloseQR}
             />
           )}
-        </div>
+        </>
       )}
     </div>
   );

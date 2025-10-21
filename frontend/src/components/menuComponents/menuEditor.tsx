@@ -181,7 +181,7 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
       router.push(`/menu/${parts[2]}/${response.data.menuId}`);
     } catch (error) {
       console.error("Error submitting menu:", error);
-      toast.error("Failed to save menu. Please try again.", {
+      toast.error(error, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

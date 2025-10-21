@@ -20,7 +20,7 @@ export const addMenu = async (req, res) => {
     res.json({ msg: "Menu added successfully", menuId: createdMenu.id });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Failed to add menu" });
+    res.status(500).json({ message: "Restaurant name is required" });
   }
 };
 // difference between id and _id , in case searching the db we use _id
