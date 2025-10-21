@@ -28,7 +28,7 @@ function Preview() {
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
 
   return (
-    <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
+    <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8 overflow-hidden">
       <div
         className="fixed inset-0 -z-10"
         style={{
@@ -38,6 +38,8 @@ function Preview() {
           backgroundRepeat: "no-repeat",
           transform: "translate3d(0, 0, 0)",
           willChange: "transform",
+          height: "100vh",
+          width: "100vw",
         }}
       />
       <div className="text-center mb-8">
