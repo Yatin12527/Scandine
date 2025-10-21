@@ -1,5 +1,7 @@
 import { Section } from "@/types/sectionType";
 import { HiPencilSquare } from "react-icons/hi2";
+import Image from "next/image";
+
 type MinimilistProps = {
   data: Section;
   imgUrl: string;
@@ -47,10 +49,12 @@ const Minimilist = ({
           ))}
         </div>
         {imgUrl && imgUrl.trim() !== "" && (
-          <div className="w-full h-60 mt-4">
-            <img
+          <div className="w-full h-60 mt-4 relative">
+            <Image
               src={imgUrl}
               alt="Uploaded Preview"
+              width={800}
+              height={600}
               className="w-full h-full object-cover rounded-lg"
             />
           </div>

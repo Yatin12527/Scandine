@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Templates from "@/components/templates";
 import Locked from "@/components/ui/lockedOverlay";
+import Image from "next/image";
 
 function Menu() {
   return (
@@ -43,9 +44,11 @@ function Menu() {
 
               {/* Image  */}
               <div className="relative overflow-hidden rounded-t-3xl bg-gradient-to-br from-slate-100 to-slate-200 h-64">
-                <img
+                <Image
                   src={items.Image}
                   alt={items.Title}
+                  width={800}
+                  height={600}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

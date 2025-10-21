@@ -1,6 +1,7 @@
 import { Section } from "@/types/sectionType";
 import React from "react";
 import { HiPencilSquare } from "react-icons/hi2";
+import Image from "next/image";
 
 type ClassicBlackProps = {
   data: Section;
@@ -47,10 +48,12 @@ const ClassicBlack = ({
       {images.length > 0 && (
         <div className="grid grid-cols-1 gap-4">
           {images.map((img, i) => (
-            <div key={i} className="w-full h-64">
-              <img
+            <div key={i} className="w-full h-64 relative">
+              <Image
                 src={img}
                 alt="Menu item"
+                width={800}
+                height={600}
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
@@ -68,10 +71,12 @@ const ClassicBlack = ({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
             {images.slice(0, 3).map((img, idx) => (
               <div key={idx}>
-                <div className="flex justify-center w-full h-40 mb-3">
-                  <img
+                <div className="flex justify-center w-full h-40 mb-3 relative">
+                  <Image
                     src={img}
                     alt="Menu item"
+                    width={800}
+                    height={600}
                     className="w-full h-full object-cover rounded-lg"
                   />
                 </div>
@@ -119,10 +124,12 @@ const ClassicBlack = ({
       {images.length > 0 && (
         <div className="grid grid-cols-1 gap-4">
           {images.map((img, i) => (
-            <div key={i} className="w-full h-64">
-              <img
+            <div key={i} className="w-full h-64 relative">
+              <Image
                 src={img}
                 alt="Menu item"
+                width={800}
+                height={600}
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
@@ -154,10 +161,12 @@ const ClassicBlack = ({
     <div className="grid grid-cols-1 gap-6">
       {images.length > 0 &&
         images.map((img, i) => (
-          <div key={i} className="w-full h-64">
-            <img
+          <div key={i} className="w-full h-64 relative">
+            <Image
               src={img}
               alt="Menu item"
+              width={800}
+              height={600}
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
