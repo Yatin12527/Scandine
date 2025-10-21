@@ -7,7 +7,6 @@ import { themes } from "../data/themes";
 import HeadingOne from "./menuHeading";
 import StackMenuSkeleton from "../ui/stackLoader";
 import GridMenuSkeleton from "../ui/gridLoader";
-import Image from "next/image";
 
 type MenuOneProps = {
   mode: "create" | "edit";
@@ -165,16 +164,17 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
   if (layoutType === "stack") {
     return (
       <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
-        <div className="fixed inset-0 -z-10">
-          <Image
-            src={`/${parts[2]}BG.png`}
-            alt="Background"
-            fill
-            quality={100}
-            priority
-            className="object-cover object-center"
-          />
-        </div>{" "}
+        <div
+          className="fixed inset-0 -z-10"
+          style={{
+            backgroundImage: `url('/${parts[2]}BG.png')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            transform: "translate3d(0, 0, 0)",
+            willChange: "transform",
+          }}
+        />
         <button
           className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
           onClick={() => router.back()}
@@ -232,16 +232,17 @@ export default function MenuEditor({ mode, menuId }: MenuOneProps) {
 
   return (
     <div className="relative min-h-screen font-inter flex flex-col items-center p-5 sm:p-8">
-      <div className="fixed inset-0 -z-10">
-        <Image
-          src={`/${parts[2]}BG.png`}
-          alt="Background"
-          fill
-          quality={100}
-          priority
-          className="object-cover object-center"
-        />
-      </div>
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          backgroundImage: `url('/${parts[2]}BG.png')`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          transform: "translate3d(0, 0, 0)",
+          willChange: "transform",
+        }}
+      />
       <button
         className="absolute left-0 sm:left-8 md:left-16 lg:left-60 top-12 flex cursor-pointer bg-transparent rounded-full p-0 sm:px-4 sm:py-2 items-center hover:bg-white/10 transition-all duration-200 shadow-md hover:shadow-lg sm:border border-gray-100 group"
         onClick={() => router.back()}

@@ -12,7 +12,6 @@ import { RiArrowGoBackFill } from "react-icons/ri";
 import { MenuData } from "@/types/sectionType";
 import { IoIosArrowBack } from "react-icons/io";
 
-
 interface MenuCompletedProps {
   DesignComponent;
   template?: string;
@@ -75,7 +74,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
       }`}
     >
       <div
-        className="fixed inset-0 -z-10 bg-[#1a1a1a]"
+        className="fixed inset-0 -z-10"
         style={{
           backgroundImage: `url('/${bg}BG.png')`,
           backgroundSize: "cover",
@@ -83,8 +82,6 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
           backgroundRepeat: "no-repeat",
           transform: "translate3d(0, 0, 0)",
           willChange: "transform",
-          height: "100vh",
-          width: "100vw",
         }}
       />
 
