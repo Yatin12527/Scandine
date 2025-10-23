@@ -3,9 +3,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { asyncGetApi } from "@/redux/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 import QRCodeModal from "@/components/qrModal";
 import { MdOutlineQrCode2 } from "react-icons/md";
 import { RiArrowGoBackFill } from "react-icons/ri";
@@ -35,27 +34,46 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
   const bg = pathname.split("/")[2];
   const isDark = template === "classicBlack";
   const [isLoading, setIsloading] = useState<boolean>(true);
+  const auth = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
+    if (auth.loading) {
+      return;
+    }
     const fetchMenuData = async () => {
       try {
         const menuResult = await axios.get(
           `${process.env.NEXT_PUBLIC_SERVER}/items/menuItems/${menuId}`
         );
-        setData(menuResult.data);
-        const userResult = await dispatch(asyncGetApi()).unwrap();
 
-        if (userResult && menuResult.data.owner) {
-          setIsOwner(userResult.id === menuResult.data.owner);
+        setData(menuResult.data);
+
+        const seenRecently = localStorage.getItem(`seenRecently_${menuId}`);
+
+        if (!seenRecently) {
+          axios.post(`${process.env.NEXT_PUBLIC_SERVER}/items/view/${menuId}`);
+          const expiryTime = Date.now() + 24 * 60 * 60 * 1000;
+          localStorage.setItem(
+            `seenRecently_${menuId}`,
+            JSON.stringify({
+              value: true,
+              expiry: expiryTime,
+            })
+          );
         }
+
         setIsloading(false);
+
+        if (auth && menuResult.data.owner) {
+          setIsOwner(auth.id === menuResult.data.owner);
+        }
       } catch (err) {
         console.error("Error fetching data:", err);
       }
     };
 
     fetchMenuData();
-  }, [dispatch, menuId]);
+  }, [auth.loading, dispatch, menuId]);
 
   const handleGenerateQR = () => {
     setShowQRModal(true);
@@ -66,9 +84,7 @@ const MenuCompleted: React.FC<MenuCompletedProps> = ({
     setShowQRModal(false);
     document.body.style.overflow = "unset";
   };
-
   const sectionsArray = data?.sections ? Object.values(data.sections) : [];
-
   return (
     <div
       className={`relative min-h-screen font-inter p-5 sm:p-8 ${

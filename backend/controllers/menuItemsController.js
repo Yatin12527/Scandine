@@ -75,11 +75,23 @@ export const getMenusById = async (req, res) => {
     const owner = req.data.id;
     const allMenus = await menuItems.find(
       { owner: owner },
-      { _id: 1, title: 1, logo: 1, owner: 1, createdAt: 1,style: 1 }
+      { _id: 1, title: 1, logo: 1, owner: 1, createdAt: 1, style: 1,views:1}
     );
     res.json(allMenus);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to fetch menus" });
+  }
+};
+
+export const viewCount = async (req, res) => {
+  try {
+    const menuId = req.params.menuId;
+
+    await menuItems.updateOne({ _id: menuId }, { $inc: { views: 1 } });
+
+    res.sendStatus(200);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update views" });
   }
 };

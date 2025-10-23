@@ -6,6 +6,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import MenuSkeleton from "./ui/menuLoader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { CgEye } from "react-icons/cg";
 
 interface menusInterface {
   _id: string;
@@ -13,6 +14,7 @@ interface menusInterface {
   logo?: string;
   createdAt: Date;
   style: string;
+  views:number;
 }
 
 const Menus = () => {
@@ -41,7 +43,7 @@ const Menus = () => {
             }
           );
           setUserMenus(response.data);
-          console.log(auth);
+          console.log(response.data)
         } catch (error) {
           console.log(error);
         } finally {
@@ -59,6 +61,7 @@ const Menus = () => {
   if (auth.error) {
     return null;
   }
+  
 
   return (
     <div>
@@ -115,6 +118,11 @@ const Menus = () => {
                     <span className="bg-slate-100 px-2 py-1 rounded-lg">
                       {menu.style.replace(/_/g, " ")}
                     </span>
+                    <span className="flex items-center  gap-1">
+                        <CgEye size={15} />
+                        {menu.views}
+                    </span>
+
                   </div>
                 </div>
 

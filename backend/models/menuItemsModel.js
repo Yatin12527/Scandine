@@ -24,6 +24,7 @@ const menuItemsSchema = new mongoose.Schema({
   // ref looks up for models not collections
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   style: { type: String, required: true },
+ views: { type: Number, required: true, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 

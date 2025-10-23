@@ -4,6 +4,7 @@ import {
   getMenuById,
   editMenu,
   getMenusById,
+  viewCount
 } from "../controllers/menuItemsController.js";
 import validateToken from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -24,5 +25,9 @@ router.get("/menuItems/:menuId", getMenuById);
 // @route = /api/items/menus
 // @access = private
 router.get("/menus", validateToken, getMenusById);
+// @desc = adding a new item
+// @route = /api/items/view/:menuId
+// @access = public
+router.post("/view/:menuId", viewCount);
 
 export default router;
