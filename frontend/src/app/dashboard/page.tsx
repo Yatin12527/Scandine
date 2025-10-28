@@ -4,15 +4,17 @@ import React, { useState } from "react";
 import { IoRestaurant, IoBarChart, IoSettings } from "react-icons/io5";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import Analytics from "@/components/analytics";
+import ManageMenus from "@/components/ManageMenus";
 
 const navItems = [
   { key: "menus", label: "Your Menus", icon: IoRestaurant },
   { key: "analytics", label: "Analytics", icon: IoBarChart },
-  { key: "settings", label: "Settings", icon: IoSettings },
+  { key: "manage", label: "Manage", icon: IoSettings },
 ];
 function Dashboard() {
   const [activeTab, setActiveTab] = useState("menus");
-  const router= useRouter();
+  const router = useRouter();
 
   return (
     <div className="min-h-screen bg-[#fffcf4] py-8 px-4">
@@ -90,11 +92,9 @@ function Dashboard() {
         {/* Content based on active tab */}
         {activeTab === "menus" && <Menus />}
 
-        {activeTab === "analytics" && <div>work under progress</div>}
+        {activeTab === "analytics" && <Analytics />}
 
-        {activeTab === "templates" && <div>work under progress</div>}
-
-        {activeTab === "settings" && <div>work under progress</div>}
+        {activeTab === "manage" && <ManageMenus/>}
       </div>
     </div>
   );

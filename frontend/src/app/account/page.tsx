@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { IoBarChart, IoSettings } from "react-icons/io5";
+import { IoBarChart } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import Profile from "@/components/profile";
 import { useSelector } from "react-redux";
@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 
 const AccountItems = [
   { key: "Profile", icon: CgProfile },
-  { key: "Analytics", icon: IoBarChart },
-  { key: "Settings", icon: IoSettings },
+  { key: "Subscription", icon: IoBarChart },
 ];
 
 const Account = () => {
@@ -97,9 +96,8 @@ const Account = () => {
           <div className="p-8 ">
             {activeTab === "Profile" && <Profile />}
 
-            {activeTab === "Analytics" && <div>work under progress</div>}
+            {activeTab === "Subscription" && <div>Coming soon</div>}
 
-            {activeTab === "Settings" && <div>work under progress</div>}
           </div>
         </div>
       </div>

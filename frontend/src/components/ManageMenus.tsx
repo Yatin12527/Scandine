@@ -6,7 +6,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import MenuSkeleton from "./ui/menuLoader";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { CgEye } from "react-icons/cg";
 
 interface menusInterface {
   _id: string;
@@ -17,13 +16,14 @@ interface menusInterface {
   views: number;
 }
 
-const Menus = () => {
+const ManageMenus = () => {
   dayjs.extend(relativeTime);
   const router = useRouter();
   const [userMenus, setUserMenus] = useState<menusInterface[]>([]);
   const [isMenusLoading, setIsMenusLoading] = useState<boolean>(true);
+  const [deleteMenuId, setDeleteMenuId] = useState<string | null>(null);
   const auth = useSelector((state: RootState) => state.auth);
-  // By adding [auth.loading, auth.error], this effect re-runs when auth finishes, letting us check the auth result (error or success) *after* it's done loading.
+
   useEffect(() => {
     if (auth.loading) {
       setIsMenusLoading(true);
@@ -54,6 +54,27 @@ const Menus = () => {
     }
   }, [auth.loading, auth.error, router]);
 
+  useEffect(() => {
+    if (deleteMenuId) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [deleteMenuId]);
+  
+  const handleDelete = async (menuId: string) => {
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_SERVER}/items/menus/${menuId}`,
+        { withCredentials: true }
+      );
+      setUserMenus(userMenus.filter((menu) => menu._id !== menuId));
+      setDeleteMenuId(null);
+    } catch (error) {
+      console.error("Failed to delete menu:", error);
+    }
+  };
+
   if (isMenusLoading) {
     return <MenuSkeleton />;
   }
@@ -66,9 +87,9 @@ const Menus = () => {
     <div>
       {/* Header Section */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl font-bold mb-6">View Your Menu Collection</h1>
+        <h1 className="text-5xl font-bold mb-6">Modify your menu collection</h1>
         <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-          view all your created menus in one place
+          Manage your created menus in one place
         </p>
       </div>
 
@@ -97,7 +118,7 @@ const Menus = () => {
               </div>
 
               {/* Content */}
-              <div className="p-4">
+              <div className="p-6">
                 <div className="mb-5">
                   <div className="flex items-center gap-x-4 mb-2">
                     <img
@@ -108,16 +129,12 @@ const Menus = () => {
                       {menu.title}
                     </h3>
                   </div>
-                  <p className="text-xs  text-slate-600 mb-2 group-hover:text-slate-700 transition-colors">
+                  <p className="text-xs  text-slate-600 mb-2 group-hover:text-slate-700 transition-colors">
                     Posted {dayjs(menu.createdAt).fromNow()}
                   </p>
-                  <div className="flex items-center justify-between text-xs text-slate-500 pr-3">
+                  <div className="flex items-center justify-between text-xs text-slate-500">
                     <span className="bg-slate-100 px-2 py-1 rounded-lg">
                       {menu.style.replace(/_/g, " ")}
-                    </span>
-                    <span className="flex items-center  gap-1">
-                      <CgEye size={15} />
-                      {menu.views}
                     </span>
                   </div>
                 </div>
@@ -125,17 +142,60 @@ const Menus = () => {
                 {/* Buttons */}
                 <div className="flex gap-4 items-center">
                   <button
-                    className="flex-1 px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-xl transition-all duration-300 border border-slate-200 hover:border-slate-300 hover:scale-[1.02] text-sm cursor-pointer"
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
+                    onClick={() => setDeleteMenuId(menu._id)}
+                  >
+                    Delete Menu
+                  </button>
+                  <button
+                    className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] cursor-pointer"
                     onClick={() =>
-                      router.push(`/menu/${menu.style}/${menu._id}`)
+                      router.push(`/menu/${menu.style}/${menu._id}/edit`)
                     }
                   >
-                    View Menu
+                    Edit Menu
                   </button>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Delete Modal*/}
+      {deleteMenuId && (
+        <div
+          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 "
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setDeleteMenuId(null);
+            }
+          }}
+        >
+          <div
+            className="bg-white rounded-2xl p-8 max-w-md mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-2xl font-bold mb-4">Delete Menu?</h3>
+            <p className="text-slate-600 mb-6">
+              Are you sure you want to delete this menu? This action cannot be
+              undone.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => setDeleteMenuId(null)}
+                className="flex-1 px-6 py-3 bg-slate-200 hover:bg-slate-300 rounded-xl font-semibold cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(deleteMenuId)}
+                className="flex-1 px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold cursor-pointer"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
@@ -152,4 +212,4 @@ const Menus = () => {
   );
 };
 
-export default Menus;
+export default ManageMenus;

@@ -4,7 +4,8 @@ import {
   getMenuById,
   editMenu,
   getMenusById,
-  viewCount
+  viewCount,
+  deleteMenu,
 } from "../controllers/menuItemsController.js";
 import validateToken from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -29,5 +30,9 @@ router.get("/menus", validateToken, getMenusById);
 // @route = /api/items/view/:menuId
 // @access = public
 router.post("/view/:menuId", viewCount);
+// @desc = deleting an  item
+// @route = /api/items/menus/:menuId
+// @access = private
+router.delete("/menus/:menuId", validateToken, deleteMenu);
 
 export default router;
