@@ -76,6 +76,13 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: black !important;
   transition: background-color 9999s ease-in-out 0s !important;
 }
+::-webkit-scrollbar {
+  display: none;
+}
+html {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 
 :root {
   --radius: 0.625rem;
