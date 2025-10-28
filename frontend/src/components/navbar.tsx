@@ -79,14 +79,25 @@ const Navbar: React.FC = () => {
     };
   }, [isMenuOpen]);
 
-  // Update theme based on pathname
-  useEffect(() => {
-    setCurrentTheme(detectTheme(pathname));
-  }, [pathname]);
-
   const handleProfileModalClose = () => {
     setShowProfileModal(false);
   };
+
+  useEffect(() => {
+    setCurrentTheme(detectTheme(pathname));
+    const handleThemeChange = () => {
+      if (pathname === "/") {
+        if (window.innerWidth <= 768) {
+          setCurrentTheme("minimilist");
+        } else {
+          setCurrentTheme("classic_black");
+        }
+      }
+    };
+    handleThemeChange();
+    window.addEventListener("resize", handleThemeChange);
+    return () => window.removeEventListener("resize", handleThemeChange);
+  }, [pathname]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -102,7 +113,6 @@ const Navbar: React.FC = () => {
     };
     fetchData();
   }, [dispatch]);
-
   if (shouldHideNavbar()) {
     return null;
   }

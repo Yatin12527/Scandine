@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import imageCompression from "browser-image-compression";
 import { Loader } from "../ui/loader";
 
-
 export default function HeadingOne({ t }) {
   const { handleSubmit: handleImageSubmit, register: registerImage } =
     useForm();
@@ -29,7 +28,7 @@ export default function HeadingOne({ t }) {
   const [image, setImage] = useState<File | null>(null);
 
   // Load data from localStorage on component mount
- useEffect(() => {
+  useEffect(() => {
     const loadFromStorage = () => {
       const savedRestaurantName = localStorage.getItem("Heading");
       const savedLogo = localStorage.getItem("Logo");
@@ -45,7 +44,8 @@ export default function HeadingOne({ t }) {
     setIsHydrated(true);
 
     window.addEventListener("localStorageCleared", loadFromStorage);
-    return () => window.removeEventListener("localStorageCleared", loadFromStorage);
+    return () =>
+      window.removeEventListener("localStorageCleared", loadFromStorage);
   }, []);
 
   // Set form value when editing starts
@@ -288,7 +288,7 @@ export default function HeadingOne({ t }) {
                     disabled={isUploading || imageSelected}
                     className={`mt-2 px-4 py-2 w-full rounded-lg font-semibold transition duration-150 ${
                       isUploading || imageSelected
-                        ? `bg-${t.accent}-400 cursor-not-allowed text-white`
+                        ? "bg-green-400 cursor-not-allowed text-white"
                         : `bg-${t.accent}-600 hover:bg-${t.accent}-700 text-white cursor-pointer`
                     }`}
                   >

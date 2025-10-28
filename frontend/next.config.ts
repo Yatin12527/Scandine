@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig = {
   images: {
     remotePatterns: [
       {
@@ -21,13 +21,16 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "res.cloudinary.com", 
+        hostname: "res.cloudinary.com",
       },
-      // Local development only
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", 
+      },
       ...(process.env.NODE_ENV === "development"
         ? [
             {
-              protocol: "http" as const,
+              protocol: "http",
               hostname: "localhost",
             },
           ]
@@ -37,7 +40,6 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-
   async headers() {
     return [
       {

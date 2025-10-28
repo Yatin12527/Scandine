@@ -15,7 +15,7 @@ export const themes = {
     headerFocus: "focus:text-white focus:bg-gray-700",
     accent: "green",
     bg: "gray-800",
-    text: "white",
+    text: "gray-300",
     label: "gray-300",
     inputBg: "gray-700",
     border: "gray-600",
