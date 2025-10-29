@@ -86,7 +86,7 @@ const AdditionalComponents = () => {
   const router = useRouter();
   return (
     <div className="relative w-full min-h-screen  bg-[#fffcf4] ">
-      {/* Features Section - Alternating Layout */}
+      {/* Features Section */}
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -157,7 +157,7 @@ const AdditionalComponents = () => {
         </div>
       </section>
 
-      {/* Categories Section - Grid with Professional Cards */}
+      {/* Categories Section */}
       <section className="py-20 px-6 bg-[#fffcf4]">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -186,7 +186,7 @@ const AdditionalComponents = () => {
                   </p>
                 </div>
 
-                {/* Image at bottom - fills remaining space */}
+                {/* Image at bottom */}
                 <div className="relative flex-1 min-h-[14rem] overflow-hidden bg-gray-100">
                   <Image
                     src={item.image}
@@ -194,7 +194,6 @@ const AdditionalComponents = () => {
                     width={1200}
                     height={675}
                     className="absolute inset-0 w-full h-full object-cover"
-                    priority={index === 0}
                   />
                 </div>
               </div>
