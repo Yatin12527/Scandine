@@ -2,6 +2,7 @@ import Link from "next/link";
 import Templates from "@/components/templates";
 import Locked from "@/components/ui/lockedOverlay";
 import Image from "next/image";
+import ContactButton from "@/components/ui/contactDesignTeamButton";
 
 function Menu() {
   return (
@@ -95,9 +96,7 @@ function Menu() {
                 Our design team can create a bespoke menu template tailored
                 specifically to your brand and requirements
               </p>
-              <button className="px-8 py-4 bg-white text-slate-900 font-semibold rounded-xl hover:bg-slate-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                Contact Design Team
-              </button>
+              <ContactButton />
             </div>
           </div>
         </div>

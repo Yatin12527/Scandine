@@ -40,7 +40,7 @@ const ClassicBlack = ({
               <p className="text-gray-400 text-sm mt-1">{item.description}</p>
             </div>
             <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-              {item.price}
+              ₹{item.price}
             </span>
           </div>
         ))}
@@ -87,7 +87,7 @@ const ClassicBlack = ({
                         {data.items[idx].value}
                       </h3>
                       <span className="text-yellow-600 font-bold ml-4 font-captureit">
-                        {data.items[idx].price}
+                        ₹{data.items[idx].price}
                       </span>
                     </div>
                     <p className="text-gray-400 text-sm mt-1">
@@ -110,7 +110,7 @@ const ClassicBlack = ({
                 <p className="text-gray-400 text-sm mt-1">{item.description}</p>
               </div>
               <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-                {item.price}
+                ₹{item.price}
               </span>
             </div>
           ))}
@@ -148,7 +148,7 @@ const ClassicBlack = ({
               <p className="text-gray-400 text-sm mt-1">{item.description}</p>
             </div>
             <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-              {item.price}
+              ₹{item.price}
             </span>
           </div>
         ))}
@@ -179,7 +179,7 @@ const ClassicBlack = ({
               <p className="text-gray-400 text-sm mt-1">{item.description}</p>
             </div>
             <span className="text-yellow-600 font-bold ml-4 whitespace-nowrap font-captureit">
-              {item.price}
+              ₹{item.price}
             </span>
           </div>
         ))}

@@ -27,7 +27,7 @@ const features = [
 const metrics = [
   { number: "5min", label: "Setup Time" },
   { number: "∞", label: "Updates" },
-  { number: "$0", label: "Print Costs" },
+  { number: "₹0", label: "Print Costs" },
   { number: "24/7", label: "Availability" },
 ];
 
@@ -117,7 +117,7 @@ const AdditionalComponents = () => {
                     <div
                       className="absolute inset-0 rounded-2xl"
                       style={{
-                        boxShadow: "inset 0 0 80px 40px white",
+                        boxShadow: "inset 0 0 80px 20px #fffcf4",
                       }}
                     />
                   </div>

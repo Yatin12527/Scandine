@@ -79,7 +79,7 @@ const Home = () => {
                   <div className="w-px h-10 bg-white/10" />
                   <div>
                     <div className="text-3xl font-light text-orange-300 tracking-wide">
-                      $0
+                      ₹0
                     </div>
                     <div className="text-xs uppercase tracking-widest text-gray-400 mt-1">
                       Printing

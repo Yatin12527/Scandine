@@ -43,7 +43,7 @@ const Minimilist = ({
                 </p>
               </div>
               <span className="font-bold text-gray-800 cursor-pointer hover:text-green-600 text-sm whitespace-nowrap">
-                {data.price}
+                ₹{data.price}
               </span>
             </div>
           ))}
