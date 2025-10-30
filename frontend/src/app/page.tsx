@@ -58,9 +58,9 @@ const Home = () => {
                   />
                 </button>
 
-                <div className="flex items-center justify-center gap-16 pt-12">
+                <div className="flex items-center justify-center gap-8 sm:gap-16 pt-12">
                   <div>
-                    <div className="text-3xl font-light text-orange-300 tracking-wide">
+                    <div className="text-xl sm:text-3xl font-light text-orange-300 tracking-wide">
                       5 min
                     </div>
                     <div className="text-xs uppercase tracking-widest text-gray-400 mt-1">
@@ -69,7 +69,7 @@ const Home = () => {
                   </div>
                   <div className="w-px h-10 bg-white/10" />
                   <div>
-                    <div className="text-3xl font-light text-orange-300 tracking-wide">
+                    <div className="text-xl sm:text-3xl  font-light text-orange-300 tracking-wide">
                       ∞
                     </div>
                     <div className="text-xs uppercase tracking-widest text-gray-400 mt-1">
@@ -78,7 +78,7 @@ const Home = () => {
                   </div>
                   <div className="w-px h-10 bg-white/10" />
                   <div>
-                    <div className="text-3xl font-light text-orange-300 tracking-wide">
+                    <div className="text-xl sm:text-3xl  font-light text-orange-300 tracking-wide">
                       ₹0
                     </div>
                     <div className="text-xs uppercase tracking-widest text-gray-400 mt-1">
